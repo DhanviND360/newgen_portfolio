@@ -1,0 +1,268 @@
+/* ═══════════════════════════════════════════════════════════════
+   DHANVI — Homepage Styles
+   Interactive orbital graph — DHANVI as sun, nodes as planets.
+   Obsidian-like interactive graph with GSAP orbital motion.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Homepage Root ── */
+.homeRoot {
+  position: relative;
+  width: 100vw;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--viewport-padding);
+}
+
+/* ── Orbital Canvas (SVG lines connecting center to nodes) ── */
+.orbitalCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Connection lines from center to each node */
+.orbitalLine {
+  stroke: var(--color-border);
+  stroke-width: 1;
+  opacity: 0.4;
+  transition: stroke 0.3s ease, opacity 0.3s ease;
+}
+
+.orbitalLine[data-active="true"] {
+  stroke: var(--color-accent-cyan);
+  opacity: 0.7;
+  filter: drop-shadow(0 0 4px rgba(62, 220, 196, 0.2));
+}
+
+/* Orbital ring paths (faint orbit tracks) */
+.orbitalRing {
+  fill: none;
+  stroke: var(--color-border-subtle);
+  stroke-width: 1;
+  stroke-dasharray: 4 8;
+  opacity: 0.25;
+}
+
+/* ── Central Sun (DHANVI identity) ── */
+.homeIdentity {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+  z-index: var(--z-content);
+  user-select: none;
+}
+
+.homeName {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-4xl), 8vw, var(--text-7xl));
+  line-height: var(--leading-none);
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.homeTagline {
+  font-family: var(--font-body);
+  font-size: clamp(var(--text-sm), 1.5vw, var(--text-lg));
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* Subtle pulsing glow behind the sun */
+.sunGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(62, 220, 196, 0.04) 0%,
+    rgba(62, 220, 196, 0.01) 50%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Node Navigation Container ── */
+.nodeContainer {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-content);
+  pointer-events: none;
+}
+
+/* ── Individual Node (planet) ── */
+.node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  pointer-events: auto;
+  cursor: grab;
+  text-decoration: none;
+  will-change: transform;
+  /* Positioned by GSAP — top/left set dynamically */
+  transform: translate(-50%, -50%);
+}
+
+.node:active {
+  cursor: grabbing;
+}
+
+/* ── Node Dot (the planet sphere) ── */
+.nodeDot {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-text-dim);
+  border: 1.5px solid var(--color-text-muted);
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.node:hover .nodeDot {
+  background: var(--color-accent-cyan);
+  border-color: var(--color-accent-cyan);
+  box-shadow:
+    0 0 15px rgba(62, 220, 196, 0.4),
+    0 0 30px rgba(62, 220, 196, 0.15);
+  transform: scale(1.3);
+}
+
+/* Active/dragging state */
+.nodeDragging .nodeDot {
+  background: var(--color-accent-cyan);
+  border-color: var(--color-accent-cyan);
+  box-shadow:
+    0 0 20px rgba(62, 220, 196, 0.5),
+    0 0 40px rgba(62, 220, 196, 0.2);
+  transform: scale(1.5);
+}
+
+/* Small pulse ring around dot */
+.nodePulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(62, 220, 196, 0.1);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.node:hover .nodePulse {
+  opacity: 1;
+  animation: nodePulseRing 2s ease-out infinite;
+}
+
+@keyframes nodePulseRing {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* ── Node Label ── */
+.nodeLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+  pointer-events: none;
+}
+
+.node:hover .nodeLabel {
+  color: var(--color-accent-cyan);
+  text-shadow: 0 0 10px rgba(62, 220, 196, 0.3);
+}
+
+.nodeDragging .nodeLabel {
+  color: var(--color-accent-cyan);
+}
+
+/* ── Node Description (appears on hover) ── */
+.nodeDescription {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-dim);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.node:hover .nodeDescription {
+  opacity: 1;
+  transform: translateY(0);
+  color: var(--color-text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Responsive — Mobile: stacked layout, no orbits
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .orbitalCanvas {
+    display: none;
+  }
+
+  .sunGlow {
+    display: none;
+  }
+
+  .nodeContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-12) 0;
+    pointer-events: auto;
+  }
+
+  .node {
+    position: relative;
+    transform: none;
+    cursor: pointer;
+    flex-direction: row;
+    gap: var(--space-3);
+  }
+
+  .nodePulse {
+    display: none;
+  }
+}

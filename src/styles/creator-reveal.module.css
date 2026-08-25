@@ -1,0 +1,158 @@
+/* ═══════════════════════════════════════════════════════════════
+   DHANVI — Creator Reveal Styles
+   
+   "Wanna meet the CREATOR?" → scroll up →
+   DHANVI wireframe scrolls into center → letter-by-letter
+   cyan illumination traces each letter on.
+   
+   Typography matches the boot/cinematic sequences exactly:
+   --font-display, uppercase, tight tracking.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Root Container ── */
+.revealRoot {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  will-change: opacity, transform;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACT 1 — "Wanna meet the CREATOR?"
+   ═══════════════════════════════════════════════════════════════ */
+
+.questionSection {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+  padding: 0 var(--space-8);
+  will-change: transform, opacity;
+}
+
+/* "Wanna meet the" — white, display font, matches bootSentenceLine */
+.questionLine {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-2xl), 4.5vw, var(--text-5xl));
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: var(--color-text);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* "CREATOR?" — high-contrast neon cyan, larger, matches bootButWhy sizing */
+.questionAccent {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-4xl), 8vw, var(--text-7xl));
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: var(--color-accent-cyan);
+  text-shadow:
+    0 0 20px rgba(62, 220, 196, 0.5),
+    0 0 50px rgba(62, 220, 196, 0.2);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACT 2 — DHANVI Name (large, centred)
+   ═══════════════════════════════════════════════════════════════ */
+
+.nameContainer {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(var(--space-2), 2.5vw, var(--space-6));
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* ── Letter Group (holds base wireframe + cyan overlay) ── */
+.letterGroup {
+  position: relative;
+  display: inline-block;
+}
+
+/* Faint gray wireframe — always visible once shown */
+.letterBase {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-6xl), 14vw, 10rem);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke-width: 1.5px;
+  -webkit-text-stroke-color: #1a1a1a;
+  user-select: none;
+}
+
+/* Cyan illumination layer — revealed by clip-path tracing */
+.letterCyan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-6xl), 14vw, 10rem);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: var(--color-accent-cyan);
+  text-shadow:
+    0 0 12px rgba(62, 220, 196, 0.4),
+    0 0 25px rgba(62, 220, 196, 0.15);
+  clip-path: inset(0 100% 0 0);
+  user-select: none;
+  will-change: clip-path, text-shadow;
+}
+
+/* ── Post-illumination glow bloom (radial behind the name) ── */
+.nameGlow {
+  position: absolute;
+  inset: -60px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(62, 220, 196, 0.06) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+  filter: blur(30px);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .questionLine {
+    font-size: clamp(var(--text-xl), 5vw, var(--text-3xl));
+  }
+
+  .questionAccent {
+    font-size: clamp(var(--text-3xl), 10vw, var(--text-5xl));
+  }
+
+  .nameContainer {
+    gap: var(--space-1);
+  }
+
+  .letterBase,
+  .letterCyan {
+    font-size: clamp(var(--text-5xl), 13vw, var(--text-7xl));
+  }
+}

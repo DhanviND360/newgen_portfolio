@@ -1,0 +1,218 @@
+/* ═══════════════════════════════════════════════════════════════
+   DHANVI — Achievement Sequence Styles
+   Cinematic typographic achievement presentation.
+   
+   NOT a conventional resume list.
+   Each achievement occupies the full viewport as a statement.
+   Achievements move to different screen positions for visual
+   movement — they are not stacked or listed.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Sequence Container ── */
+.sequenceRoot {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  will-change: opacity, transform;
+}
+
+/* ── Phase Title: "ACHIEVEMENTS" ── */
+.phaseTitle {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  will-change: opacity, transform, filter;
+}
+
+.phaseTitleText {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-5xl), 12vw, var(--text-8xl));
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: var(--color-text);
+  will-change: transform, opacity;
+}
+
+/* ── Individual Achievement Scene ── */
+.achievementScene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--viewport-padding);
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}
+
+/* Inner container — controls the layout of each achievement */
+.achievementInner {
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
+  width: 100%;
+}
+
+/* ── Result / Metric — the dominant visual element ── */
+.achievementResult {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-5xl), 10vw, var(--text-8xl));
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: var(--color-accent-red);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ── Title ── */
+.achievementTitle {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-2xl), 3.5vw, var(--text-4xl));
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: var(--color-text);
+  margin-top: var(--space-4);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ── Divider ── */
+.achievementDivider {
+  width: 0;
+  height: 1px;
+  background: var(--color-border);
+  margin: var(--space-4) 0;
+}
+
+/* ── Event / Organization ── */
+.achievementEvent {
+  font-family: var(--font-body);
+  font-size: clamp(var(--text-sm), 1.2vw, var(--text-lg));
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ── Year ── */
+.achievementYear {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+  margin-top: var(--space-3);
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* ── Supporting Statement ── */
+.achievementStatement {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  margin-top: var(--space-3);
+  max-width: 560px;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Achievement Scene Positioning
+   
+   Each achievement occupies a different area of the screen to
+   create visual movement. Positioned via alignment utilities
+   that the component toggles based on index.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Position 0: center-left, text left-aligned */
+.position0 {
+  justify-content: flex-start;
+  padding-left: 10%;
+}
+
+.position0 .achievementInner {
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* Position 1: center-right, text right-aligned */
+.position1 {
+  justify-content: flex-end;
+  padding-right: 10%;
+}
+
+.position1 .achievementInner {
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* Position 2: center, text centered */
+.position2 {
+  justify-content: center;
+}
+
+.position2 .achievementInner {
+  align-items: center;
+  text-align: center;
+}
+
+/* Position 3: lower-left */
+.position3 {
+  justify-content: flex-start;
+  align-items: flex-end;
+  padding-left: 12%;
+  padding-bottom: 12%;
+}
+
+.position3 .achievementInner {
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .phaseTitleText {
+    font-size: clamp(var(--text-4xl), 14vw, var(--text-6xl));
+  }
+
+  .achievementResult {
+    font-size: clamp(var(--text-4xl), 12vw, var(--text-6xl));
+  }
+
+  .achievementTitle {
+    font-size: clamp(var(--text-xl), 5vw, var(--text-3xl));
+  }
+
+  /* Simplify positioning on mobile — center everything */
+  .position0,
+  .position1,
+  .position2,
+  .position3 {
+    justify-content: center;
+    align-items: center;
+    padding-left: var(--viewport-padding);
+    padding-right: var(--viewport-padding);
+    padding-bottom: var(--viewport-padding);
+  }
+
+  .position0 .achievementInner,
+  .position1 .achievementInner,
+  .position2 .achievementInner,
+  .position3 .achievementInner {
+    align-items: center;
+    text-align: center;
+  }
+}

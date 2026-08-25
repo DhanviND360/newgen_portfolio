@@ -1,0 +1,259 @@
+/* ═══════════════════════════════════════════════════════════════
+   DHANVI — Cinematic Sequence Styles
+   Styles for the time-based cinematic boot sequence phases
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Master Container ── */
+.cinematicRoot {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--color-bg);
+  z-index: var(--z-cinematic);
+}
+
+/* ── Phase Container (shared by all phases) ── */
+.phaseContainer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--viewport-padding);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.phaseActive {
+  opacity: 1;
+}
+
+/* ── Boot Sequence ── */
+.bootScreen {
+  gap: 0;
+  /* All boot elements overlap — positioned absolutely within the phase container */
+}
+
+/* ── Boot: Sentence (character-by-character) ── */
+.bootSentence {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+  padding: 0 var(--space-8);
+}
+
+.bootSentenceLine {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-2xl), 4.5vw, var(--text-5xl));
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.bootChar {
+  display: inline-block;
+  will-change: opacity;
+}
+
+/* ── Boot: "BUT WHY?" ── */
+.bootButWhy {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-5xl), 12vw, var(--text-8xl));
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: var(--color-accent-red);
+  will-change: opacity, transform;
+}
+
+/* ── Boot: "SEE / FOR / YOURSELF" ── */
+.bootTripleWords {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.bootTripleWord {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-4xl), 8vw, var(--text-7xl));
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: var(--color-text);
+  will-change: opacity, transform;
+}
+
+/* ── Intro Sequence ── */
+.introScreen {
+  gap: var(--space-4);
+}
+
+.introName {
+  overflow: hidden;
+}
+
+.introTagline {
+  opacity: 0;
+}
+
+/* ── Project Sequence ── */
+.projectScreen {
+  gap: var(--space-8);
+}
+
+.projectLabel {
+  align-self: flex-start;
+  padding-left: calc(var(--viewport-padding) * 0.5);
+}
+
+.projectCard {
+  width: 100%;
+  max-width: var(--cinematic-max-width);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-8);
+  border-left: 2px solid var(--color-accent-red);
+  opacity: 0;
+}
+
+.projectTitle {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
+  line-height: var(--leading-tight);
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.projectMeta {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.projectTag {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--color-border);
+}
+
+/* ── Achievement Sequence ── */
+.achievementScreen {
+  gap: var(--space-10);
+}
+
+.achievementItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  opacity: 0;
+}
+
+.achievementMetric {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-4xl), 8vw, var(--text-7xl));
+  line-height: var(--leading-none);
+  text-transform: uppercase;
+  color: var(--color-accent-red);
+}
+
+.achievementContext {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ── Creator Reveal ── */
+.creatorScreen {
+  gap: var(--space-6);
+}
+
+.creatorName {
+  overflow: hidden;
+}
+
+.creatorTitle {
+  opacity: 0;
+  color: var(--color-accent-cyan);
+}
+
+.creatorLine {
+  width: 0;
+  height: 2px;
+  background: var(--color-accent-cyan);
+}
+
+/* ── Skip Control ── */
+.skipControl {
+  position: fixed;
+  top: var(--space-6);
+  right: var(--space-6);
+  z-index: var(--z-skip);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) ease;
+}
+
+.skipControl:hover {
+  border-color: var(--color-text-muted);
+}
+
+.skipLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: color var(--duration-fast) ease;
+}
+
+.skipControl:hover .skipLabel {
+  color: var(--color-text-secondary);
+}
+
+.skipKey {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-text-dim);
+  padding: 1px var(--space-2);
+  border: 1px solid var(--color-border);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .skipControl {
+    top: var(--space-4);
+    right: var(--space-4);
+    padding: var(--space-1) var(--space-3);
+  }
+
+  .projectCard {
+    padding: var(--space-4);
+  }
+}

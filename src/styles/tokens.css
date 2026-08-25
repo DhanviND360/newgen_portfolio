@@ -1,0 +1,124 @@
+/* ═══════════════════════════════════════════════════════════════
+   DHANVI — Design Tokens
+   Master Design Contract: cinematic, industrial, editorial
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Color: Backgrounds ── */
+  --color-bg:              #0a0a0a;
+  --color-bg-elevated:     #111111;
+  --color-bg-surface:      #161616;
+
+  /* ── Color: Text ── */
+  --color-text:            #f0f0f0;
+  --color-text-secondary:  #999999;
+  --color-text-muted:      #555555;
+  --color-text-dim:        #333333;
+
+  /* ── Color: Accents ── */
+  --color-accent-red:      #c43e3e;
+  --color-accent-red-dim:  rgba(196, 62, 62, 0.15);
+  --color-accent-cyan:     #3edcc4;
+  --color-accent-cyan-dim: rgba(62, 220, 196, 0.15);
+
+  /* ── Color: Utility ── */
+  --color-border:          #1a1a1a;
+  --color-border-subtle:   #141414;
+  --color-overlay:         rgba(0, 0, 0, 0.7);
+
+  /* ── Typography: Font Families ── */
+  --font-display:          var(--font-anton), 'Impact', 'Arial Black', sans-serif;
+  --font-body:             var(--font-inter), 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:             'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+  /* ── Typography: Scale ── */
+  --text-xs:               0.75rem;    /* 12px */
+  --text-sm:               0.875rem;   /* 14px */
+  --text-base:             1rem;       /* 16px */
+  --text-lg:               1.125rem;   /* 18px */
+  --text-xl:               1.25rem;    /* 20px */
+  --text-2xl:              1.5rem;     /* 24px */
+  --text-3xl:              2rem;       /* 32px */
+  --text-4xl:              2.5rem;     /* 40px */
+  --text-5xl:              3.5rem;     /* 56px */
+  --text-6xl:              4.5rem;     /* 72px */
+  --text-7xl:              6rem;       /* 96px */
+  --text-8xl:              8rem;       /* 128px */
+
+  /* ── Typography: Line Heights ── */
+  --leading-none:          1;
+  --leading-tight:         1.1;
+  --leading-snug:          1.2;
+  --leading-normal:        1.5;
+  --leading-relaxed:       1.65;
+
+  /* ── Typography: Letter Spacing ── */
+  --tracking-tighter:      -0.04em;
+  --tracking-tight:        -0.02em;
+  --tracking-normal:       0;
+  --tracking-wide:         0.04em;
+  --tracking-wider:        0.08em;
+  --tracking-widest:       0.16em;
+
+  /* ── Typography: Weights ── */
+  --weight-regular:        400;
+  --weight-medium:         500;
+  --weight-bold:           700;
+  --weight-black:          900;
+
+  /* ── Spacing Scale ── */
+  --space-1:               0.25rem;    /* 4px */
+  --space-2:               0.5rem;     /* 8px */
+  --space-3:               0.75rem;    /* 12px */
+  --space-4:               1rem;       /* 16px */
+  --space-5:               1.25rem;    /* 20px */
+  --space-6:               1.5rem;     /* 24px */
+  --space-8:               2rem;       /* 32px */
+  --space-10:              2.5rem;     /* 40px */
+  --space-12:              3rem;       /* 48px */
+  --space-16:              4rem;       /* 64px */
+  --space-20:              5rem;       /* 80px */
+  --space-24:              6rem;       /* 96px */
+  --space-32:              8rem;       /* 128px */
+
+  /* ── Animation: Durations ── */
+  --duration-instant:      100ms;
+  --duration-fast:         200ms;
+  --duration-normal:       400ms;
+  --duration-slow:         700ms;
+  --duration-cinematic:    1200ms;
+  --duration-dramatic:     2000ms;
+
+  /* ── Animation: Easings ── */
+  --ease-out-expo:         cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart:        cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart:     cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-cinematic:        cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-dramatic:         cubic-bezier(0.17, 0.67, 0.83, 0.67);
+
+  /* ── Z-Index Layers ── */
+  --z-base:                0;
+  --z-content:             10;
+  --z-overlay:             100;
+  --z-cinematic:           200;
+  --z-grain:               500;
+  --z-skip:                600;
+  --z-modal:               900;
+
+  /* ── Layout ── */
+  --viewport-padding:      clamp(1.5rem, 4vw, 4rem);
+  --max-content-width:     1400px;
+  --cinematic-max-width:   1200px;
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant:    0ms;
+    --duration-fast:       0ms;
+    --duration-normal:     0ms;
+    --duration-slow:       0ms;
+    --duration-cinematic:  0ms;
+    --duration-dramatic:   0ms;
+  }
+}

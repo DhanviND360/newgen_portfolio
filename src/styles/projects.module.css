@@ -1,0 +1,366 @@
+/* ═══════════════════════════════════════════════════════════════
+   DHANVI — Project Sequence Styles
+   Cinematic 3D zoom-out camera through digital exhibition space.
+   
+   Architecture:
+   - .sequenceRoot: 3D perspective viewport (the "camera lens")
+   - .cameraRig: Moves along z-axis to simulate camera pullback
+   - .sceneRoot: Each project is a physical plane in 3D space at a z-depth
+   - All depth-of-field, blur, parallax handled via z-positioning
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 3D Viewport (Camera Lens) ── */
+.sequenceRoot {
+  position: absolute;
+  inset: 0;
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  overflow: hidden;
+  will-change: contents;
+}
+
+/* ── Camera Rig (moves backward through space) ── */
+.cameraRig {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ── Ambient Grid (restrained cyan geometry) ── */
+.ambientGrid {
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  transform: translateZ(-800px);
+  opacity: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(62, 220, 196, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(62, 220, 196, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+  will-change: opacity;
+}
+
+/* ── Depth Particles (floating in the space) ── */
+.depthParticle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(62, 220, 196, 0.15);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* ── Section Header ── */
+.sequenceHeader {
+  position: absolute;
+  top: var(--space-8);
+  left: var(--viewport-padding);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  opacity: 0;
+  z-index: 10;
+}
+
+.sequenceHeaderLine {
+  width: 0;
+  height: 1px;
+  background: var(--color-accent-cyan);
+}
+
+.sequenceHeaderLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ── Lens Flare Overlay ── */
+.lensFlare {
+  position: absolute;
+  top: 20%;
+  right: 15%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(62, 220, 196, 0.06) 0%,
+    rgba(62, 220, 196, 0.02) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(40px);
+  z-index: 5;
+  will-change: opacity, transform;
+}
+
+/* ── Scene Root (individual project — a plane in 3D space) ── */
+.sceneRoot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-12);
+  align-items: center;
+  padding: var(--space-16) var(--viewport-padding);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}
+
+/* ── LEFT: Project Visual ── */
+.sceneVisual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform, opacity, filter;
+}
+
+.visualFrame {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 16 / 10;
+  border: 1px solid rgba(62, 220, 196, 0.12);
+  overflow: hidden;
+  background: var(--color-bg-elevated);
+  box-shadow:
+    0 0 60px rgba(62, 220, 196, 0.03),
+    inset 0 0 60px rgba(0, 0, 0, 0.4);
+}
+
+.visualInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.visualGrid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1px;
+}
+
+.visualCell {
+  background: var(--color-accent-cyan);
+  transition: opacity 800ms ease;
+}
+
+.visualLabel {
+  position: absolute;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  z-index: 2;
+  color: rgba(62, 220, 196, 0.4);
+}
+
+/* Scan line effect on visual */
+.visualFrame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ── RIGHT: Project Information ── */
+.sceneInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 560px;
+  will-change: transform, opacity;
+}
+
+.sceneNumber {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.sceneNumberSeparator {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wider);
+  color: rgba(62, 220, 196, 0.3);
+  margin: 0 var(--space-1);
+}
+
+.sceneTitle {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-3xl), 4.5vw, var(--text-5xl));
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: var(--color-text);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.sceneSubtitle {
+  font-family: var(--font-body);
+  font-size: clamp(var(--text-sm), 1.2vw, var(--text-lg));
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-accent-cyan);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.sceneDivider {
+  width: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--color-accent-cyan),
+    rgba(62, 220, 196, 0.1)
+  );
+  margin: var(--space-2) 0;
+}
+
+.sceneDescription {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-secondary);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* ── Impact Points ── */
+.sceneImpact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  list-style: none;
+  padding: 0;
+  margin: var(--space-2) 0 0 0;
+}
+
+.sceneImpactItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--color-text-secondary);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.sceneImpactMarker {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  margin-top: 6px;
+  background: var(--color-accent-cyan);
+  box-shadow: 0 0 6px rgba(62, 220, 196, 0.3);
+}
+
+/* ── Tech Tags ── */
+.sceneTags {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+  opacity: 0;
+  will-change: opacity;
+}
+
+.sceneTag {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid rgba(62, 220, 196, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .sequenceRoot {
+    perspective: 900px;
+  }
+
+  .sceneRoot {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    gap: var(--space-8);
+    padding: var(--space-20) var(--viewport-padding) var(--space-8);
+  }
+
+  .sceneVisual {
+    max-height: 35vh;
+  }
+
+  .visualFrame {
+    max-width: 360px;
+  }
+
+  .sceneInfo {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .sequenceRoot {
+    perspective: 700px;
+  }
+
+  .sceneRoot {
+    padding: var(--space-16) var(--viewport-padding) var(--space-6);
+  }
+
+  .visualFrame {
+    max-width: 280px;
+  }
+
+  .sceneTitle {
+    font-size: clamp(var(--text-2xl), 6vw, var(--text-4xl));
+  }
+
+  .sceneImpactItem {
+    font-size: var(--text-xs);
+  }
+
+  .lensFlare {
+    width: 150px;
+    height: 150px;
+  }
+}
