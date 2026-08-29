@@ -32,7 +32,7 @@ export const PHASE_ORDER: CinematicPhase[] = [
 /** Duration hints (ms) for each phase — animation systems use these to build timelines */
 export const PHASE_DURATIONS: Record<CinematicPhase, number> = {
   [CinematicPhase.BOOT]: 4000,
-  [CinematicPhase.PROJECTS]: 18000, // ~6s per project × 3 projects (entry + hold + exit w/ overlaps)
+  [CinematicPhase.PROJECTS]: 24000, // ~6s per project × 4 projects (entry + hold + exit w/ overlaps)
   [CinematicPhase.ACHIEVEMENTS]: 22000, // title (3.5s) + 4 achievements × ~4s + recession (2.5s)
   [CinematicPhase.CREATOR_REVEAL]: 9500,
   [CinematicPhase.HOME]: 0, // Terminal state — no duration

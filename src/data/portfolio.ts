@@ -126,6 +126,21 @@ export const projects: Project[] = [
     year: 2024,
     github: 'https://github.com/dhanvi/cipher',
   },
+  {
+    id: 'project-prism',
+    title: 'Prism Engine',
+    subtitle: 'GPU Spatial Simulation Engine',
+    description:
+      'Next-generation WebGPU graphics and physics engine delivering real-time volumetric lighting and spatial simulations in the browser.',
+    impact: [
+      'Sustained 120 FPS rendering across 500K+ dynamic physical particles',
+      'Reduced GPU memory footprint by 65% via custom compute shader pipeline',
+      'Featured in Web3D Global Showcase & ACM SIGGRAPH Community',
+    ],
+    tags: ['WebGPU', 'Rust', 'WGSL', 'TypeScript'],
+    year: 2024,
+    github: 'https://github.com/dhanvi/prism-engine',
+  },
 ];
 
 // ── Achievements ──
