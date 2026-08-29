@@ -204,21 +204,19 @@ export default function ProjectSequence({
       const isLast = index === projects.length - 1;
       const projectZ = -(index * SPACE.projectDepth);
 
-      // ── Position each project scene at its z-depth ──
+      // ── Position each project scene at its z-depth (pure transform/opacity) ──
       tl.set(scene.root, {
         z: projectZ,
         opacity: 0,
-        filter: 'blur(12px)',
-        scale: 0.7,
+        scale: 0.75,
       }, 0);
 
       // ── PHASE 1: APPROACH — Camera moves toward this project ──
       const approachStart = cursor;
 
-      // Fade in the scene as the camera approaches
+      // Fade in the scene as the camera approaches (GPU hardware composited)
       tl.to(scene.root, {
         opacity: 1,
-        filter: 'blur(0px)',
         scale: 1,
         duration: safeDuration(TIMING.cameraApproach),
         ease: safeEase(EASE.cinematic),
@@ -236,8 +234,8 @@ export default function ProjectSequence({
         tl.fromTo(
           scene.visual,
           {
-            x: -40,
-            scale: 0.9,
+            x: -35,
+            scale: 0.92,
             opacity: 0,
           },
           {
@@ -247,19 +245,19 @@ export default function ProjectSequence({
             duration: safeDuration(TIMING.cameraApproach * 0.85),
             ease: safeEase(EASE.cinematic),
           },
-          approachStart + 0.2
+          approachStart + 0.15
         );
       }
 
       // ── Text elements: sequential reveal during approach ──
-      const textStart = approachStart + TIMING.cameraApproach * 0.4;
+      const textStart = approachStart + TIMING.cameraApproach * 0.35;
       let textOffset = 0;
 
       // Project number
       if (scene.number) {
         tl.fromTo(
           scene.number,
-          { opacity: 0, y: 20, x: 15 },
+          { opacity: 0, y: 18, x: 10 },
           {
             opacity: 1,
             y: 0,
@@ -276,7 +274,7 @@ export default function ProjectSequence({
       if (scene.title) {
         tl.fromTo(
           scene.title,
-          { opacity: 0, y: 40, scale: 0.95 },
+          { opacity: 0, y: 30, scale: 0.96 },
           {
             opacity: 1,
             y: 0,
@@ -286,14 +284,14 @@ export default function ProjectSequence({
           },
           textStart + textOffset
         );
-        textOffset += TIMING.textStagger * 2;
+        textOffset += TIMING.textStagger * 1.5;
       }
 
       // Subtitle
       if (scene.subtitle) {
         tl.fromTo(
           scene.subtitle,
-          { opacity: 0, y: 15 },
+          { opacity: 0, y: 12 },
           {
             opacity: 1,
             y: 0,
@@ -323,7 +321,7 @@ export default function ProjectSequence({
       if (scene.description) {
         tl.fromTo(
           scene.description,
-          { opacity: 0, y: 12 },
+          { opacity: 0, y: 10 },
           {
             opacity: 1,
             y: 0,
@@ -339,7 +337,7 @@ export default function ProjectSequence({
       if (scene.impactItems.length > 0) {
         tl.fromTo(
           scene.impactItems,
-          { opacity: 0, x: -10 },
+          { opacity: 0, x: -8 },
           {
             opacity: 1,
             x: 0,
@@ -373,8 +371,8 @@ export default function ProjectSequence({
       // Subtle lens flare pulse during hold
       if (lensFlare) {
         tl.to(lensFlare, {
-          opacity: 0.7 + (index * 0.1),
-          x: index % 2 === 0 ? 30 : -30,
+          opacity: 0.6 + (index * 0.08),
+          x: index % 2 === 0 ? 25 : -25,
           duration: safeDuration(TIMING.sceneHold * 0.6),
           ease: safeEase('sine.inOut'),
         }, holdStart);
@@ -382,47 +380,42 @@ export default function ProjectSequence({
 
       // ── PHASE 3: PULLBACK — Camera pulls backward, project recedes ──
       if (!isLast) {
-        // The project blurs and shrinks as camera moves away
+        // The project smoothly shrinks and fades out without heavy blur rasterization
         tl.to(scene.root, {
-          filter: 'blur(8px)',
-          scale: 0.65,
-          opacity: 0.15,
-          duration: safeDuration(TIMING.cameraPullback),
+          scale: 0.7,
+          opacity: 0,
+          duration: safeDuration(TIMING.cameraPullback * 0.8),
           ease: safeEase(EASE.dramatic),
         }, cursor);
 
-        // Parallax: visual frame recedes slightly faster
+        // Parallax: visual frame recedes slightly
         if (scene.visual) {
           tl.to(scene.visual, {
-            scale: 0.85,
-            opacity: 0.2,
-            duration: safeDuration(TIMING.cameraPullback * 0.9),
+            scale: 0.88,
+            opacity: 0,
+            duration: safeDuration(TIMING.cameraPullback * 0.75),
             ease: safeEase(EASE.dramatic),
           }, cursor);
         }
 
-        // Move camera rig backward toward next project
-        // (camera z will be set in the next project's approach phase)
-
-        cursor += TIMING.cameraPullback * 0.4; // overlap: next project starts approaching before this fully recedes
+        cursor += TIMING.cameraPullback * 0.35; // smooth overlap
       } else {
-        // Last project: elegant fade out + camera keeps pulling back
+        // Last project: clean fade out + camera pulls back
         tl.to(scene.root, {
           opacity: 0,
-          filter: 'blur(10px)',
-          scale: 0.5,
-          duration: safeDuration(TIMING.cameraPullback),
+          scale: 0.6,
+          duration: safeDuration(TIMING.cameraPullback * 0.8),
           ease: safeEase(EASE.dramatic),
         }, cursor);
 
-        // Camera drifts further backward
+        // Camera drifts backward
         tl.to(cameraRig, {
-          z: -projectZ - SPACE.projectDepth * 0.5,
-          duration: safeDuration(TIMING.cameraPullback),
+          z: -projectZ - SPACE.projectDepth * 0.4,
+          duration: safeDuration(TIMING.cameraPullback * 0.9),
           ease: safeEase('power2.in'),
         }, cursor);
 
-        cursor += TIMING.cameraPullback;
+        cursor += TIMING.cameraPullback * 0.85;
       }
     });
 
@@ -433,17 +426,17 @@ export default function ProjectSequence({
     if (ambientGrid) {
       tl.to(ambientGrid, {
         opacity: 0,
-        duration: safeDuration(0.8),
+        duration: safeDuration(0.6),
         ease: safeEase(EASE.snappy),
-      }, cursor - TIMING.cameraPullback * 0.6);
+      }, cursor - 0.4);
     }
 
     if (lensFlare) {
       tl.to(lensFlare, {
         opacity: 0,
-        duration: safeDuration(0.6),
+        duration: safeDuration(0.5),
         ease: safeEase(EASE.snappy),
-      }, cursor - TIMING.cameraPullback * 0.5);
+      }, cursor - 0.3);
     }
 
     // ── Fade out header alongside last project exit ──
@@ -455,7 +448,7 @@ export default function ProjectSequence({
           duration: safeDuration(DURATION.fast),
           ease: safeEase(EASE.snappy),
         },
-        cursor - TIMING.cameraPullback * 0.5
+        cursor - 0.4
       );
     }
 

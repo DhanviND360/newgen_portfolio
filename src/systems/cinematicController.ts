@@ -14,7 +14,6 @@
 
 export enum CinematicPhase {
   BOOT = 'BOOT',
-  INTRO = 'INTRO',
   PROJECTS = 'PROJECTS',
   ACHIEVEMENTS = 'ACHIEVEMENTS',
   CREATOR_REVEAL = 'CREATOR_REVEAL',
@@ -24,7 +23,6 @@ export enum CinematicPhase {
 /** Ordered sequence of cinematic phases */
 export const PHASE_ORDER: CinematicPhase[] = [
   CinematicPhase.BOOT,
-  CinematicPhase.INTRO,
   CinematicPhase.PROJECTS,
   CinematicPhase.ACHIEVEMENTS,
   CinematicPhase.CREATOR_REVEAL,
@@ -34,7 +32,6 @@ export const PHASE_ORDER: CinematicPhase[] = [
 /** Duration hints (ms) for each phase — animation systems use these to build timelines */
 export const PHASE_DURATIONS: Record<CinematicPhase, number> = {
   [CinematicPhase.BOOT]: 4000,
-  [CinematicPhase.INTRO]: 3500,
   [CinematicPhase.PROJECTS]: 18000, // ~6s per project × 3 projects (entry + hold + exit w/ overlaps)
   [CinematicPhase.ACHIEVEMENTS]: 22000, // title (3.5s) + 4 achievements × ~4s + recession (2.5s)
   [CinematicPhase.CREATOR_REVEAL]: 9500,

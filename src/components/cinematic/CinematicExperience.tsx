@@ -16,14 +16,13 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import gsap from 'gsap';
 import {
   CinematicPhase,
-  resetCinematicController,
+  getCinematicController,
 } from '@/systems/cinematicController';
 import { projects, achievements } from '@/data/portfolio';
 import styles from '@/styles/cinematic.module.css';
 
 // Phase components
 import BootSequence from './BootSequence';
-import IntroSequence from './IntroSequence';
 import ProjectSequence from './ProjectSequence';
 import AchievementSequence from './AchievementSequence';
 import CreatorReveal from './CreatorReveal';
@@ -34,8 +33,11 @@ import FilmGrain from '@/components/shared/FilmGrain';
 import HomePage from '@/components/home/HomePage';
 
 export default function CinematicExperience() {
-  // Reset controller on mount — ensures fresh state on page reload/HMR
-  const controllerRef = useRef(resetCinematicController());
+  // Lazy singleton controller — stable across phase re-renders
+  const controllerRef = useRef<ReturnType<typeof getCinematicController> | null>(null);
+  if (!controllerRef.current) {
+    controllerRef.current = getCinematicController();
+  }
   const cinematicRootRef = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<CinematicPhase>(CinematicPhase.BOOT);
 
@@ -86,7 +88,6 @@ export default function CinematicExperience() {
 
   // Skip handler — kills ALL active GSAP animations to prevent artifacts
   const handleSkip = useCallback(() => {
-    // Kill every GSAP tween/timeline in the cinematic container
     if (cinematicRootRef.current) {
       gsap.killTweensOf(cinematicRootRef.current.querySelectorAll('*'));
     }
@@ -105,10 +106,6 @@ export default function CinematicExperience() {
         <div ref={cinematicRootRef} className={styles.cinematicRoot}>
           <BootSequence
             isActive={phase === CinematicPhase.BOOT}
-            onComplete={handlePhaseComplete}
-          />
-          <IntroSequence
-            isActive={phase === CinematicPhase.INTRO}
             onComplete={handlePhaseComplete}
           />
           <ProjectSequence

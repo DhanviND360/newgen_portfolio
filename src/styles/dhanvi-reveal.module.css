@@ -1,0 +1,394 @@
+/* ═══════════════════════════════════════════════════════════════
+   DHANVI — Circular Hover Reveal Styles
+   
+   Master Design System for the Interactive Identity:
+   - Centered "D H A N V I" typography in default state
+   - Circular orbit rearrangement on hover
+   - Central circular creator portrait with cyan illumination
+   - Physically attached orbital navigation nodes with SVG links
+   - Matte-black, stark white typography, restrained cyan glow
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Root Canvas ── */
+.revealRoot {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--color-bg);
+  cursor: default;
+  user-select: none;
+}
+
+/* ── SVG Connection Layer ── */
+.svgCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Faint orbital track rings */
+.orbitTrack {
+  fill: none;
+  stroke: var(--color-border);
+  stroke-width: 1;
+  stroke-dasharray: 4 8;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.orbitTrackVisible {
+  opacity: 0.35;
+}
+
+/* Physical link from letter to node */
+.connectionLine {
+  stroke: rgba(255, 255, 255, 0.15);
+  stroke-width: 1.2;
+  transition: stroke 0.3s ease, stroke-width 0.3s ease, opacity 0.3s ease;
+}
+
+.connectionLineActive {
+  stroke: var(--color-accent-cyan);
+  stroke-width: 1.5;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 6px rgba(62, 220, 196, 0.4));
+}
+
+/* ── Center Portrait System ── */
+.portraitWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity, filter;
+}
+
+.portraitGlow {
+  position: absolute;
+  width: 290px;
+  height: 290px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(62, 220, 196, 0.28) 0%,
+    rgba(62, 220, 196, 0.1) 45%,
+    transparent 70%
+  );
+  filter: blur(32px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.portraitFrame {
+  position: relative;
+  width: clamp(140px, 17vw, 205px);
+  height: clamp(140px, 17vw, 205px);
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(62, 220, 196, 0.55);
+  box-shadow:
+    0 0 26px rgba(62, 220, 196, 0.35),
+    0 0 50px rgba(62, 220, 196, 0.15);
+  background: #0d0d0d;
+  z-index: 2;
+}
+
+.portraitImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  filter: grayscale(0.05) contrast(1.08) brightness(1.05);
+  display: block;
+}
+
+.portraitScanline {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(62, 220, 196, 0.06) 2px,
+    rgba(62, 220, 196, 0.06) 4px
+  );
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 3;
+}
+
+/* Sleek rotating ring around portrait */
+.portraitRing {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px dashed rgba(62, 220, 196, 0.3);
+  pointer-events: none;
+  animation: rotateRing 30s linear infinite;
+  z-index: 2;
+}
+
+@keyframes rotateRing {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Letter Elements ── */
+.letterItem {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  z-index: 6;
+  cursor: pointer;
+  will-change: transform, opacity;
+  transform: translate(-50%, -50%);
+}
+
+.letterText {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 5.2vw, 4.8rem);
+  line-height: var(--leading-none);
+  text-transform: uppercase;
+  color: var(--color-text);
+  letter-spacing: 0.04em;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.letterItem:hover .letterText {
+  color: #ffffff;
+  text-shadow:
+    0 0 15px rgba(62, 220, 196, 0.6),
+    0 0 30px rgba(62, 220, 196, 0.25);
+}
+
+/* ── Navigation Nodes (Attached to letters) ── */
+.nodeAnchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  pointer-events: auto;
+  cursor: pointer;
+  text-decoration: none;
+  z-index: 7;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+}
+
+.nodeDotWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.nodeDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  border: 1.5px solid var(--color-text-secondary);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+}
+
+.nodeAnchor:hover .nodeDot,
+.nodeAnchor[data-active="true"] .nodeDot {
+  background: var(--color-accent-cyan);
+  border-color: var(--color-accent-cyan);
+  transform: scale(1.35);
+  box-shadow:
+    0 0 14px rgba(62, 220, 196, 0.7),
+    0 0 28px rgba(62, 220, 196, 0.3);
+}
+
+.nodePulse {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(62, 220, 196, 0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.nodeAnchor:hover .nodePulse,
+.nodeAnchor[data-active="true"] .nodePulse {
+  opacity: 1;
+  animation: pulseAnimation 1.8s ease-out infinite;
+}
+
+@keyframes pulseAnimation {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+.nodeCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  pointer-events: none;
+  background: rgba(10, 10, 10, 0.75);
+  backdrop-filter: blur(8px);
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+}
+
+.nodeAnchor:hover .nodeCard,
+.nodeAnchor[data-active="true"] .nodeCard {
+  border-color: rgba(62, 220, 196, 0.3);
+  background: rgba(13, 13, 13, 0.9);
+  transform: translateY(-2px);
+}
+
+.nodeHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nodeIndex {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-cyan);
+  opacity: 0.8;
+}
+
+.nodeLabel {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.nodeAnchor:hover .nodeLabel,
+.nodeAnchor[data-active="true"] .nodeLabel {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(62, 220, 196, 0.5);
+}
+
+.nodeDesc {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transform: translateY(-2px);
+  transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease;
+}
+
+.nodeAnchor:hover .nodeDesc,
+.nodeAnchor[data-active="true"] .nodeDesc {
+  opacity: 1;
+  max-height: 20px;
+  transform: translateY(0);
+  color: var(--color-text-secondary);
+}
+
+/* ── Interactive Hover Capture Area ── */
+.hoverZone {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 4;
+  border-radius: 50%;
+}
+
+/* ── Bottom Tagline ── */
+.tagline {
+  position: absolute;
+  bottom: clamp(1.5rem, 5vh, 3.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-body);
+  font-size: clamp(var(--text-xs), 1.3vw, var(--text-sm));
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  pointer-events: none;
+  z-index: 5;
+  white-space: nowrap;
+  transition: opacity 0.5s ease;
+}
+
+/* ── Responsive Refinements ── */
+@media (max-width: 768px) {
+  .letterText {
+    font-size: clamp(2.4rem, 11vw, 4.2rem);
+  }
+
+  .portraitFrame {
+    width: 110px;
+    height: 110px;
+  }
+
+  .portraitGlow {
+    width: 180px;
+    height: 180px;
+  }
+
+  .nodeCard {
+    padding: 2px 6px;
+  }
+
+  .nodeLabel {
+    font-size: 0.62rem;
+  }
+
+  .nodeIndex {
+    font-size: 0.55rem;
+  }
+
+  .tagline {
+    bottom: 2rem;
+    font-size: 0.7rem;
+  }
+}

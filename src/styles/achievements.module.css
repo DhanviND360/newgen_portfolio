@@ -24,7 +24,7 @@
   align-items: center;
   justify-content: center;
   opacity: 0;
-  will-change: opacity, transform, filter;
+  will-change: opacity, transform;
 }
 
 .phaseTitleText {
@@ -46,7 +46,7 @@
   justify-content: center;
   padding: var(--viewport-padding);
   opacity: 0;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
 }
 
 /* Inner container — controls the layout of each achievement */

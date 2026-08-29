@@ -155,7 +155,6 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
     tl.to(questionSectionRef.current, {
       y: -150,
       opacity: 0,
-      filter: 'blur(4px)',
       duration: safeDuration(scrollDuration),
       ease: safeEase('power3.inOut'),
     }, cursor);
@@ -268,7 +267,6 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
     tl.to(containerRef.current, {
       scale: 0.94,
       opacity: 0,
-      filter: 'blur(8px)',
       duration: safeDuration(1.2),
       ease: safeEase('power3.inOut'),
     }, cursor);

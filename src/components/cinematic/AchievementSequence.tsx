@@ -145,18 +145,18 @@ export default function AchievementSequence({
     // ═══════════════════════════════════════════════════
 
     if (phaseTitle && phaseTitleText) {
-      // Scale in from slightly larger, with blur
+      // Scale in from slightly larger with crisp opacity
       tl.fromTo(
         phaseTitle,
         {
           opacity: 0,
-          scale: 1.15,
-          filter: 'blur(12px)',
+          scale: 1.08,
+          y: -10,
         },
         {
           opacity: 1,
           scale: 1,
-          filter: 'blur(0px)',
+          y: 0,
           duration: safeDuration(TIMING.titleEntry),
           ease: safeEase(EASE.cinematic),
         },
@@ -165,13 +165,13 @@ export default function AchievementSequence({
 
       cursor += TIMING.titleEntry + TIMING.titleHold;
 
-      // Exit: scale down and blur away
+      // Exit: scale down and fade
       tl.to(
         phaseTitle,
         {
           opacity: 0,
-          scale: 0.85,
-          filter: 'blur(8px)',
+          scale: 0.92,
+          y: 10,
           duration: safeDuration(TIMING.titleExit),
           ease: safeEase(EASE.dramatic),
         },
@@ -192,18 +192,16 @@ export default function AchievementSequence({
       const isLast = index === achievements.length - 1;
       const entryStart = cursor;
 
-      // ── ENTRY: Scene fades in with scale + blur ──
+      // ── ENTRY: Scene fades in with scale ──
       tl.fromTo(
         refs.scene,
         {
           opacity: 0,
-          scale: 0.9,
-          filter: 'blur(10px)',
+          scale: 0.94,
         },
         {
           opacity: 1,
           scale: 1,
-          filter: 'blur(0px)',
           duration: safeDuration(TIMING.resultEntry),
           ease: safeEase(EASE.cinematic),
         },
@@ -211,13 +209,13 @@ export default function AchievementSequence({
       );
 
       // ── Result (dominant metric) — the hero element ──
-      const textStart = entryStart + TIMING.resultEntry * 0.25;
+      const textStart = entryStart + TIMING.resultEntry * 0.2;
       let textOffset = 0;
 
       if (refs.result) {
         tl.fromTo(
           refs.result,
-          { opacity: 0, y: 40, scale: 0.92 },
+          { opacity: 0, y: 30, scale: 0.95 },
           {
             opacity: 1,
             y: 0,
@@ -227,14 +225,14 @@ export default function AchievementSequence({
           },
           textStart
         );
-        textOffset += TIMING.textStagger * 2;
+        textOffset += TIMING.textStagger * 1.5;
       }
 
       // ── Title ──
       if (refs.title) {
         tl.fromTo(
           refs.title,
-          { opacity: 0, y: 20 },
+          { opacity: 0, y: 16 },
           {
             opacity: 1,
             y: 0,
@@ -264,7 +262,7 @@ export default function AchievementSequence({
       if (refs.event) {
         tl.fromTo(
           refs.event,
-          { opacity: 0, y: 12 },
+          { opacity: 0, y: 10 },
           {
             opacity: 1,
             y: 0,
@@ -295,7 +293,7 @@ export default function AchievementSequence({
       if (refs.statement) {
         tl.fromTo(
           refs.statement,
-          { opacity: 0, y: 10 },
+          { opacity: 0, y: 8 },
           {
             opacity: 1,
             y: 0,
@@ -315,8 +313,7 @@ export default function AchievementSequence({
           refs.scene,
           {
             opacity: 0,
-            scale: 0.88,
-            filter: 'blur(10px)',
+            scale: 0.92,
             duration: safeDuration(TIMING.achievementExit),
             ease: safeEase(EASE.dramatic),
           },
@@ -334,7 +331,7 @@ export default function AchievementSequence({
     // visual field becomes sparse → prepare for creator reveal
     // ═══════════════════════════════════════════════════
 
-    const recessionStart = cursor + 0.3;
+    const recessionStart = cursor + 0.2;
 
     // Fade out the last achievement
     const lastRefs = innerRefs.current[achievements.length - 1];
@@ -343,30 +340,28 @@ export default function AchievementSequence({
         lastRefs.scene,
         {
           opacity: 0,
-          scale: 0.7,
-          filter: 'blur(14px)',
-          duration: safeDuration(TIMING.recessionDuration),
+          scale: 0.8,
+          duration: safeDuration(TIMING.recessionDuration * 0.8),
           ease: safeEase(EASE.dramatic),
         },
         recessionStart
       );
     }
 
-    // Zoom the entire container backward
+    // Zoom the container backward with smooth opacity
     tl.to(
       containerRef.current,
       {
-        scale: 0.85,
+        scale: 0.92,
         opacity: 0,
-        filter: 'blur(6px)',
-        duration: safeDuration(TIMING.recessionDuration * 0.8),
+        duration: safeDuration(TIMING.recessionDuration * 0.75),
         ease: safeEase(EASE.dramatic),
       },
-      recessionStart + TIMING.recessionDuration * 0.3
+      recessionStart + 0.2
     );
 
     // Final gap — brief darkness before CREATOR_REVEAL
-    cursor = recessionStart + TIMING.recessionDuration + 0.2;
+    cursor = recessionStart + TIMING.recessionDuration * 0.85;
     tl.to({}, { duration: TIMING.postGap }, cursor);
 
     return tl;

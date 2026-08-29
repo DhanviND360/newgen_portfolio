@@ -191,6 +191,18 @@ export const navigationNodes: NavigationNode[] = [
     description: 'Get in touch',
     href: '#contact',
   },
+  {
+    id: 'node-gallery',
+    label: 'Gallery',
+    description: 'Visual archive',
+    href: '#gallery',
+  },
+  {
+    id: 'node-hobby',
+    label: 'Hobby',
+    description: 'Beyond the code',
+    href: '#hobby',
+  },
 ];
 
 // ── Boot Sequence Lines ──

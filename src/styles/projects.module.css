@@ -16,7 +16,6 @@
   perspective: 1200px;
   perspective-origin: 50% 50%;
   overflow: hidden;
-  will-change: contents;
 }
 
 /* ── Camera Rig (moves backward through space) ── */
@@ -96,7 +95,6 @@
   );
   pointer-events: none;
   opacity: 0;
-  filter: blur(40px);
   z-index: 5;
   will-change: opacity, transform;
 }
@@ -116,7 +114,7 @@
   transform-style: preserve-3d;
   backface-visibility: hidden;
   opacity: 0;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
 }
 
 /* ── LEFT: Project Visual ── */
@@ -126,7 +124,7 @@
   justify-content: center;
   height: 100%;
   transform-style: preserve-3d;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
 }
 
 .visualFrame {
