@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Anton, Inter } from "next/font/google";
+import { Anton, Inter, Silkscreen } from "next/font/google";
 import "./globals.css";
 
 const anton = Anton({
@@ -12,6 +12,13 @@ const anton = Anton({
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const silkscreen = Silkscreen({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-silkscreen",
   display: "swap",
 });
 
@@ -34,9 +41,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className={`${anton.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      className={`${anton.variable} ${inter.variable} ${silkscreen.variable}`}
+    >
       <body>{children}</body>
     </html>
   );

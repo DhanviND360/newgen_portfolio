@@ -13,6 +13,7 @@
    ═══════════════════════════════════════════════════════════════ */
 
 export enum CinematicPhase {
+  INITIALIZING = 'INITIALIZING',
   BOOT = 'BOOT',
   PROJECTS = 'PROJECTS',
   ACHIEVEMENTS = 'ACHIEVEMENTS',
@@ -22,6 +23,7 @@ export enum CinematicPhase {
 
 /** Ordered sequence of cinematic phases */
 export const PHASE_ORDER: CinematicPhase[] = [
+  CinematicPhase.INITIALIZING,
   CinematicPhase.BOOT,
   CinematicPhase.PROJECTS,
   CinematicPhase.ACHIEVEMENTS,
@@ -31,6 +33,7 @@ export const PHASE_ORDER: CinematicPhase[] = [
 
 /** Duration hints (ms) for each phase — animation systems use these to build timelines */
 export const PHASE_DURATIONS: Record<CinematicPhase, number> = {
+  [CinematicPhase.INITIALIZING]: 4200,
   [CinematicPhase.BOOT]: 4000,
   [CinematicPhase.PROJECTS]: 24000, // ~6s per project × 4 projects (entry + hold + exit w/ overlaps)
   [CinematicPhase.ACHIEVEMENTS]: 22000, // title (3.5s) + 4 achievements × ~4s + recession (2.5s)
@@ -57,7 +60,7 @@ export interface CinematicControllerState {
 }
 
 export class CinematicController {
-  private _currentPhase: CinematicPhase = CinematicPhase.BOOT;
+  private _currentPhase: CinematicPhase = CinematicPhase.INITIALIZING;
   private _previousPhase: CinematicPhase | null = null;
   private _listeners: Set<PhaseChangeCallback> = new Set();
   private _phaseCompleteCallbacks: Map<CinematicPhase, () => void> = new Map();
@@ -132,16 +135,16 @@ export class CinematicController {
     this._transitionTo(CinematicPhase.HOME);
   }
 
-  /** Restart from BOOT (development only) */
+  /** Restart from INITIALIZING (development only) */
   restart(): void {
     if (typeof window !== 'undefined') {
       console.log(
-        '%c[DHANVI] Sequence restarted → BOOT',
+        '%c[DHANVI] Sequence restarted → INITIALIZING',
         'color: #c43e3e; font-weight: bold;'
       );
     }
 
-    this._transitionTo(CinematicPhase.BOOT);
+    this._transitionTo(CinematicPhase.INITIALIZING);
   }
 
   /** Transition to a specific phase */

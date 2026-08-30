@@ -22,6 +22,7 @@ import { projects, achievements } from '@/data/portfolio';
 import styles from '@/styles/cinematic.module.css';
 
 // Phase components
+import InitializingSequence from './InitializingSequence';
 import BootSequence from './BootSequence';
 import ProjectSequence from './ProjectSequence';
 import AchievementSequence from './AchievementSequence';
@@ -39,7 +40,7 @@ export default function CinematicExperience() {
     controllerRef.current = getCinematicController();
   }
   const cinematicRootRef = useRef<HTMLDivElement>(null);
-  const [phase, setPhase] = useState<CinematicPhase>(CinematicPhase.BOOT);
+  const [phase, setPhase] = useState<CinematicPhase>(controllerRef.current.currentPhase);
 
   const controller = controllerRef.current;
 
@@ -47,6 +48,9 @@ export default function CinematicExperience() {
   useEffect(() => {
     const unsubscribe = controller.subscribe((newPhase) => {
       setPhase(newPhase);
+      if (newPhase === CinematicPhase.HOME) {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      }
     });
 
     return () => {
@@ -104,6 +108,10 @@ export default function CinematicExperience() {
       {/* Cinematic sequence */}
       {isCinematicActive && (
         <div ref={cinematicRootRef} className={styles.cinematicRoot}>
+          <InitializingSequence
+            isActive={phase === CinematicPhase.INITIALIZING}
+            onComplete={handlePhaseComplete}
+          />
           <BootSequence
             isActive={phase === CinematicPhase.BOOT}
             onComplete={handlePhaseComplete}

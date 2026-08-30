@@ -37,7 +37,7 @@ export default function DhanviNameReveal() {
   const portraitWrapperRef = useRef<HTMLDivElement>(null);
   const portraitGlowRef = useRef<HTMLDivElement>(null);
   const portraitFrameRef = useRef<HTMLDivElement>(null);
-  const taglineRef = useRef<HTMLParagraphElement>(null);
+  const taglineRef = useRef<HTMLDivElement>(null);
   const hoverZoneRef = useRef<HTMLDivElement>(null);
 
   // Interaction State
@@ -174,7 +174,7 @@ export default function DhanviNameReveal() {
       tl.fromTo(
         taglineRef.current,
         { opacity: 0, y: 15 },
-        { opacity: 0.65, y: 0, duration: 0.8, ease: 'power2.out' },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
         0.5
       );
     }
@@ -270,7 +270,7 @@ export default function DhanviNameReveal() {
 
       // Tagline dims subtly on expansion
       if (taglineRef.current) {
-        taglineRef.current.style.opacity = String(gsap.utils.interpolate(0.65, 0.15, p));
+        taglineRef.current.style.opacity = String(gsap.utils.interpolate(1.0, 0.3, p));
       }
     };
 
@@ -356,6 +356,7 @@ export default function DhanviNameReveal() {
           href={node.href}
           ref={(el) => { nodeRefs.current[i] = el; }}
           className={styles.nodeAnchor}
+          data-index={i}
           data-active={activeNodeIndex === i ? 'true' : 'false'}
           aria-label={`Navigate to ${node.label} section`}
           onMouseEnter={() => {
@@ -387,9 +388,13 @@ export default function DhanviNameReveal() {
       />
 
       {/* ── Editorial Tagline ── */}
-      <p ref={taglineRef} className={styles.tagline}>
-        {creator.tagline}
-      </p>
+      <div ref={taglineRef} className={styles.tagline}>
+        <span className={styles.taglineWord}>Builder</span>
+        <span className={styles.taglineDot}>•</span>
+        <span className={styles.taglineWord}>Creator</span>
+        <span className={styles.taglineDot}>•</span>
+        <span className={styles.taglineWord}>Engineer</span>
+      </div>
     </div>
   );
 }

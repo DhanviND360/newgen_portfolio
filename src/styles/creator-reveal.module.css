@@ -47,19 +47,53 @@
   will-change: opacity, transform;
 }
 
-/* "CREATOR?" — high-contrast neon cyan, larger, matches bootButWhy sizing */
+/* "CREATOR?" — neon sign container */
 .questionAccent {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-display);
   font-size: clamp(var(--text-4xl), 8vw, var(--text-7xl));
   line-height: var(--leading-none);
   letter-spacing: var(--tracking-tight);
   text-transform: uppercase;
-  color: var(--color-accent-cyan);
-  text-shadow:
-    0 0 20px rgba(62, 220, 196, 0.5),
-    0 0 50px rgba(62, 220, 196, 0.2);
   opacity: 0;
   will-change: opacity, transform;
+}
+
+/* Ambient neon wall radiance / backdrop bloom */
+.neonAura {
+  position: absolute;
+  inset: -30px -50px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(62, 220, 196, 0.45) 0%,
+    rgba(62, 220, 196, 0.15) 45%,
+    transparent 75%
+  );
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  filter: blur(25px);
+  will-change: opacity, transform;
+}
+
+/* Neon text element with hot plasma core and multi-layer gas glow */
+.neonText {
+  position: relative;
+  display: inline-block;
+  color: #ffffff;
+  -webkit-text-stroke: 1.5px var(--color-accent-cyan);
+  text-shadow:
+    0 0 4px #ffffff,
+    0 0 10px #3edcc4,
+    0 0 20px #3edcc4,
+    0 0 40px #3edcc4,
+    0 0 80px rgba(62, 220, 196, 0.75),
+    0 0 120px rgba(62, 220, 196, 0.35);
+  user-select: none;
+  will-change: opacity, text-shadow, color;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -82,7 +116,7 @@
   display: inline-block;
 }
 
-/* Faint gray wireframe — always visible once shown */
+/* Faint gray wireframe — unlit glass tube outline */
 .letterBase {
   display: block;
   font-family: var(--font-display);
@@ -92,11 +126,11 @@
   text-transform: uppercase;
   color: transparent;
   -webkit-text-stroke-width: 1.5px;
-  -webkit-text-stroke-color: #1a1a1a;
+  -webkit-text-stroke-color: rgba(62, 220, 196, 0.15);
   user-select: none;
 }
 
-/* Cyan illumination layer — revealed by clip-path tracing */
+/* Cyan neon illumination layer */
 .letterCyan {
   position: absolute;
   top: 0;
@@ -107,31 +141,35 @@
   line-height: var(--leading-none);
   letter-spacing: var(--tracking-tight);
   text-transform: uppercase;
-  color: transparent;
-  -webkit-text-stroke-width: 2px;
+  color: #e8fbf7;
+  -webkit-text-stroke-width: 1.2px;
   -webkit-text-stroke-color: var(--color-accent-cyan);
   text-shadow:
-    0 0 12px rgba(62, 220, 196, 0.4),
-    0 0 25px rgba(62, 220, 196, 0.15);
-  clip-path: inset(0 100% 0 0);
+    0 0 2.5px #ffffff,
+    0 0 6px #3edcc4,
+    0 0 14px rgba(62, 220, 196, 0.55),
+    0 0 26px rgba(62, 220, 196, 0.28),
+    0 0 45px rgba(62, 220, 196, 0.12);
+  opacity: 0;
   user-select: none;
-  will-change: clip-path, text-shadow;
+  will-change: opacity, text-shadow, color;
 }
 
 /* ── Post-illumination glow bloom (radial behind the name) ── */
 .nameGlow {
   position: absolute;
-  inset: -60px;
+  inset: -80px;
   border-radius: 50%;
   background: radial-gradient(
     ellipse at center,
-    rgba(62, 220, 196, 0.06) 0%,
+    rgba(62, 220, 196, 0.22) 0%,
+    rgba(62, 220, 196, 0.06) 45%,
     transparent 70%
   );
   opacity: 0;
   pointer-events: none;
-  will-change: opacity;
-  filter: blur(30px);
+  will-change: opacity, transform;
+  filter: blur(35px);
 }
 
 /* ═══════════════════════════════════════════════════════════════
