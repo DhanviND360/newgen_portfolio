@@ -23,6 +23,21 @@
   user-select: none;
 }
 
+/* ── Planetary Zoom Scaling Layer ── */
+.canvasZoomLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform, filter;
+  transform-origin: center center;
+}
+
+.nodeTargetGlow {
+  box-shadow: 0 0 35px rgba(62, 220, 196, 0.95), 0 0 70px rgba(62, 220, 196, 0.6) !important;
+  border-color: #ffffff !important;
+}
+
 /* ── SVG Connection Layer ── */
 .svgCanvas {
   position: absolute;
@@ -50,16 +65,16 @@
 
 /* Physical link from letter to node */
 .connectionLine {
-  stroke: rgba(255, 255, 255, 0.15);
-  stroke-width: 1.2;
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1.5;
   transition: stroke 0.3s ease, stroke-width 0.3s ease, opacity 0.3s ease;
 }
 
 .connectionLineActive {
   stroke: var(--color-accent-cyan);
-  stroke-width: 1.5;
-  opacity: 0.9;
-  filter: drop-shadow(0 0 6px rgba(62, 220, 196, 0.4));
+  stroke-width: 2.2;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 8px rgba(62, 220, 196, 0.5));
 }
 
 /* ── Center Portrait System ── */
@@ -172,7 +187,7 @@
   line-height: var(--leading-none);
   text-transform: uppercase;
   color: var(--color-text);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--tracking-tight);
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
@@ -192,7 +207,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   pointer-events: auto;
   cursor: pointer;
   text-decoration: none;
@@ -206,18 +221,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
 }
 
 .nodeDot {
-  width: 10px;
-  height: 10px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--color-text-muted);
-  border: 1.5px solid var(--color-text-secondary);
+  border: 2px solid var(--color-text-secondary);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
 }
 
 .nodeAnchor:hover .nodeDot,
@@ -226,16 +241,16 @@
   border-color: var(--color-accent-cyan);
   transform: scale(1.35);
   box-shadow:
-    0 0 14px rgba(62, 220, 196, 0.7),
-    0 0 28px rgba(62, 220, 196, 0.3);
+    0 0 18px rgba(62, 220, 196, 0.85),
+    0 0 36px rgba(62, 220, 196, 0.4);
 }
 
 .nodePulse {
   position: absolute;
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  border: 1px solid rgba(62, 220, 196, 0.25);
+  border: 1.5px solid rgba(62, 220, 196, 0.3);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -262,57 +277,62 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 3px;
   white-space: nowrap;
   pointer-events: none;
-  background: rgba(10, 10, 10, 0.75);
-  backdrop-filter: blur(8px);
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+  background: rgba(10, 10, 10, 0.82);
+  backdrop-filter: blur(10px);
+  padding: 7px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .nodeAnchor:hover .nodeCard,
 .nodeAnchor[data-active="true"] .nodeCard {
-  border-color: rgba(62, 220, 196, 0.3);
-  background: rgba(13, 13, 13, 0.9);
+  border-color: rgba(62, 220, 196, 0.35);
+  background: rgba(13, 13, 13, 0.95);
   transform: translateY(-2px);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.8),
+    0 0 16px rgba(62, 220, 196, 0.15);
 }
 
 .nodeHeader {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .nodeIndex {
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.85rem;
+  font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--color-accent-cyan);
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .nodeLabel {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: var(--tracking-widest);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--color-text-secondary);
-  font-weight: 500;
+  font-weight: var(--weight-regular);
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .nodeAnchor:hover .nodeLabel,
 .nodeAnchor[data-active="true"] .nodeLabel {
   color: #ffffff;
-  text-shadow: 0 0 10px rgba(62, 220, 196, 0.5);
+  text-shadow: 0 0 12px rgba(62, 220, 196, 0.55);
 }
 
 .nodeDesc {
   font-family: var(--font-body);
-  font-size: 0.62rem;
+  font-size: 0.8rem;
   letter-spacing: 0.04em;
   color: var(--color-text-muted);
   opacity: 0;
@@ -325,7 +345,7 @@
 .nodeAnchor:hover .nodeDesc,
 .nodeAnchor[data-active="true"] .nodeDesc {
   opacity: 1;
-  max-height: 20px;
+  max-height: 26px;
   transform: translateY(0);
   color: var(--color-text-secondary);
 }
@@ -375,21 +395,21 @@
   0%, 28%, 100% {
     background: var(--color-text-muted);
     border-color: var(--color-text-secondary);
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
     transform: scale(1);
   }
   10% {
     background: var(--color-accent-cyan);
     border-color: #ffffff;
     box-shadow:
-      0 0 12px rgba(62, 220, 196, 0.95),
-      0 0 24px rgba(62, 220, 196, 0.45);
+      0 0 16px rgba(62, 220, 196, 0.95),
+      0 0 32px rgba(62, 220, 196, 0.45);
     transform: scale(1.35);
   }
   20% {
     background: var(--color-text-muted);
     border-color: var(--color-text-secondary);
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
     transform: scale(1);
   }
 }
@@ -410,19 +430,19 @@
 
 @keyframes nodeTwinkleCard {
   0%, 28%, 100% {
-    border-color: rgba(255, 255, 255, 0.06);
-    background: rgba(10, 10, 10, 0.75);
-    box-shadow: none;
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(10, 10, 10, 0.82);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
   }
   10% {
-    border-color: rgba(62, 220, 196, 0.35);
-    background: rgba(14, 18, 17, 0.88);
-    box-shadow: 0 0 14px rgba(62, 220, 196, 0.15);
+    border-color: rgba(62, 220, 196, 0.4);
+    background: rgba(14, 18, 17, 0.92);
+    box-shadow: 0 0 18px rgba(62, 220, 196, 0.2);
   }
   20% {
-    border-color: rgba(255, 255, 255, 0.06);
-    background: rgba(10, 10, 10, 0.75);
-    box-shadow: none;
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(10, 10, 10, 0.82);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
   }
 }
 
@@ -433,7 +453,7 @@
   }
   10% {
     color: #ffffff;
-    text-shadow: 0 0 8px rgba(62, 220, 196, 0.5);
+    text-shadow: 0 0 10px rgba(62, 220, 196, 0.6);
   }
   20% {
     color: var(--color-text-secondary);
@@ -465,10 +485,10 @@
   align-items: center;
   justify-content: center;
   gap: clamp(var(--space-2), 1.2vw, var(--space-4));
-  font-family: var(--font-body);
-  font-size: clamp(var(--text-xs), 1.2vw, var(--text-sm));
-  font-weight: var(--weight-medium);
-  letter-spacing: var(--tracking-widest);
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.4vw, 1.2rem);
+  font-weight: var(--weight-regular);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #ffffff;
   pointer-events: none;
@@ -580,16 +600,27 @@
     height: 180px;
   }
 
+  .nodeDotWrapper {
+    width: 28px;
+    height: 28px;
+  }
+
+  .nodeDot {
+    width: 14px;
+    height: 14px;
+  }
+
   .nodeCard {
-    padding: 2px 6px;
+    padding: 5px 10px;
+    border-radius: 5px;
   }
 
   .nodeLabel {
-    font-size: 0.62rem;
+    font-size: 0.85rem;
   }
 
   .nodeIndex {
-    font-size: 0.55rem;
+    font-size: 0.72rem;
   }
 
   .tagline {

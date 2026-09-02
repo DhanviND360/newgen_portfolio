@@ -36,7 +36,7 @@ export const PHASE_DURATIONS: Record<CinematicPhase, number> = {
   [CinematicPhase.INITIALIZING]: 4200,
   [CinematicPhase.BOOT]: 4000,
   [CinematicPhase.PROJECTS]: 24000, // ~6s per project × 4 projects (entry + hold + exit w/ overlaps)
-  [CinematicPhase.ACHIEVEMENTS]: 22000, // title (3.5s) + 4 achievements × ~4s + recession (2.5s)
+  [CinematicPhase.ACHIEVEMENTS]: 26500, // title (3.5s) + 5 achievements × ~4.3s + recession (2.5s)
   [CinematicPhase.CREATOR_REVEAL]: 9500,
   [CinematicPhase.HOME]: 0, // Terminal state — no duration
 };

@@ -52,6 +52,41 @@ export interface NavigationNode {
   href: string;
 }
 
+export interface GalleryItem {
+  id: string;
+  title: string;
+  category: string;
+  year: number;
+  description: string;
+  tags: string[];
+  gradient: string;
+  aspect: string;
+  metrics?: string;
+}
+
+export interface HobbyItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  category: string;
+  description: string;
+  highlights: string[];
+  accentColor: string;
+  tag: string;
+}
+
+export interface AboutTimeline {
+  year: string;
+  role: string;
+  company: string;
+  description: string;
+}
+
+export interface SkillCategory {
+  title: string;
+  skills: string[];
+}
+
 // ── Creator ──
 
 export const creator: CreatorInfo = {
@@ -155,6 +190,14 @@ export const achievements: Achievement[] = [
     statement: 'Built a real-time disaster response coordination system in 36 hours.',
   },
   {
+    id: 'achievement-ynotme',
+    title: 'Top 100 Teams',
+    event: '31,000+ Builders Challenge',
+    result: 'TOP 100',
+    year: 2025,
+    statement: 'Selected in top 100 teams out of 31,000+ builders. YnotMe — AI conversation coach focused on improving dates and getting better.',
+  },
+  {
     id: 'achievement-finalist',
     title: 'International Innovation Finalist',
     event: 'Global Student Innovation Challenge',
@@ -229,4 +272,188 @@ export const bootLines: string[] = [
   'Mounting creative engine...',
   'Establishing visual pipeline...',
   'All systems operational.',
+];
+
+// ── Gallery Items (Visual Archive) ──
+
+export const galleryItems: GalleryItem[] = [
+  {
+    id: 'gal-spatial-ui',
+    title: 'Spatial Canvas Holography',
+    category: 'Spatial Interface',
+    year: 2025,
+    description: 'Experimental 3D HUD interface utilizing WebGPU compute shaders, volumetric particle grids, and kinetic cursor distortion.',
+    tags: ['WebGPU', 'WGSL', 'Spatial Audio', 'GLSL'],
+    gradient: 'linear-gradient(135deg, #0b1e28 0%, #064047 50%, #3edcc4 100%)',
+    aspect: 'wide',
+    metrics: '120 FPS // 500K Particles',
+  },
+  {
+    id: 'gal-kinetic-type',
+    title: 'Kinetic Variable Glyph Engine',
+    category: 'Generative Typography',
+    year: 2025,
+    description: 'Real-time procedural font morphing framework driven by sound frequency spectra and pointer velocity physics.',
+    tags: ['Canvas 2D', 'Web Audio API', 'Physics Engine'],
+    gradient: 'linear-gradient(135deg, #180924 0%, #43125e 50%, #c43e3e 100%)',
+    aspect: 'square',
+    metrics: 'Real-time FFT Analysis',
+  },
+  {
+    id: 'gal-cyber-dock',
+    title: 'Cybernetic Dock & HUD System',
+    category: 'System Architecture',
+    year: 2024,
+    description: 'Industrial glassmorphic navigation shell designed for telemetry surveillance dashboards and mission control consoles.',
+    tags: ['React', 'CSS Architecture', 'Hardware Accelerated'],
+    gradient: 'linear-gradient(135deg, #09121a 0%, #152e3d 50%, #00f0ff 100%)',
+    aspect: 'wide',
+    metrics: 'Sub-millisecond Latency',
+  },
+  {
+    id: 'gal-neural-topography',
+    title: 'Neural Latent Topography',
+    category: 'AI Visualization',
+    year: 2024,
+    description: 'Volumetric topographical landscape rendering continuous multi-dimensional latent embeddings in real-time raymarched scenes.',
+    tags: ['Three.js', 'Raymarching', 'Embedding Visualization'],
+    gradient: 'linear-gradient(135deg, #1f1406 0%, #4d2f09 50%, #ffd438 100%)',
+    aspect: 'tall',
+    metrics: '4D Dimension Projection',
+  },
+  {
+    id: 'gal-quantum-clock',
+    title: 'Quantum Orbit Chronometer',
+    category: 'Interactive Installation',
+    year: 2024,
+    description: 'Precision atomic clock simulation tracking relativistic time dilations across gravitational wells with interactive celestial bodies.',
+    tags: ['SVG Animation', 'Relativistic Math', 'GSAP Core'],
+    gradient: 'linear-gradient(135deg, #0d1222 0%, #1c2748 50%, #3178c6 100%)',
+    aspect: 'square',
+    metrics: 'Microsecond Precision',
+  },
+  {
+    id: 'gal-light-chamber',
+    title: 'Anamorphic Light Chamber',
+    category: 'Optical Simulation',
+    year: 2023,
+    description: 'Optical ray dispersion chamber demonstrating refraction, caustic generation, and chromatic chromaticity shifts through crystal prisms.',
+    tags: ['Custom Shaders', 'Caustic Mapping', 'WebGL 2.0'],
+    gradient: 'linear-gradient(135deg, #1f0b14 0%, #46142c 50%, #e70488 100%)',
+    aspect: 'wide',
+    metrics: 'Multi-bounce Caustics',
+  },
+];
+
+// ── Hobby Pursuits (Beyond the Code) ──
+
+export const hobbyItems: HobbyItem[] = [
+  {
+    id: 'hobby-synth',
+    title: 'Modular Synthesizers & Sound Synthesis',
+    subtitle: 'Eurorack Patching & Algorithmic Frequency Modulation',
+    category: 'Acoustic Engineering',
+    description: 'Crafting generative ambient soundscapes and rhythmic textures through analog modular synthesis, patch cables, and CV (control voltage) feedback loops. Exploring mathematics through audible waveforms.',
+    highlights: [
+      'Custom Eurorack modular rack with analogue VCOs, wavefolders & granular DSP',
+      'Algorithmic sequencing inspired by Euclidean rhythms and cellular automata',
+      'Original sound design for interactive web experiences and kinetic installations',
+    ],
+    accentColor: '#3edcc4',
+    tag: 'ANALOG AUDIO',
+  },
+  {
+    id: 'hobby-astronomy',
+    title: 'Astrophotography & Orbital Mechanics',
+    subtitle: 'Deep-Sky Long-Exposure Imaging & Celestial Tracking',
+    category: 'Space Exploration',
+    description: 'Photographing emission nebulae, distant galaxies, and lunar terminator ridges from high-altitude dark sky reserves. Deeply inspired by astrophysics, telemetry, and celestial mechanics.',
+    highlights: [
+      'Equatorial motorized tracking mount with autoguiding precision under 0.6 arcseconds',
+      'Narrowband dual-band filtration (H-Alpha & O-III) capturing deep cosmic gases',
+      'Translating orbital physics equations into digital gravitational simulation code',
+    ],
+    accentColor: '#4285F4',
+    tag: 'COSMOLOGY',
+  },
+  {
+    id: 'hobby-hardware',
+    title: 'Hardware Prototyping & Custom Keyboards',
+    subtitle: 'Microcontroller Programming, PCB Routing & Tactile Mechanics',
+    category: 'Physical Computing',
+    description: 'Soldering custom split ergonomic mechanical keyboards, designing custom CNC switch plates, and programming firmware on RP2040 and STM32 microcontrollers using QMK and Rust.',
+    highlights: [
+      'Hand-wired 36-key split columnar keyboards with custom OLED telemetry screens',
+      'Custom macro pads with rotary encoders mapped to audio mixing and developer tools',
+      'Embedded firmware in C / Rust for sub-1ms USB polling and custom matrix scanning',
+    ],
+    accentColor: '#FFD438',
+    tag: 'HARDWARE',
+  },
+  {
+    id: 'hobby-scifi',
+    title: 'Sci-Fi Worldbuilding & Game Architecture',
+    subtitle: 'Procedural Generation, Speculative Fiction & Simulation',
+    category: 'Creative Direction',
+    description: 'Writing speculative technical lore, architecting fictional planetary societies, and building small procedural terrain prototypes in Godot and custom Rust game engines.',
+    highlights: [
+      'Procedural planetary terrain generation utilizing simplex noise & hydraulic erosion',
+      'Speculative industrial design documents for retro-futuristic spacecraft avionics',
+      'Interactive narrative fiction exploring AI alignment and post-scarcity economies',
+    ],
+    accentColor: '#c43e3e',
+    tag: 'SPECULATION',
+  },
+];
+
+// ── About Page Datasets ──
+
+export const aboutTimeline: AboutTimeline[] = [
+  {
+    year: '2025 — PRESENT',
+    role: 'Lead Creative Technologist & Full-Stack Architect',
+    company: 'Independent Practice / Autonomous Systems',
+    description: 'Architecting high-throughput distributed architectures, real-time collaboration engines, and cutting-edge WebGPU spatial web applications.',
+  },
+  {
+    year: '2024 — 2025',
+    role: 'Systems Engineer & Research Fellow',
+    company: 'Distributed Systems & Applied Crypto Lab',
+    description: 'Conducted empirical research on zero-knowledge messaging networks, low-latency state resolution, and co-authored 3 conference papers.',
+  },
+  {
+    year: '2023 — 2024',
+    role: 'Full-Stack Developer & UI Engineer',
+    company: 'Interactive Media & Creative Studios',
+    description: 'Engineered high-performance web products, bespoke design systems, and animated interactive platforms for tech clients globally.',
+  },
+  {
+    year: '2022 — 2023',
+    role: 'Open-Source Contributor & Hackathon Competitor',
+    company: 'Global Developer Community',
+    description: 'Secured national hackathon championship victories and built open-source utilities reaching over 10K+ GitHub stars worldwide.',
+  },
+];
+
+export const skillCategories: SkillCategory[] = [
+  {
+    title: 'Core Languages',
+    skills: ['TypeScript', 'JavaScript (ESNext)', 'Python', 'Rust', 'C / C++', 'SQL', 'Go'],
+  },
+  {
+    title: 'Frameworks & Runtimes',
+    skills: ['Next.js 16', 'React 19', 'Node.js', 'Express', 'Flask', 'FastAPI', 'Tailwind / Vanilla CSS'],
+  },
+  {
+    title: 'Graphics & Creative Tech',
+    skills: ['WebGPU / WGSL', 'WebGL 2.0', 'GSAP Core', 'Three.js', 'Framer Motion', 'Canvas 2D', 'Shaders'],
+  },
+  {
+    title: 'Systems, Cloud & Infra',
+    skills: ['Docker', 'PostgreSQL', 'Redis', 'WebSockets', 'WebRTC', 'Vercel Edge', 'Cloudflare Workers', 'Supabase'],
+  },
+  {
+    title: 'AI & Machine Learning',
+    skills: ['OpenAI / ChatGPT API', 'Google Gemini', 'Anthropic Claude', 'Ollama (Local LLMs)', 'NumPy', 'Pandas', 'OpenCV'],
+  },
 ];

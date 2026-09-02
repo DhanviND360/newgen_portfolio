@@ -111,6 +111,20 @@ export default function AchievementSequence({
     }))
   );
 
+  // Keep refs synchronized with achievements array length
+  if (innerRefs.current.length !== achievements.length) {
+    innerRefs.current = achievements.map((_, i) => innerRefs.current[i] || {
+      scene: null,
+      result: null,
+      title: null,
+      divider: null,
+      event: null,
+      year: null,
+      statement: null,
+    });
+    achievementRefs.current = achievements.map((_, i) => achievementRefs.current[i] || createRef<HTMLDivElement>());
+  }
+
   const buildTimeline = useCallback(() => {
     if (!containerRef.current) return null;
 

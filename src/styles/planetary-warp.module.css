@@ -1,0 +1,106 @@
+/* ═══════════════════════════════════════════════════════════════
+   DHANVI — Planetary Warp FX Styles
+   Cinematic planetary zoom, radial edge streaks, motion blur,
+   and minimalist flash transition.
+   ═══════════════════════════════════════════════════════════════ */
+
+.warpRoot {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+/* Procedural hyperspace warp streaks canvas */
+.warpCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Edge speed graphic ring — peripheral motion blur & tunnel */
+.edgeTunnel {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--warp-x, 50%) var(--warp-y, 50%),
+    transparent 30%,
+    rgba(62, 220, 196, 0.04) 55%,
+    rgba(10, 10, 10, 0.6) 80%,
+    rgba(0, 0, 0, 0.92) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  mix-blend-mode: multiply;
+}
+
+/* Radial peripheral motion lines */
+.radialLinesOverlay {
+  position: absolute;
+  inset: -20%;
+  width: 140%;
+  height: 140%;
+  pointer-events: none;
+  background: repeating-conic-gradient(
+    from 0deg at var(--warp-x, 50%) var(--warp-y, 50%),
+    transparent 0deg,
+    transparent 3deg,
+    rgba(62, 220, 196, 0.12) 3.5deg,
+    transparent 4deg,
+    transparent 8deg,
+    rgba(255, 255, 255, 0.08) 8.5deg,
+    transparent 9deg
+  );
+  opacity: 0;
+  mix-blend-mode: screen;
+  mask-image: radial-gradient(
+    circle at var(--warp-x, 50%) var(--warp-y, 50%),
+    transparent 20%,
+    rgba(0, 0, 0, 0.8) 60%,
+    black 90%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--warp-x, 50%) var(--warp-y, 50%),
+    transparent 20%,
+    rgba(0, 0, 0, 0.8) 60%,
+    black 90%
+  );
+}
+
+/* Minimalist Flash Burst */
+.minimalFlash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--warp-x, 50%) var(--warp-y, 50%),
+    #ffffff 0%,
+    rgba(215, 255, 250, 0.95) 30%,
+    rgba(62, 220, 196, 0.75) 65%,
+    rgba(10, 15, 20, 0.95) 100%
+  );
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+/* Target Focus Ring (Planet Horizon Ring) */
+.focusReticle {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1px solid rgba(62, 220, 196, 0.6);
+  box-shadow:
+    0 0 20px rgba(62, 220, 196, 0.6),
+    inset 0 0 15px rgba(62, 220, 196, 0.4);
+  transform: translate(-50%, -50%) scale(0.2);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}

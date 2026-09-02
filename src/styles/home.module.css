@@ -74,10 +74,10 @@
 }
 
 .homeTagline {
-  font-family: var(--font-body);
-  font-size: clamp(var(--text-sm), 1.5vw, var(--text-lg));
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-base), 1.6vw, var(--text-xl));
   font-weight: var(--weight-regular);
-  letter-spacing: var(--tracking-wide);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
@@ -195,9 +195,9 @@
 
 /* ── Node Label ── */
 .nodeLabel {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-widest);
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--color-text-muted);
   white-space: nowrap;

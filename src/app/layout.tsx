@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Anton, Inter, Silkscreen } from "next/font/google";
+import { Anton, Inter, Silkscreen, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const anton = Anton({
@@ -19,6 +19,12 @@ const silkscreen = Silkscreen({
   weight: ["400", "700"],
   subsets: ["latin"],
   variable: "--font-silkscreen",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
   display: "swap",
 });
 
@@ -49,7 +55,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${anton.variable} ${inter.variable} ${silkscreen.variable}`}
+      className={`${anton.variable} ${inter.variable} ${silkscreen.variable} ${jetbrainsMono.variable}`}
     >
       <body>{children}</body>
     </html>
