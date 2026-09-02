@@ -19,6 +19,7 @@ import {
   getCinematicController,
 } from '@/systems/cinematicController';
 import { projects, achievements } from '@/data/portfolio';
+import { startBGM, stopBGM } from '@/systems/audioManager';
 import styles from '@/styles/cinematic.module.css';
 
 // Phase components
@@ -43,6 +44,11 @@ export default function CinematicExperience() {
   const [phase, setPhase] = useState<CinematicPhase>(controllerRef.current.currentPhase);
 
   const controller = controllerRef.current;
+
+  // Initialize BGM audio right from the beginning
+  useEffect(() => {
+    startBGM();
+  }, []);
 
   // Subscribe to phase changes
   useEffect(() => {
@@ -73,11 +79,14 @@ export default function CinematicExperience() {
     };
   }, [phase]);
 
-  // ESC key handler for skip
+  // ESC key handler: stops music and skips to home
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && controller.isCinematicActive) {
-        handleSkip();
+      if (e.key === 'Escape') {
+        stopBGM();
+        if (controller.isCinematicActive) {
+          handleSkip();
+        }
       }
     };
 
@@ -90,8 +99,9 @@ export default function CinematicExperience() {
     controller.advance();
   }, [controller]);
 
-  // Skip handler — kills ALL active GSAP animations to prevent artifacts
+  // Skip handler — stops BGM and kills ALL active GSAP animations to prevent artifacts
   const handleSkip = useCallback(() => {
+    stopBGM();
     if (cinematicRootRef.current) {
       gsap.killTweensOf(cinematicRootRef.current.querySelectorAll('*'));
     }

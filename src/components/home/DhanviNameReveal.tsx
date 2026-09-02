@@ -319,16 +319,23 @@ export default function DhanviNameReveal() {
     updateDimensions();
     window.addEventListener('resize', updateDimensions);
 
-    // Initial entrance animation
-    const tl = gsap.timeline({ delay: 0.2 });
+    // Initial entrance animation — elongated majestic letter illumination
+    const tl = gsap.timeline({ delay: 0.3 });
     NAME_LETTERS.forEach((_, i) => {
       const el = letterRefs.current[i];
       if (el) {
         tl.fromTo(
           el,
-          { opacity: 0, scale: 0.5, y: -20 },
-          { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: 'power3.out' },
-          i * 0.08
+          { opacity: 0, scale: 0.5, y: -20, filter: 'brightness(0.25) blur(6px)' },
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            filter: 'brightness(1) blur(0px)',
+            duration: 1.4,
+            ease: 'power2.out',
+          },
+          i * 0.35
         );
       }
     });
@@ -336,8 +343,8 @@ export default function DhanviNameReveal() {
       tl.fromTo(
         taglineRef.current,
         { opacity: 0, y: 15 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
-        0.5
+        { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out' },
+        (NAME_LETTERS.length - 1) * 0.35 + 0.8
       );
     }
 
