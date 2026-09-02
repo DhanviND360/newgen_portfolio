@@ -26,6 +26,7 @@ export default function InitializingSequence({
   const diskRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const auraRef = useRef<HTMLDivElement>(null);
+  const warningsRef = useRef<HTMLDivElement>(null);
   const [dots, setDots] = useState('');
 
   // Animated cycling dots for pixel font
@@ -53,6 +54,7 @@ export default function InitializingSequence({
       gsap.set(diskRef.current, { scale: 0.6, opacity: 0, rotation: -45 });
       gsap.set(textRef.current, { opacity: 0, y: 15 });
       gsap.set(auraRef.current, { scale: 0.5, opacity: 0 });
+      gsap.set(warningsRef.current, { opacity: 1, y: 0 });
 
       // ── Step 1: High-voltage Power Ignition (0.0s - 0.4s) ──
       tl.to(
@@ -141,6 +143,16 @@ export default function InitializingSequence({
           3.75
         )
         .to(
+          warningsRef.current,
+          {
+            opacity: 0,
+            scale: 0.9,
+            duration: 0.25,
+            ease: 'power2.in',
+          },
+          3.75
+        )
+        .to(
           containerRef.current,
           {
             opacity: 0,
@@ -200,6 +212,51 @@ export default function InitializingSequence({
           INITIALISING<span className={styles.pixelDots}>{dots}</span>
           <span className={styles.pixelCursor}>_</span>
         </p>
+      </div>
+
+      {/* High-Visibility Badges: SOUND ON & EPILEPSY WARNING */}
+      <div ref={warningsRef} className={styles.warningCluster}>
+        {/* SOUND ON Badge */}
+        <div className={styles.soundBadge} role="status" aria-label="Sound enabled">
+          <span className={styles.soundBadgeIcon} aria-hidden="true">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+            </svg>
+          </span>
+          <span>SOUND ON</span>
+        </div>
+
+        {/* EPILEPSY WARNING Badge */}
+        <div className={styles.epilepsyBadge} role="alert" aria-label="Epilepsy warning: flashing lights">
+          <span className={styles.epilepsyBadgeIcon} aria-hidden="true">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+          </span>
+          <span>EPILEPSY WARNING</span>
+        </div>
       </div>
     </div>
   );
