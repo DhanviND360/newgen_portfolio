@@ -15,6 +15,8 @@ export interface Project {
   tags: string[];
   year: number;
   image?: string;
+  images?: string[];
+  tileLabels?: string[];
   link?: string;
   github?: string;
 }
@@ -119,19 +121,25 @@ export const creator: CreatorInfo = {
 
 export const projects: Project[] = [
   {
-    id: 'project-alpha',
-    title: 'Project Alpha',
-    subtitle: 'Real-time Collaboration Platform',
+    id: 'sih-bro',
+    title: 'SIH Bro',
+    subtitle: 'Smart Problem Statement Ranking Copilot',
     description:
-      'A high-performance collaborative workspace enabling teams to build, iterate, and ship together in real time.',
+      'Built SIH Bro for teams that are looking to win SIH 2026. Smart application that ranks teams to their appropriate problem statement mathematically.',
     impact: [
-      'Reduced team sync latency by 94% with CRDT-based state resolution',
-      '12K+ concurrent users in production with sub-50ms response',
-      'Adopted by 3 enterprise clients within first quarter',
+      'Over 30 concurrent users during peak team formation',
+      'Helped 100+ users with their problem statement related queries',
+      'Many positive reviews and strong community engagement on LinkedIn',
     ],
-    tags: ['TypeScript', 'React', 'WebSocket', 'Redis'],
-    year: 2025,
-    github: 'https://github.com/dhanvi/project-alpha',
+    tags: ['Next.js', 'TypeScript', 'CSS', 'Vercel', 'SessionStorage'],
+    year: 2026,
+    images: [
+      '/projects/sihbro-1.png',
+      '/projects/sihbro-2.png',
+      '/projects/sihbro-3.png',
+    ],
+    tileLabels: ['01 // COPILOT UI', '02 // SESSION KEY', '03 // ARCHITECTURE'],
+    link: 'https://sih-bro.vercel.app',
   },
   {
     id: 'project-nexus',
