@@ -18,16 +18,32 @@ function notify() {
 }
 
 let removeInteractionListeners: (() => void) | null = null;
+let delayTimer: ReturnType<typeof setTimeout> | null = null;
 
-/** Start the cinematic BGM. Handles browser autoplay policies. */
-export function startBGM(): void {
+/** Start the cinematic BGM. Handles browser autoplay policies and optional startup delay. */
+export function startBGM(delayMs: number = 0): void {
   if (typeof window === 'undefined') return;
   if (userStopped) return;
   if (isPlaying) return;
 
+  if (delayTimer) {
+    clearTimeout(delayTimer);
+    delayTimer = null;
+  }
+
+  if (delayMs > 0) {
+    delayTimer = setTimeout(() => {
+      delayTimer = null;
+      if (!userStopped && !isPlaying) {
+        startBGM(0);
+      }
+    }, delayMs);
+    return;
+  }
+
   if (!audioInstance) {
     audioInstance = new Audio('/tron_arena_BGM_edited.mp3');
-    audioInstance.volume = 0.75;
+    audioInstance.volume = 0.85;
     audioInstance.loop = false;
     audioInstance.preload = 'auto';
 
@@ -64,7 +80,7 @@ export function startBGM(): void {
       })
       .catch(() => {
         // Autoplay policy prevented immediate playback
-        // Attach one-time user gesture listeners to start audio immediately on user interaction
+        // Attach user gesture listeners on ANY interaction (click, move, key, touch, scroll)
         if (userStopped) return;
 
         const handleUserGesture = () => {
@@ -84,16 +100,24 @@ export function startBGM(): void {
           window.removeEventListener('click', handleUserGesture);
           window.removeEventListener('keydown', handleUserGesture);
           window.removeEventListener('pointerdown', handleUserGesture);
+          window.removeEventListener('pointermove', handleUserGesture);
+          window.removeEventListener('mousemove', handleUserGesture);
           window.removeEventListener('touchstart', handleUserGesture);
+          window.removeEventListener('wheel', handleUserGesture);
+          window.removeEventListener('scroll', handleUserGesture);
           removeInteractionListeners = null;
         };
 
         removeInteractionListeners = cleanupGestureListeners;
 
-        window.addEventListener('click', handleUserGesture, { passive: true });
-        window.addEventListener('keydown', handleUserGesture, { passive: true });
-        window.addEventListener('pointerdown', handleUserGesture, { passive: true });
-        window.addEventListener('touchstart', handleUserGesture, { passive: true });
+        window.addEventListener('click', handleUserGesture, { passive: true, once: true });
+        window.addEventListener('keydown', handleUserGesture, { passive: true, once: true });
+        window.addEventListener('pointerdown', handleUserGesture, { passive: true, once: true });
+        window.addEventListener('pointermove', handleUserGesture, { passive: true, once: true });
+        window.addEventListener('mousemove', handleUserGesture, { passive: true, once: true });
+        window.addEventListener('touchstart', handleUserGesture, { passive: true, once: true });
+        window.addEventListener('wheel', handleUserGesture, { passive: true, once: true });
+        window.addEventListener('scroll', handleUserGesture, { passive: true, once: true });
       });
   }
 }
@@ -101,6 +125,11 @@ export function startBGM(): void {
 /** Stop the BGM immediately (e.g. on ESC or Skip). */
 export function stopBGM(): void {
   userStopped = true;
+
+  if (delayTimer) {
+    clearTimeout(delayTimer);
+    delayTimer = null;
+  }
 
   if (removeInteractionListeners) {
     removeInteractionListeners();
