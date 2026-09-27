@@ -581,7 +581,6 @@ export default function DhanviNameReveal() {
                 <span className={styles.nodeIndex}>{String(i + 1).padStart(2, '0')}</span>
                 <span className={styles.nodeLabel}>{node.label}</span>
               </div>
-              <span className={styles.nodeDesc}>{node.description}</span>
             </div>
           </a>
         ))}

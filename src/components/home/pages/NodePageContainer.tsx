@@ -72,10 +72,9 @@ export default function NodePageContainer({
 
   return (
     <div ref={containerRef} className={styles.pageRoot} role="dialog" aria-modal="true">
-      {/* ── Top Bar: Heading on Top ── */}
+      {/* ── Top Bar: Clean Heading on Top ── */}
       <header className={styles.topBar}>
         <div className={styles.headingGroup}>
-          <span className={styles.nodeIndexBadge}>{formattedIndex} // NODE</span>
           <h1 className={styles.nodePageHeading}>{nodeLabel}</h1>
         </div>
 
@@ -92,11 +91,6 @@ export default function NodePageContainer({
 
       {/* ── Page Content ── */}
       <main className={styles.contentContainer}>
-        <div className={styles.pageSubtitleBanner}>
-          <p className={styles.pageSubtitle}>{nodeDescription}</p>
-          <span className={styles.pageTelemetry}>STATUS: TELEMETRY ACTIVE // SEC_0{nodeIndex + 1}</span>
-        </div>
-
         <div ref={contentRef}>{children}</div>
       </main>
     </div>
