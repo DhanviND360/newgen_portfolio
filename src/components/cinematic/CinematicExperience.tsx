@@ -45,9 +45,9 @@ export default function CinematicExperience() {
 
   const controller = controllerRef.current;
 
-  // Initialize BGM audio right from the beginning
+  // Initialize BGM audio delayed by 10 seconds
   useEffect(() => {
-    startBGM();
+    startBGM(10000);
   }, []);
 
   // Subscribe to phase changes
