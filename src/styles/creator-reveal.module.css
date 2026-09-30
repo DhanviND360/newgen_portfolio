@@ -1,10 +1,13 @@
 /* ═══════════════════════════════════════════════════════════════
    DHANVI — Creator Reveal Styles
-   4-Stage Cinematic Digitalization Engine:
-   1. Clean Neon Text (Reference Image 4)
-   2. Pixelated Fragmentation (Reference Image 1)
-   3. Blue Voxelized / Extruded 3D Text (Reference Image 3)
-   4. Extreme Forward Zoom into Tunnel of Glowing Data Particles (Reference Image 2)
+   
+   1. ACT 1 — "Wanna meet the CREATOR?" (neon buzz & ignition strike)
+   2. ACT 2 — Letter-by-letter DHANVI name reveal (cyan neon tracing)
+   3. ACT 3 — 4-Stage Digitalization Engine:
+      - Clean Neon Text
+      - Pixelated Fragmentation
+      - Blue Voxelized 3D Extrusion
+      - Extreme Forward Tunnel Dive & Hyperdrive Climax Flash
    ═══════════════════════════════════════════════════════════════ */
 
 .revealRoot {
@@ -20,6 +23,169 @@
   z-index: 20;
   user-select: none;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   ACT 1 — "Wanna meet the CREATOR?"
+   ═══════════════════════════════════════════════════════════════ */
+
+.questionSection {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+  padding: 0 var(--space-8);
+  will-change: transform, opacity, filter;
+  z-index: 25;
+  pointer-events: none;
+}
+
+/* "Wanna meet the" */
+.questionLine {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-2xl), 4.5vw, var(--text-5xl));
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: var(--color-text);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* "CREATOR?" — neon sign container */
+.questionAccent {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-4xl), 8vw, var(--text-7xl));
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* Ambient neon wall radiance / backdrop bloom */
+.neonAura {
+  position: absolute;
+  inset: -30px -50px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(62, 220, 196, 0.45) 0%,
+    rgba(62, 220, 196, 0.15) 45%,
+    transparent 75%
+  );
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  filter: blur(25px);
+  will-change: opacity, transform;
+}
+
+/* Neon text element with hot plasma core and multi-layer gas glow */
+.neonText {
+  position: relative;
+  display: inline-block;
+  color: #ffffff;
+  -webkit-text-stroke: 1.5px var(--color-accent-cyan);
+  text-shadow:
+    0 0 4px #ffffff,
+    0 0 10px #3edcc4,
+    0 0 20px #3edcc4,
+    0 0 40px #3edcc4,
+    0 0 80px rgba(62, 220, 196, 0.75),
+    0 0 120px rgba(62, 220, 196, 0.35);
+  user-select: none;
+  will-change: opacity, text-shadow, color;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACT 2 — DHANVI Name (large, centred)
+   ═══════════════════════════════════════════════════════════════ */
+
+.nameContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(var(--space-2), 2vw, var(--space-5));
+  opacity: 0;
+  will-change: opacity, transform;
+  z-index: 22;
+  pointer-events: none;
+}
+
+/* ── Letter Group (holds base wireframe + cyan overlay) ── */
+.letterGroup {
+  position: relative;
+  display: inline-block;
+}
+
+/* Faint gray wireframe — unlit glass tube outline */
+.letterBase {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-6xl), 14vw, 10rem);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke-width: 1.5px;
+  -webkit-text-stroke-color: rgba(62, 220, 196, 0.15);
+  user-select: none;
+}
+
+/* Cyan neon illumination layer */
+.letterCyan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-6xl), 14vw, 10rem);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: #e8fbf7;
+  -webkit-text-stroke-width: 1.2px;
+  -webkit-text-stroke-color: var(--color-accent-cyan);
+  text-shadow:
+    0 0 2.5px #ffffff,
+    0 0 6px #3edcc4,
+    0 0 14px rgba(62, 220, 196, 0.55),
+    0 0 26px rgba(62, 220, 196, 0.28),
+    0 0 45px rgba(62, 220, 196, 0.12);
+  opacity: 0;
+  user-select: none;
+  will-change: opacity, text-shadow, color;
+}
+
+/* ── Post-illumination glow bloom (radial behind the name) ── */
+.nameGlow {
+  position: absolute;
+  inset: -80px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(62, 220, 196, 0.25) 0%,
+    rgba(62, 220, 196, 0.08) 45%,
+    transparent 70%
+  );
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity, transform;
+  filter: blur(35px);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACT 3 — DIGITALIZATION ENGINE LAYERS
+   ═══════════════════════════════════════════════════════════════ */
 
 /* ── Fullscreen Interactive Canvas ── */
 .canvas {
@@ -104,4 +270,27 @@
   pointer-events: none;
   opacity: 0;
   will-change: opacity;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .questionLine {
+    font-size: clamp(var(--text-xl), 5vw, var(--text-3xl));
+  }
+
+  .questionAccent {
+    font-size: clamp(var(--text-3xl), 10vw, var(--text-5xl));
+  }
+
+  .nameContainer {
+    gap: var(--space-1);
+  }
+
+  .letterBase,
+  .letterCyan {
+    font-size: clamp(var(--text-5xl), 13vw, var(--text-7xl));
+  }
 }

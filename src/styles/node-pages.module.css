@@ -308,15 +308,14 @@
 }
 
 .achieveCard {
-  background: rgba(14, 14, 14, 0.8);
+  background: rgba(14, 14, 14, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-left: 3px solid var(--color-accent-red);
   border-radius: 10px;
   padding: clamp(20px, 3vh, 32px);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
+  flex-direction: column;
+  gap: 18px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -327,10 +326,19 @@
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
 }
 
+.achieveCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+}
+
 .achieveInfo {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  max-width: 680px;
 }
 
 .achieveTitle {
@@ -351,6 +359,7 @@
 .achieveStatement {
   font-family: var(--font-body);
   font-size: 0.85rem;
+  line-height: 1.5;
   color: var(--color-text-muted);
   margin-top: 4px;
 }
@@ -378,6 +387,246 @@
   font-size: 0.75rem;
   color: var(--color-text-muted);
 }
+
+/* ── Interactive Achievement Image Showcase (Proof Strip) ── */
+.achieveGallery {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  height: clamp(140px, 18vh, 200px);
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.achieveTile {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(196, 62, 62, 0.25);
+  background: rgba(14, 10, 10, 0.9);
+  cursor: pointer;
+  transition:
+    flex 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  outline: none;
+}
+
+.achieveTile:hover,
+.achieveTile:focus-visible {
+  flex: 2;
+  border-color: rgba(230, 60, 60, 0.85);
+  box-shadow:
+    0 0 20px rgba(230, 60, 60, 0.25),
+    inset 0 0 12px rgba(230, 60, 60, 0.12);
+  z-index: 2;
+}
+
+.achieveTileImgWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.achieveTileImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.88) contrast(1.05) saturate(0.9);
+  transition:
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.3s ease;
+}
+
+.achieveTile:hover .achieveTileImg,
+.achieveTile:focus-visible .achieveTileImg {
+  transform: scale(1.05);
+  filter: brightness(1.02) contrast(1.02) saturate(1.05);
+}
+
+.achieveTileGlow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(14, 8, 8, 0.1) 0%,
+    rgba(14, 8, 8, 0.2) 50%,
+    rgba(14, 8, 8, 0.85) 100%
+  );
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.achieveTile:hover .achieveTileGlow {
+  opacity: 0.3;
+}
+
+.achieveTileScanline {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.12) 2px,
+    rgba(0, 0, 0, 0.12) 4px
+  );
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.achieveTileBadge {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 6px;
+  background: rgba(12, 6, 6, 0.9);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(196, 62, 62, 0.35);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.achieveTileBadgeText {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-red);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.achieveTileBadgeDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-accent-red);
+  box-shadow: 0 0 5px var(--color-accent-red);
+  flex-shrink: 0;
+}
+
+.achieveTileCornerTL {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 5px;
+  height: 5px;
+  border-top: 1px solid rgba(230, 60, 60, 0.7);
+  border-left: 1px solid rgba(230, 60, 60, 0.7);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.achieveTileCornerBR {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 5px;
+  height: 5px;
+  border-top: 1px solid rgba(230, 60, 60, 0.7);
+  border-right: 1px solid rgba(230, 60, 60, 0.7);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ── Lightbox Modal in Achievements View ── */
+.achieveLightboxOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 2, 2, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 40px);
+  cursor: zoom-out;
+  animation: achieveLightboxIn 0.25s ease forwards;
+}
+
+@keyframes achieveLightboxIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.achieveLightboxContainer {
+  position: relative;
+  max-width: 92vw;
+  max-height: 88vh;
+  border: 1px solid rgba(230, 60, 60, 0.5);
+  box-shadow:
+    0 0 50px rgba(0, 0, 0, 0.9),
+    0 0 35px rgba(230, 60, 60, 0.25);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #080505;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+}
+
+.achieveLightboxImg {
+  display: block;
+  max-width: 100%;
+  max-height: calc(88vh - 44px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.achieveLightboxCaption {
+  padding: 10px 16px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-red);
+  background: rgba(14, 8, 8, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-transform: uppercase;
+}
+
+.achieveLightboxClose {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(230, 60, 60, 0.6);
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.achieveLightboxClose:hover {
+  background: var(--color-accent-red);
+  color: #000;
+  transform: scale(1.1);
+}
+
 
 /* ═══════════════════════════════════════════════════════════════
    3. ABOUT VIEW

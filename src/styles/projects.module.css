@@ -114,6 +114,7 @@
   transform-style: preserve-3d;
   backface-visibility: hidden;
   opacity: 0;
+  pointer-events: none;
   will-change: transform, opacity;
 }
 
