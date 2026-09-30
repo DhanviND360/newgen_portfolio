@@ -16,6 +16,7 @@ export interface Project {
   year: number;
   image?: string;
   images?: string[];
+  imagePositions?: string[];
   tileLabels?: string[];
   link?: string;
   github?: string;
@@ -28,6 +29,9 @@ export interface Achievement {
   result: string;
   year: number;
   statement?: string;
+  images?: string[];
+  imagePositions?: string[];
+  tileLabels?: string[];
 }
 
 export interface SocialLink {
@@ -142,47 +146,77 @@ export const projects: Project[] = [
     link: 'https://sih-bro.vercel.app',
   },
   {
-    id: 'project-nexus',
-    title: 'Nexus Engine',
-    subtitle: 'AI-Powered Data Pipeline',
+    id: 'razorpace-ai',
+    title: 'Razorpace AI',
+    subtitle: 'Agentic Commerce & Merchant Growth',
     description:
-      'Intelligent data processing engine that automates extraction, transformation, and analysis at scale.',
+      'Agentic commerce platform connecting AI buyers with merchant intelligence, deterministic financial controls, and Razorpay payments.',
     impact: [
-      'Processes 2M+ records per hour with adaptive schema detection',
-      'Cut manual data prep time from 6 hours to 12 minutes',
+      '27.4% AOV increase — ₹14,299 → ₹15,480 in control-vs-test benchmark',
+      '100% policy adherence across defined financial constraints',
+      '100% machine-readable catalog with auditable Razorpay transactions',
     ],
-    tags: ['Python', 'Go', 'Kafka', 'ML'],
+    tags: ['TypeScript', 'LangGraph', 'Python', 'Razorpay', 'Agentic AI'],
+    year: 2026,
+    images: [
+      '/projects/razorpace-1.png',
+      '/projects/razorpace-2.png',
+      '/projects/razorpace-3.png',
+    ],
+    imagePositions: ['left center', 'left top', 'left top'],
+    tileLabels: ['01 // COMMERCE ENGINE', '02 // MERCHANT DASHBOARD', '03 // AGENT TRACE & RAILS'],
+  },
+  {
+    id: 'hemoconnect',
+    title: 'HemoConnect',
+    subtitle: 'AI-Powered Thalassemia Care',
+    description:
+      'Unified healthcare platform combining report analysis, donor—patient matching, blood delivery tracking, and community support.',
+    impact: [
+      'OCR + ML converts uploaded blood reports into diagnostic insights',
+      'AI donor matchmaking connects patients and donors using location/context',
+      'Blockchain-backed delivery provides blood-order and tracking infrastructure',
+    ],
+    tags: ['React', 'Python', 'Machine Learning', 'Tesseract OCR', 'Polygon'],
     year: 2025,
+    images: [
+      '/projects/hemoconnect-1.png',
+      '/projects/hemoconnect-2.png',
+      '/projects/hemoconnect-3.png',
+    ],
+    imagePositions: ['center center', 'left top', 'left center'],
+    tileLabels: ['01 // ECOSYSTEM HERO', '02 // AI REPORT INSIGHTS', '03 // GEO DONOR MATCH'],
   },
   {
-    id: 'project-cipher',
-    title: 'Cipher Protocol',
-    subtitle: 'End-to-End Encrypted Messaging',
+    id: 'ynotme',
+    title: 'YnotMe',
+    subtitle: 'Real-Time AI Conversation Coach',
     description:
-      'Zero-knowledge messaging protocol with forward secrecy and decentralized key management.',
+      'Real-time conversation intelligence that transcribes live conversations, extracts context, and generates contextual coaching through an evolving knowledge graph.',
     impact: [
-      'Zero metadata leakage verified through formal security audit',
-      'Handles 50K messages/sec across distributed relay network',
-      'Open-sourced with 4.2K GitHub stars',
+      'Selected in Top 100 teams out of 31,000+ builders worldwide',
+      '8-second rolling audio pipeline designed for live conversational feedback',
+      'Sarvam AI handles speech transcription and conversation reasoning',
+      'Neo4j knowledge graph persists extracted conversational context',
     ],
-    tags: ['Rust', 'Cryptography', 'P2P', 'WebRTC'],
-    year: 2024,
-    github: 'https://github.com/dhanvi/cipher',
-  },
-  {
-    id: 'project-prism',
-    title: 'Prism Engine',
-    subtitle: 'GPU Spatial Simulation Engine',
-    description:
-      'Next-generation WebGPU graphics and physics engine delivering real-time volumetric lighting and spatial simulations in the browser.',
-    impact: [
-      'Sustained 120 FPS rendering across 500K+ dynamic physical particles',
-      'Reduced GPU memory footprint by 65% via custom compute shader pipeline',
-      'Featured in Web3D Global Showcase & ACM SIGGRAPH Community',
+    tags: [
+      'React Native',
+      'Expo SDK 54',
+      'TypeScript',
+      'Express',
+      'Sarvam AI',
+      'Neo4j',
+      'Supabase',
+      'expo-audio',
     ],
-    tags: ['WebGPU', 'Rust', 'WGSL', 'TypeScript'],
-    year: 2024,
-    github: 'https://github.com/dhanvi/prism-engine',
+    year: 2026,
+    images: [
+      '/projects/ynotme-1.jpeg',
+      '/projects/ynotme-2.jpeg',
+      '/projects/ynotme-3.jpeg',
+    ],
+    imagePositions: ['center top', 'center top', 'center center'],
+    tileLabels: ['01 // APP INTERFACE', '02 // LIVE COACHING', '03 // MEMORY GRAPH'],
   },
 ];
 
@@ -190,43 +224,84 @@ export const projects: Project[] = [
 
 export const achievements: Achievement[] = [
   {
-    id: 'achievement-hackathon',
-    title: 'National Hackathon Champion',
-    event: 'All India Engineering Hackathon',
-    result: '1ST PLACE',
+    id: 'achievement-datavortex',
+    title: 'Datavortex KLU Hackathon',
+    event: 'KL University Hackathon 2025',
+    result: '2ND RUNNER UP',
     year: 2025,
-    statement: 'Built a real-time disaster response coordination system in 36 hours.',
+    statement:
+      'Built an end-to-end AI application for thalassemia patients — providing automated blood report diagnostics, intelligent donor matchmaking, and blood supply logistics.',
+    images: [
+      '/achievements/datavortex-1.jpeg',
+      '/achievements/datavortex-2.jpeg',
+      '/achievements/datavortex-3.jpeg',
+    ],
+    imagePositions: ['center center', 'center 30%', 'center 30%'],
+    tileLabels: ['01 // PARTICIPANT ACCESS', '02 // AWARD CEREMONY', '03 // 2ND RUNNER UP'],
   },
   {
     id: 'achievement-ynotme',
     title: 'Top 100 Teams',
-    event: '31,000+ Builders Challenge',
+    event: '31,000+ Builders Challenge · HackHazards \'26',
     result: 'TOP 100',
     year: 2025,
-    statement: 'Selected in top 100 teams out of 31,000+ builders. YnotMe — AI conversation coach focused on improving dates and getting better.',
+    statement:
+      'Selected in top 100 teams out of 31,000+ builders worldwide. Built YnotMe — real-time AI conversation coach powered by speech intelligence and persistent memory graphs.',
+    images: [
+      '/achievements/top100-1.jpeg',
+      '/achievements/top100-2.jpeg',
+      '/achievements/top100-3.jpeg',
+    ],
+    imagePositions: ['center center', 'center top', 'center top'],
+    tileLabels: ['01 // MEMORY GRAPH', '02 // LIVE COPILOT', '03 // OFFICIAL SELECTION'],
   },
   {
-    id: 'achievement-finalist',
-    title: 'International Innovation Finalist',
-    event: 'Global Student Innovation Challenge',
-    result: 'TOP 5',
-    year: 2025,
-    statement: 'Selected from 2,400+ teams across 48 countries.',
+    id: 'achievement-codewithflow',
+    title: 'Code With Flow',
+    event: 'National Hackathon Challenge 2026',
+    result: '3RD PLACE',
+    year: 2026,
+    statement:
+      'Effectively used base44 for incorporating AI agent built websites, demonstrating high-velocity autonomous web deployment and full-stack generation.',
+    images: [
+      '/achievements/codewithflow-1.jpeg',
+      '/achievements/codewithflow-2.jpeg',
+      '/achievements/codewithflow-3.jpeg',
+    ],
+    imagePositions: ['center center', 'center center', 'center center'],
+    tileLabels: ['01 // BASE44 SPONSOR', '02 // SHORTLISTED', '03 // 3RD PLACE RANKING'],
   },
   {
-    id: 'achievement-research',
-    title: 'Published Researcher',
-    event: 'IEEE & ACM Conferences',
-    result: '3 PAPERS',
-    year: 2024,
-    statement: 'Distributed systems optimization and applied cryptography.',
+    id: 'achievement-headofevents',
+    title: 'Head of Events',
+    event: 'App & Web Development Club · 2025 - 2026',
+    result: '1,000+ STUDENTS',
+    year: 2026,
+    statement:
+      'Head of Events (2025 – 2026) — coordinated technical initiatives, hands-on engineering workshops, and flagship hackathons involving 1,000+ students.',
+    images: [
+      '/achievements/headofevents-1.jpeg',
+      '/achievements/headofevents-2.jpeg',
+      '/achievements/headofevents-3.jpeg',
+    ],
+    imagePositions: ['center 20%', 'center 20%', 'center 30%'],
+    tileLabels: ['01 // LAB MENTORING', '02 // TECH WORKSHOP', '03 // ORGANIZING TEAM'],
   },
   {
-    id: 'achievement-opensource',
-    title: 'Open Source Recognition',
-    event: 'GitHub Community',
-    result: '10K+ STARS',
-    year: 2025,
+    id: 'achievement-hackathonbug',
+    title: 'Hackathon Bug',
+    event: 'Competitive Hackathon Circuit',
+    result: '4W · 18F',
+    year: 2026,
+    statement:
+      '4-time winner and 18-time finalist across national and collegiate hackathons. Relentless builder with active participation in many more competitive sprints.',
+    images: [
+      '/achievements/hackathonbug-1.jpeg',
+      '/achievements/hackathonbug-2.jpeg',
+      '/achievements/hackathonbug-3.jpeg',
+    ],
+    imagePositions: ['center 25%', 'center 20%', 'center 30%'],
+    tileLabels: ['01 // NIGHT SPRINT', '02 // 18X FINALIST', '03 // SPEED PROTOTYPING'],
   },
 ];
 

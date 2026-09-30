@@ -131,7 +131,7 @@ export default function ProjectSequence({
       sceneRefs.current.forEach((ref) => {
         const scene = ref.current;
         if (!scene?.root) return;
-        tl.set(scene.root, { opacity: 1 });
+        tl.set(scene.root, { opacity: 1, pointerEvents: 'auto' });
         tl.set(
           [scene.number, scene.title, scene.subtitle, scene.description, scene.tagContainer],
           { opacity: 1 }
@@ -209,10 +209,18 @@ export default function ProjectSequence({
         z: projectZ,
         opacity: 0,
         scale: 0.75,
+        pointerEvents: 'none',
+        zIndex: 1,
       }, 0);
 
       // ── PHASE 1: APPROACH — Camera moves toward this project ──
       const approachStart = cursor;
+
+      // Enable pointer events on the active project
+      tl.set(scene.root, {
+        pointerEvents: 'auto',
+        zIndex: 10,
+      }, approachStart);
 
       // Fade in the scene as the camera approaches (GPU hardware composited)
       tl.to(scene.root, {
@@ -380,6 +388,12 @@ export default function ProjectSequence({
 
       // ── PHASE 3: PULLBACK — Camera pulls backward, project recedes ──
       if (!isLast) {
+        // Disable pointer events on receding project so deeper projects can receive hover
+        tl.set(scene.root, {
+          pointerEvents: 'none',
+          zIndex: 1,
+        }, cursor);
+
         // The project smoothly shrinks and fades out without heavy blur rasterization
         tl.to(scene.root, {
           scale: 0.7,
@@ -400,6 +414,12 @@ export default function ProjectSequence({
 
         cursor += TIMING.cameraPullback * 0.35; // smooth overlap
       } else {
+        // Disable pointer events on last project as well
+        tl.set(scene.root, {
+          pointerEvents: 'none',
+          zIndex: 1,
+        }, cursor);
+
         // Last project: clean fade out + camera pulls back
         tl.to(scene.root, {
           opacity: 0,
