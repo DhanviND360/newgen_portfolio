@@ -3,21 +3,23 @@
 /* ═══════════════════════════════════════════════════════════════
    DHANVI — Achievement Sequence
    
-   Cinematic typographic achievement presentation.
-   NOT a resume list — each achievement is a full-viewport
-   typographic statement.
+   Cinematic typographic & visual achievement presentation.
+   Dual-panel spatial layout:
+   - LEFT/RIGHT: Dominant metric statement, title, event, statement
+   - OPPOSITE: 3-tile vertical image showcase with Tron red glow,
+     hover-expansion, and full-resolution lightbox modal.
    
    Sequence:
    1. "ACHIEVEMENTS" title — scale in, hold, recede
-   2. Each achievement: result dominates → title → event → statement
-   3. Achievements occupy different screen positions for movement
+   2. Each achievement: result dominates → visual emerges → title → event → statement
+   3. Alternating layout creates continuous visual rhythm
    4. After final achievement: everything recedes, scene zooms out,
       typography shrinks, visual field becomes sparse → CREATOR_REVEAL
    
-   Time-based GSAP master timeline. No scroll. No input.
+   Time-based GSAP master timeline.
    ═══════════════════════════════════════════════════════════════ */
 
-import { useRef, useEffect, useCallback, createRef } from 'react';
+import { useRef, useEffect, useCallback, createRef, useState } from 'react';
 import gsap from 'gsap';
 import type { Achievement } from '@/data/portfolio';
 import styles from '@/styles/achievements.module.css';
@@ -66,16 +68,9 @@ const TIMING = {
   postGap: 0.6,
 } as const;
 
-/** Screen position classes cycled per achievement */
-const POSITION_CLASSES = [
-  styles.position0,  // center-left
-  styles.position1,  // center-right
-  styles.position2,  // center
-  styles.position3,  // lower-left
-];
-
 interface AchievementRefs {
   scene: HTMLDivElement | null;
+  visual: HTMLDivElement | null;
   result: HTMLDivElement | null;
   title: HTMLDivElement | null;
   divider: HTMLDivElement | null;
@@ -93,6 +88,19 @@ export default function AchievementSequence({
   const phaseTitleRef = useRef<HTMLDivElement>(null);
   const phaseTitleTextRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+
+  // Close lightbox on ESC
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && activeImage) {
+        e.stopPropagation();
+        setActiveImage(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeImage]);
 
   // Create stable refs for each achievement
   const achievementRefs = useRef(
@@ -102,6 +110,7 @@ export default function AchievementSequence({
   const innerRefs = useRef<AchievementRefs[]>(
     achievements.map(() => ({
       scene: null,
+      visual: null,
       result: null,
       title: null,
       divider: null,
@@ -115,6 +124,7 @@ export default function AchievementSequence({
   if (innerRefs.current.length !== achievements.length) {
     innerRefs.current = achievements.map((_, i) => innerRefs.current[i] || {
       scene: null,
+      visual: null,
       result: null,
       title: null,
       divider: null,
@@ -141,7 +151,8 @@ export default function AchievementSequence({
     if (prefersReducedMotion()) {
       if (phaseTitle) tl.set(phaseTitle, { opacity: 1 });
       innerRefs.current.forEach((refs) => {
-        if (refs.scene) tl.set(refs.scene, { opacity: 1 });
+        if (refs.scene) tl.set(refs.scene, { opacity: 1, pointerEvents: 'auto' });
+        if (refs.visual) tl.set(refs.visual, { opacity: 1 });
         if (refs.result) tl.set(refs.result, { opacity: 1 });
         if (refs.title) tl.set(refs.title, { opacity: 1 });
         if (refs.event) tl.set(refs.event, { opacity: 1 });
@@ -206,6 +217,12 @@ export default function AchievementSequence({
       const isLast = index === achievements.length - 1;
       const entryStart = cursor;
 
+      // Enable pointer events and elevate z-index on active achievement
+      tl.set(refs.scene, {
+        pointerEvents: 'auto',
+        zIndex: 10,
+      }, entryStart);
+
       // ── ENTRY: Scene fades in with scale ──
       tl.fromTo(
         refs.scene,
@@ -221,6 +238,26 @@ export default function AchievementSequence({
         },
         entryStart
       );
+
+      // ── Visual frame reveals with smooth slide ──
+      if (refs.visual) {
+        tl.fromTo(
+          refs.visual,
+          {
+            opacity: 0,
+            scale: 0.95,
+            y: 15,
+          },
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: safeDuration(TIMING.resultEntry),
+            ease: safeEase(EASE.cinematic),
+          },
+          entryStart + 0.1
+        );
+      }
 
       // ── Result (dominant metric) — the hero element ──
       const textStart = entryStart + TIMING.resultEntry * 0.2;
@@ -323,6 +360,11 @@ export default function AchievementSequence({
 
       // ── EXIT ──
       if (!isLast) {
+        tl.set(refs.scene, {
+          pointerEvents: 'none',
+          zIndex: 1,
+        }, cursor);
+
         tl.to(
           refs.scene,
           {
@@ -347,9 +389,13 @@ export default function AchievementSequence({
 
     const recessionStart = cursor + 0.2;
 
-    // Fade out the last achievement
+    // Fade out the last achievement and disable pointer events
     const lastRefs = innerRefs.current[achievements.length - 1];
     if (lastRefs?.scene) {
+      tl.set(lastRefs.scene, {
+        pointerEvents: 'none',
+        zIndex: 1,
+      }, recessionStart);
       tl.to(
         lastRefs.scene,
         {
@@ -436,7 +482,7 @@ export default function AchievementSequence({
 
       {/* Individual achievement scenes */}
       {achievements.map((achievement, index) => {
-        const posClass = POSITION_CLASSES[index % POSITION_CLASSES.length];
+        const isReverse = index % 2 === 1;
 
         return (
           <div
@@ -444,72 +490,159 @@ export default function AchievementSequence({
             ref={(el) => {
               if (el) innerRefs.current[index].scene = el;
             }}
-            className={`${styles.achievementScene} ${posClass}`}
+            className={styles.achievementScene}
           >
-            <div className={styles.achievementInner}>
-              {/* Result — dominant metric */}
-              <div
-                ref={(el) => {
-                  if (el) innerRefs.current[index].result = el;
-                }}
-                className={styles.achievementResult}
-              >
-                {achievement.result}
-              </div>
-
-              {/* Title */}
-              <div
-                ref={(el) => {
-                  if (el) innerRefs.current[index].title = el;
-                }}
-                className={styles.achievementTitle}
-              >
-                {achievement.title}
-              </div>
-
-              {/* Divider */}
-              <div
-                ref={(el) => {
-                  if (el) innerRefs.current[index].divider = el;
-                }}
-                className={styles.achievementDivider}
-              />
-
-              {/* Event / Organization */}
-              <div
-                ref={(el) => {
-                  if (el) innerRefs.current[index].event = el;
-                }}
-                className={styles.achievementEvent}
-              >
-                {achievement.event}
-              </div>
-
-              {/* Year */}
-              <div
-                ref={(el) => {
-                  if (el) innerRefs.current[index].year = el;
-                }}
-                className={styles.achievementYear}
-              >
-                {achievement.year}
-              </div>
-
-              {/* Supporting statement (optional) */}
-              {achievement.statement && (
-                <p
+            <div
+              className={`${styles.achievementContainer} ${
+                isReverse ? styles.achievementContainerReverse : ''
+              }`}
+            >
+              {/* Info Side */}
+              <div className={styles.achievementInner}>
+                {/* Result — dominant metric */}
+                <div
                   ref={(el) => {
-                    if (el) innerRefs.current[index].statement = el;
+                    if (el) innerRefs.current[index].result = el;
                   }}
-                  className={styles.achievementStatement}
+                  className={styles.achievementResult}
                 >
-                  {achievement.statement}
-                </p>
-              )}
+                  {achievement.result}
+                </div>
+
+                {/* Title */}
+                <div
+                  ref={(el) => {
+                    if (el) innerRefs.current[index].title = el;
+                  }}
+                  className={styles.achievementTitle}
+                >
+                  {achievement.title}
+                </div>
+
+                {/* Divider */}
+                <div
+                  ref={(el) => {
+                    if (el) innerRefs.current[index].divider = el;
+                  }}
+                  className={styles.achievementDivider}
+                />
+
+                {/* Event / Organization */}
+                <div
+                  ref={(el) => {
+                    if (el) innerRefs.current[index].event = el;
+                  }}
+                  className={styles.achievementEvent}
+                >
+                  {achievement.event}
+                </div>
+
+                {/* Year */}
+                <div
+                  ref={(el) => {
+                    if (el) innerRefs.current[index].year = el;
+                  }}
+                  className={styles.achievementYear}
+                >
+                  {achievement.year}
+                </div>
+
+                {/* Supporting statement (optional) */}
+                {achievement.statement && (
+                  <p
+                    ref={(el) => {
+                      if (el) innerRefs.current[index].statement = el;
+                    }}
+                    className={styles.achievementStatement}
+                  >
+                    {achievement.statement}
+                  </p>
+                )}
+              </div>
+
+              {/* Visual Showcase: 3 Vertical Image Tiles */}
+              <div
+                ref={(el) => {
+                  if (el) innerRefs.current[index].visual = el;
+                }}
+                className={styles.achievementVisual}
+              >
+                <div className={styles.visualFrame}>
+                  {achievement.images && achievement.images.length > 0 ? (
+                    <div className={styles.verticalTilesContainer}>
+                      {achievement.images.slice(0, 3).map((imgSrc, i) => (
+                        <div
+                          key={i}
+                          className={styles.verticalTile}
+                          onClick={() => setActiveImage(imgSrc)}
+                          title="Click to expand view"
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              setActiveImage(imgSrc);
+                            }
+                          }}
+                        >
+                          <div className={styles.tileImageWrapper}>
+                            <img
+                              src={imgSrc}
+                              alt={`${achievement.title} proof asset 0${i + 1}`}
+                              className={styles.tileImage}
+                              style={{
+                                objectPosition:
+                                  achievement.imagePositions?.[i] || 'center center',
+                              }}
+                            />
+                            <div className={styles.tileGlowOverlay} />
+                            <div className={styles.tileScanline} />
+                          </div>
+                          <div className={styles.tileBadge}>
+                            <span className={styles.tileBadgeText}>
+                              {achievement.tileLabels?.[i] || `0${i + 1}`}
+                            </span>
+                            <span className={styles.tileBadgeDot} />
+                          </div>
+                          <div className={styles.tileCornerTL} />
+                          <div className={styles.tileCornerBR} />
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
             </div>
           </div>
         );
       })}
+
+      {/* Lightbox Preview Modal */}
+      {activeImage && (
+        <div
+          className={styles.lightboxOverlay}
+          onClick={() => setActiveImage(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className={styles.lightboxContainer}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className={styles.lightboxClose}
+              onClick={() => setActiveImage(null)}
+              aria-label="Close preview"
+            >
+              ✕
+            </button>
+            <img
+              src={activeImage}
+              alt="Enlarged achievement view"
+              className={styles.lightboxImg}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

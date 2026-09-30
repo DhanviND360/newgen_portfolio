@@ -96,7 +96,8 @@ const ProjectScene = forwardRef<ProjectSceneRefs, ProjectSceneProps>(
                           className={styles.tileImage}
                           style={{
                             objectPosition:
-                              i === 0 ? 'left center' : i === 1 ? 'center 15%' : 'left top',
+                              project.imagePositions?.[i] ||
+                              (i === 0 ? 'left center' : i === 1 ? 'center 15%' : 'left top'),
                           }}
                         />
                         <div className={styles.tileGlowOverlay} />

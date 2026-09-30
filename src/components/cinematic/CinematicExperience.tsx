@@ -59,6 +59,10 @@ export default function CinematicExperience() {
       }
     });
 
+    if (typeof window !== 'undefined') {
+      (window as unknown as { __cinematicController?: typeof controller }).__cinematicController = controller;
+    }
+
     return () => {
       unsubscribe();
     };

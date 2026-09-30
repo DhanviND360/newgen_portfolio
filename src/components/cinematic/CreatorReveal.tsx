@@ -3,55 +3,94 @@
 /* ═══════════════════════════════════════════════════════════════
    DHANVI — Creator Reveal Component
    
-   4-Stage Cinematic Digitalization Engine:
-   Stage 1: Clean Neon Text (Reference Image 4)
-   Stage 2: Pixelated Fragmentation (Reference Image 1)
-   Stage 3: Blue Voxelized / Extruded 3D Text (Reference Image 3)
-   Stage 4: Extreme Forward Zoom into Tunnel of Glowing Data Particles (Reference Image 2)
-   
-   Smoothly transitions directly into the main homepage.
+   Seamless 3-Act Cinematic Finale:
+   ACT 1: "Wanna meet the CREATOR?"
+          Display typography fades in + authentic neon starter
+          flicker, dropout, electrical sparks, and ignition strike.
+   ACT 2: Letter-by-letter DHANVI Name Reveal
+          Question scrolls up as unlit wireframe letters glide in.
+          Sequential neon ignition (D → H → A → N → V → I) followed
+          by a collective high-voltage power surge & aura bloom.
+   ACT 3: ASCII Magic Digitalization Engine
+          Seamless hand-off to real-time ASCII cipher matrix:
+          - Stage 1: Clean Neon ASCII Matrix Typography
+          - Stage 2: Cyberpunk ASCII Fragmentation & Cipher Drift
+          - Stage 3: 3D Holographic ASCII Perspective Extrusion
+          - Stage 4: Extreme Forward Warp Zoom into ASCII Tunnel
+          Climax flash & seamless transition into Home Page.
    ═══════════════════════════════════════════════════════════════ */
 
 import React, { useRef, useEffect, useCallback } from 'react';
 import gsap from 'gsap';
 import styles from '@/styles/creator-reveal.module.css';
-import { prefersReducedMotion } from '@/systems/animationUtils';
+import {
+  createPhaseTimeline,
+  safeDuration,
+  safeEase,
+  EASE,
+  prefersReducedMotion,
+} from '@/systems/animationUtils';
 
 interface CreatorRevealProps {
   isActive: boolean;
   onComplete: () => void;
 }
 
-interface VoxelPoint {
-  x: number;
-  y: number;
+const NAME_LETTERS = ['D', 'H', 'A', 'N', 'V', 'I'];
+
+// ASCII Glyph Palettes
+const ASCII_DENSE = ['#', '@', '%', '&', 'W', 'M', 'X', '8', '0', '$'];
+const ASCII_MID = ['*', '+', '=', 'Z', 'Y', '<', '>', '/', '{', '}', '[', ']'];
+const ASCII_LIGHT = [':', '-', '~', '^', '1', '!', '.', '`'];
+const MATRIX_CIPHER = ['0', '1', 'X', 'F', 'A', '9', '7', '4', '3', '0x', '§', 'Δ', 'λ', '>', '<', '#', '*'];
+const ASCII_TUNNEL_GLYPHS = ['0', '1', '>', '<', '//', '::', '0x', '$', '#', '*', '+', '[]', '~'];
+
+interface AsciiChar {
+  char: string;
+  baseChar: string;
   origX: number;
   origY: number;
   relX: number;
   relY: number;
-  dist: number;
-  angle: number;
   driftX: number;
   driftY: number;
-  size: number;
+  fontSize: number;
   color: string;
   glowColor: string;
   depthOffset: number;
   alpha: number;
+  shimmerTimer: number;
+  shimmerSpeed: number;
 }
 
-interface TunnelParticle {
+interface AsciiTunnelParticle {
+  char: string;
   x: number;
   y: number;
   z: number;
   prevZ: number;
   speed: number;
-  size: number;
+  fontSize: number;
   color: string;
 }
 
 export default function CreatorReveal({ isActive, onComplete }: CreatorRevealProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Act 1: Question refs
+  const questionSectionRef = useRef<HTMLDivElement>(null);
+  const questionLineRef = useRef<HTMLDivElement>(null);
+  const questionAccentRef = useRef<HTMLDivElement>(null);
+  const neonAuraRef = useRef<HTMLDivElement>(null);
+  const neonTextRef = useRef<HTMLSpanElement>(null);
+
+  // Act 2: Name refs
+  const nameContainerRef = useRef<HTMLDivElement>(null);
+  const letterBaseRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const letterCyanRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const nameGlowRef = useRef<HTMLDivElement>(null);
+
+  // Act 3: Digitalization Canvas & VFX refs
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const anamorphicStreakRef = useRef<HTMLDivElement>(null);
   const flashOverlayRef = useRef<HTMLDivElement>(null);
@@ -62,27 +101,25 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
   // GSAP Controlled Digitalization State
   const effectState = useRef({
     globalOpacity: 0,
-    // Stage 1: Clean Neon Text
+    // Stage 1: Clean Neon ASCII Matrix
     stage1Neon: 0,
     stage1Glow: 0,
-    // Stage 2: Pixelated Fragmentation
+    // Stage 2: ASCII Fragmentation & Shuffling
     stage2Fragmentation: 0,
     stage2Drift: 0,
     stage2Glitch: 0,
-    // Stage 3: Blue 3D Voxel Extrusion
+    // Stage 3: 3D Holographic ASCII Extrusion
     stage3Extrusion: 0,
-    // Stage 4: Extreme Forward Tunnel Zoom
+    // Stage 4: Extreme Forward ASCII Warp Zoom
     stage4Zoom: 1,
     stage4Speed: 0,
     stage4Tunnel: 0,
-    // Climax Flash
-    flashOpacity: 0,
   });
 
-  const voxelsRef = useRef<VoxelPoint[]>([]);
-  const tunnelParticlesRef = useRef<TunnelParticle[]>([]);
+  const asciiCharsRef = useRef<AsciiChar[]>([]);
+  const tunnelParticlesRef = useRef<AsciiTunnelParticle[]>([]);
 
-  // Sample "DHANVI" text into high-density voxel points
+  // Sample "DHANVI" text into high-performance ASCII glyphs
   const rasterizeText = useCallback((width: number, height: number) => {
     const offCanvas = document.createElement('canvas');
     offCanvas.width = width;
@@ -92,7 +129,6 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
 
     offCtx.clearRect(0, 0, width, height);
 
-    // Font sizing tailored to match the bold aspect ratio in Reference Images
     const fontSize = Math.min(width * 0.165, 185);
     offCtx.font = `900 ${fontSize}px "Anton", "Arial Black", "Impact", sans-serif`;
     offCtx.textAlign = 'center';
@@ -105,23 +141,33 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
 
     const imgData = offCtx.getImageData(0, 0, width, height);
     const data = imgData.data;
-    const points: VoxelPoint[] = [];
+    const chars: AsciiChar[] = [];
 
-    // Dense grid step (4px for crisp block resolution)
-    const step = width < 768 ? 4 : 5;
+    // Monospace step size: fast, light, and perfectly spaced
+    const stepX = width < 768 ? 7 : 8;
+    const stepY = width < 768 ? 11 : 12;
+    const charFontSize = width < 768 ? 10 : 12;
 
-    for (let y = 0; y < height; y += step) {
-      for (let x = 0; x < width; x += step) {
+    for (let y = 0; y < height; y += stepY) {
+      for (let x = 0; x < width; x += stepX) {
         const idx = (y * width + x) * 4;
         const alpha = data[idx + 3];
 
-        if (alpha > 120) {
+        if (alpha > 85) {
           const relX = x - cx;
           const relY = y - cy;
-          const dist = Math.sqrt(relX * relX + relY * relY);
-          const angle = Math.atan2(relY, relX);
 
-          // Authentic cyan-blue spectrum matching Reference Images
+          // Select ASCII glyph by pixel density
+          let baseChar = '#';
+          if (alpha > 220) {
+            baseChar = ASCII_DENSE[Math.floor(Math.random() * ASCII_DENSE.length)];
+          } else if (alpha > 150) {
+            baseChar = ASCII_MID[Math.floor(Math.random() * ASCII_MID.length)];
+          } else {
+            baseChar = ASCII_LIGHT[Math.floor(Math.random() * ASCII_LIGHT.length)];
+          }
+
+          // Same authentic cyan-blue-white spectrum
           const rand = Math.random();
           let color = '#00f0ff';
           let glowColor = 'rgba(0, 240, 255, 0.85)';
@@ -140,34 +186,34 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
             glowColor = 'rgba(0, 102, 204, 0.55)';
           }
 
-          points.push({
-            x,
-            y,
+          chars.push({
+            char: baseChar,
+            baseChar,
             origX: x,
             origY: y,
             relX,
             relY,
-            dist,
-            angle,
-            driftX: (Math.random() - 0.5) * (160 + Math.random() * 220),
-            driftY: (Math.random() - 0.5) * (45 + Math.random() * 75),
-            size: step * 0.92,
+            driftX: (Math.random() - 0.5) * (180 + Math.random() * 240),
+            driftY: (Math.random() - 0.5) * (50 + Math.random() * 80),
+            fontSize: charFontSize,
             color,
             glowColor,
-            depthOffset: (Math.random() - 0.5) * 35,
+            depthOffset: (Math.random() - 0.5) * 40,
             alpha: alpha / 255,
+            shimmerTimer: Math.random() * 30,
+            shimmerSpeed: 3 + Math.floor(Math.random() * 6),
           });
         }
       }
     }
 
-    return points;
+    return chars;
   }, []);
 
-  // Initialize background data tunnel particles
+  // Initialize ASCII background data tunnel
   const initTunnelParticles = useCallback((width: number, height: number) => {
-    const particles: TunnelParticle[] = [];
-    const count = 800;
+    const particles: AsciiTunnelParticle[] = [];
+    const count = 450; // Optimized count for buttery 60-120fps
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
@@ -178,14 +224,16 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
 
       const rand = Math.random();
       const color = rand > 0.65 ? '#ffffff' : rand > 0.3 ? '#00f0ff' : '#0066cc';
+      const char = ASCII_TUNNEL_GLYPHS[Math.floor(Math.random() * ASCII_TUNNEL_GLYPHS.length)];
 
       particles.push({
+        char,
         x,
         y,
         z,
         prevZ: z,
-        speed: 14 + Math.random() * 24,
-        size: 2.2 + Math.random() * 3.8,
+        speed: 15 + Math.random() * 26,
+        fontSize: 11 + Math.random() * 6,
         color,
       });
     }
@@ -193,7 +241,7 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
     return particles;
   }, []);
 
-  // Main Canvas Render Loop
+  // Main Canvas Render Loop (ASCII Magic Digitalization Engine)
   useEffect(() => {
     if (!isActive) return;
 
@@ -205,14 +253,14 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    voxelsRef.current = rasterizeText(width, height);
+    asciiCharsRef.current = rasterizeText(width, height);
     tunnelParticlesRef.current = initTunnelParticles(width, height);
 
     const handleResize = () => {
       if (!canvas) return;
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
-      voxelsRef.current = rasterizeText(width, height);
+      asciiCharsRef.current = rasterizeText(width, height);
       tunnelParticlesRef.current = initTunnelParticles(width, height);
     };
 
@@ -225,23 +273,24 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
 
       // Motion blur trailing in Stage 4 high speed zoom
       if (state.stage4Speed > 0.2) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
         ctx.fillRect(0, 0, width, height);
       } else {
         ctx.clearRect(0, 0, width, height);
       }
 
-      if (state.globalOpacity <= 0.01) {
+      if (state.globalOpacity <= 0.005) {
         animFrameRef.current = requestAnimationFrame(render);
         return;
       }
 
       ctx.save();
       ctx.globalAlpha = state.globalOpacity;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
 
       // ═══════════════════════════════════════════════════════════════
-      // STAGE 4: TUNNEL OF GLOWING DATA PARTICLES (Reference Image 2)
-      // Extreme radial forward plunge into the center void
+      // STAGE 4: TUNNEL OF GLOWING ASCII DATA STREAMS
       // ═══════════════════════════════════════════════════════════════
       if (state.stage4Tunnel > 0.01) {
         ctx.save();
@@ -268,136 +317,142 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
           const prevY = cy + p.y * prevK;
 
           if (px >= 0 && px <= width && py >= 0 && py <= height) {
-            const pSize = Math.max(1.2, p.size * k * 1.6);
-
-            // Draw motion streak towards camera
+            // Speed streak ray
             ctx.beginPath();
             ctx.moveTo(prevX, prevY);
             ctx.lineTo(px, py);
             ctx.strokeStyle = p.color;
-            ctx.lineWidth = pSize;
-            ctx.shadowColor = '#00f0ff';
-            ctx.shadowBlur = 8;
+            ctx.lineWidth = Math.max(1, 1.8 * k);
             ctx.stroke();
 
-            // Voxel tip
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(px - pSize / 2, py - pSize / 2, pSize, pSize);
+            // Glowing ASCII glyph at particle head
+            const pFontSize = Math.max(9, Math.min(p.fontSize * k * 1.5, 36));
+            ctx.font = `bold ${pFontSize}px "JetBrains Mono", "Fira Code", monospace`;
+            ctx.fillStyle = p.color;
+            ctx.shadowColor = '#00f0ff';
+            ctx.shadowBlur = 6;
+            ctx.fillText(p.char, px, py);
           }
         }
         ctx.restore();
       }
 
       // ═══════════════════════════════════════════════════════════════
-      // STAGES 1, 2, 3 & 4 FOR "DHANVI" VOXEL ELEMENTS
+      // ASCII MAGIC GLYPHS FOR "DHANVI" (STAGES 1, 2, 3 & 4)
       // ═══════════════════════════════════════════════════════════════
-      const voxels = voxelsRef.current;
+      const chars = asciiCharsRef.current;
       const zoom = state.stage4Zoom;
       const frag = state.stage2Fragmentation;
       const drift = state.stage2Drift;
       const extrusion = state.stage3Extrusion;
+      const glitch = state.stage2Glitch;
 
-      for (let i = 0; i < voxels.length; i++) {
-        const v = voxels[i];
+      for (let i = 0; i < chars.length; i++) {
+        const v = chars[i];
 
-        // 1. Position calculation with Fragmentation drift & Forward Zoom
+        // 1. Position calculation with Drift & Zoom
         let curRelX = v.relX + v.driftX * drift;
         let curRelY = v.relY + v.driftY * drift;
 
-        // Stage 2 glitch jitter
-        if (state.stage2Glitch > 0) {
-          if (Math.random() < 0.14 * state.stage2Glitch) {
-            curRelX += (Math.random() - 0.5) * 30;
+        // Stage 2 ASCII glitch jitter
+        if (glitch > 0) {
+          if (Math.random() < 0.12 * glitch) {
+            curRelX += (Math.random() - 0.5) * 28;
           }
         }
 
-        // Apply Extreme Stage 4 Forward Radial Zoom
         const vx = cx + curRelX * zoom;
         const vy = cy + curRelY * zoom;
 
-        // Skip offscreen pixels during forward zoom
-        if (vx < -250 || vx > width + 250 || vy < -250 || vy > height + 250) {
+        // Skip offscreen during extreme zoom
+        if (vx < -150 || vx > width + 150 || vy < -150 || vy > height + 150) {
           continue;
         }
 
-        const currentSize = Math.max(1.5, v.size * Math.min(zoom, 4.5));
+        // 2. ASCII Character Cycling / Shimmer (ASCII Magic)
+        v.shimmerTimer++;
+        if (frag > 0.05) {
+          // In fragmentation: rapidly cycle through cipher matrix characters
+          if (v.shimmerTimer % (glitch > 0.5 ? 2 : 4) === 0) {
+            v.char = MATRIX_CIPHER[Math.floor(Math.random() * MATRIX_CIPHER.length)];
+          }
+        } else {
+          // In clean neon state: subtle matrix shimmer on random glyphs
+          if (v.shimmerTimer % v.shimmerSpeed === 0) {
+            if (Math.random() < 0.04) {
+              v.char = MATRIX_CIPHER[Math.floor(Math.random() * MATRIX_CIPHER.length)];
+            } else {
+              v.char = v.baseChar;
+            }
+          }
+        }
+
+        const scaledFontSize = Math.max(8, Math.min(v.fontSize * zoom, 110));
 
         // ═══════════════════════════════════════════════════════════════
-        // STAGE 3 & 4: 3D VOXEL EXTRUSION (Reference Image 3 & Image 2)
-        // 3D block columns extending deeply along perspective rays
+        // STAGE 3 & 4: 3D HOLOGRAPHIC ASCII PERSPECTIVE EXTRUSION
+        // Monospace characters receding deeply along perspective rays
         // ═══════════════════════════════════════════════════════════════
         if (extrusion > 0.05 || state.stage4Speed > 0.05) {
           const rayDx = (vx - cx) * 0.0035;
           const rayDy = (vy - cy) * 0.0035;
-          const depthLen = (extrusion * 80 + state.stage4Speed * 190 + v.depthOffset) * zoom;
+          const depthLen = (extrusion * 75 + state.stage4Speed * 180 + v.depthOffset) * zoom;
 
-          // Back extrusion coordinates
-          const backX = vx - rayDx * depthLen;
-          const backY = vy - rayDy * depthLen;
+          // Back depth coordinates
+          const backX1 = vx - rayDx * (depthLen * 0.45);
+          const backY1 = vy - rayDy * (depthLen * 0.45);
+          const backX2 = vx - rayDx * depthLen;
+          const backY2 = vy - rayDy * depthLen;
 
-          // Side polygon with cobalt-cyan gradient
+          // Connecting holographic perspective ray
           ctx.beginPath();
-          ctx.moveTo(backX, backY);
+          ctx.moveTo(backX2, backY2);
           ctx.lineTo(vx, vy);
-          ctx.lineTo(vx + currentSize, vy);
-          ctx.lineTo(backX + currentSize * 0.75, backY);
-          ctx.closePath();
+          ctx.strokeStyle = 'rgba(0, 170, 255, 0.2)';
+          ctx.lineWidth = Math.max(0.8, 1.2 * zoom);
+          ctx.stroke();
 
-          const extGrad = ctx.createLinearGradient(backX, backY, vx, vy);
-          extGrad.addColorStop(0, 'rgba(0, 18, 50, 0.12)');
-          extGrad.addColorStop(0.5, 'rgba(0, 95, 200, 0.65)');
-          extGrad.addColorStop(1, 'rgba(0, 240, 255, 0.95)');
+          // Mid-depth extruded ASCII character (cobalt-cyan)
+          ctx.save();
+          ctx.font = `bold ${Math.max(6, scaledFontSize * 0.8)}px "JetBrains Mono", "Fira Code", monospace`;
+          ctx.fillStyle = 'rgba(0, 140, 240, 0.55)';
+          ctx.shadowColor = '#0066cc';
+          ctx.shadowBlur = 4;
+          ctx.fillText(v.char, backX1, backY1);
 
-          ctx.fillStyle = extGrad;
-          ctx.fill();
-
-          // Bottom extrusion flank
-          ctx.beginPath();
-          ctx.moveTo(backX, backY + currentSize * 0.75);
-          ctx.lineTo(vx, vy + currentSize);
-          ctx.lineTo(vx + currentSize, vy + currentSize);
-          ctx.lineTo(backX + currentSize * 0.75, backY + currentSize * 0.75);
-          ctx.closePath();
-
-          ctx.fillStyle = 'rgba(0, 35, 95, 0.55)';
-          ctx.fill();
+          // Deepest extruded ASCII character (deep cobalt echo)
+          ctx.font = `bold ${Math.max(5, scaledFontSize * 0.65)}px "JetBrains Mono", "Fira Code", monospace`;
+          ctx.fillStyle = 'rgba(0, 50, 160, 0.35)';
+          ctx.shadowBlur = 0;
+          ctx.fillText(':', backX2, backY2);
+          ctx.restore();
         }
 
-        // Horizontal motion blur trail for drifting voxels in Stage 2
+        // Horizontal phosphor trails for drifting characters in Stage 2
         if (drift > 0.15 && Math.abs(v.driftX) > 40) {
-          ctx.beginPath();
-          ctx.moveTo(vx - v.driftX * drift * 0.45, vy);
-          ctx.lineTo(vx, vy);
-          ctx.strokeStyle = 'rgba(0, 240, 255, 0.35)';
-          ctx.lineWidth = currentSize * 0.6;
-          ctx.stroke();
+          ctx.save();
+          ctx.font = `${scaledFontSize * 0.8}px "JetBrains Mono", monospace`;
+          ctx.fillStyle = 'rgba(0, 240, 255, 0.25)';
+          ctx.fillText('-', vx - v.driftX * drift * 0.4, vy);
+          ctx.restore();
         }
 
         // ═══════════════════════════════════════════════════════════════
-        // STAGE 1: CLEAN NEON TEXT (Reference Image 4) & Voxel Front Face
+        // STAGE 1 & 2: MAIN GLOWING ASCII CHARACTER
         // ═══════════════════════════════════════════════════════════════
         ctx.save();
+        ctx.font = `bold ${scaledFontSize}px "JetBrains Mono", "Fira Code", monospace`;
         ctx.fillStyle = v.color;
         ctx.shadowColor = v.glowColor;
-        ctx.shadowBlur = state.stage1Glow * 18 + 6;
+        ctx.shadowBlur = state.stage1Glow * 14 + 5;
+        ctx.fillText(v.char, vx, vy);
 
-        if (frag > 0.08) {
-          // Discrete pixel block cubes (Stage 2)
-          ctx.fillRect(vx - currentSize / 2, vy - currentSize / 2, currentSize, currentSize);
-        } else {
-          // Solid clean neon rasterization (Stage 1)
-          ctx.fillRect(vx - currentSize * 0.55, vy - currentSize * 0.55, currentSize * 1.1, currentSize * 1.1);
-        }
-
-        // Brilliant white specular core center
-        if (state.stage1Glow > 0.35 || state.stage3Extrusion > 0.4) {
+        // Brilliant white specular core highlight on bright characters
+        if (v.color === '#ffffff' && state.stage1Glow > 0.4) {
           ctx.fillStyle = '#ffffff';
-          ctx.fillRect(
-            vx - currentSize * 0.25,
-            vy - currentSize * 0.25,
-            currentSize * 0.5,
-            currentSize * 0.5
-          );
+          ctx.shadowColor = '#ffffff';
+          ctx.shadowBlur = 8;
+          ctx.fillText(v.char, vx, vy);
         }
         ctx.restore();
       }
@@ -416,132 +471,711 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
     };
   }, [isActive, rasterizeText, initTunnelParticles]);
 
-  // Master Timeline for the 4 Stages
-  useEffect(() => {
-    if (!isActive || !containerRef.current) return;
+  // Master Timeline: Act 1 (Question) → Act 2 (Name Reveal) → Act 3 (ASCII Digitalization)
+  const buildTimeline = useCallback(() => {
+    if (!containerRef.current) return null;
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        onComplete: () => {
-          onComplete();
-        },
+    const tl = createPhaseTimeline({
+      onComplete: () => {
+        onComplete();
+      },
+    });
+
+    // ── Reduced motion fallback ──
+    if (prefersReducedMotion()) {
+      tl.set(containerRef.current, { opacity: 1 });
+      tl.set(questionSectionRef.current, { opacity: 0 });
+      tl.set(nameContainerRef.current, { opacity: 1, y: 0 });
+      letterCyanRefs.current.forEach((ref) => {
+        if (ref) {
+          tl.set(ref, {
+            opacity: 1,
+            color: '#e8fbf7',
+            webkitTextStroke: '1.2px #3edcc4',
+            textShadow:
+              '0 0 2.5px #ffffff, 0 0 6px #3edcc4, 0 0 14px rgba(62, 220, 196, 0.55)',
+          });
+        }
       });
+      tl.to({}, { duration: 2.5 });
+      tl.call(() => onComplete());
+      return tl;
+    }
 
-      // Reduced motion fallback
-      if (prefersReducedMotion()) {
-        gsap.set(containerRef.current, { opacity: 1 });
-        effectState.current.globalOpacity = 1;
-        effectState.current.stage1Glow = 1;
-        tl.to({}, { duration: 2.5 });
-        tl.call(() => onComplete());
-        return;
+    const state = effectState.current;
+
+    // ═══════════════════════════════════════════════════
+    // INITIAL STATES
+    // ═══════════════════════════════════════════════════
+    tl.set(containerRef.current, { opacity: 1 });
+    tl.set(anamorphicStreakRef.current, { opacity: 0, scaleX: 0.1 });
+    tl.set(flashOverlayRef.current, { opacity: 0 });
+
+    // Question: unlit / hidden
+    tl.set(questionLineRef.current, { opacity: 0, y: 20 });
+    tl.set(questionAccentRef.current, { opacity: 0, y: 15, scale: 0.98 });
+    if (neonAuraRef.current) {
+      tl.set(neonAuraRef.current, { opacity: 0, scale: 0.85 });
+    }
+    if (neonTextRef.current) {
+      tl.set(neonTextRef.current, {
+        opacity: 0,
+        color: 'rgba(62, 220, 196, 0.2)',
+        webkitTextStroke: '1.5px rgba(62, 220, 196, 0.25)',
+        textShadow: '0 0 0px rgba(62, 220, 196, 0)',
+      });
+    }
+
+    // Name container: unlit, initially positioned below center
+    tl.set(nameContainerRef.current, { opacity: 0, y: 110 });
+    letterCyanRefs.current.forEach((ref) => {
+      if (ref) {
+        tl.set(ref, {
+          opacity: 0,
+          color: 'rgba(62, 220, 196, 0.15)',
+          webkitTextStroke: '1.2px rgba(62, 220, 196, 0.2)',
+          textShadow: '0 0 0px rgba(62, 220, 196, 0)',
+        });
+      }
+    });
+    letterBaseRefs.current.forEach((ref) => {
+      if (ref) {
+        tl.set(ref, {
+          webkitTextStrokeColor: 'rgba(62, 220, 196, 0.18)',
+        });
+      }
+    });
+    tl.set(nameGlowRef.current, { opacity: 0, scale: 0.9 });
+
+    let cursor = 0.25;
+
+    // ═══════════════════════════════════════════════════
+    // ACT 1: "Wanna meet the CREATOR?"
+    // ═══════════════════════════════════════════════════
+
+    // "Wanna meet the" rises smoothly
+    tl.to(
+      questionLineRef.current,
+      {
+        opacity: 1,
+        y: 0,
+        duration: safeDuration(0.7),
+        ease: safeEase(EASE.cinematic),
+      },
+      cursor
+    );
+
+    cursor += 0.45;
+
+    // "CREATOR?" container appears as dim unlit silhouette
+    tl.to(
+      questionAccentRef.current,
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: safeDuration(0.3),
+        ease: safeEase('power2.out'),
+      },
+      cursor
+    );
+
+    tl.to(
+      neonTextRef.current,
+      {
+        opacity: 0.3,
+        color: 'rgba(62, 220, 196, 0.2)',
+        webkitTextStroke: '1.5px rgba(62, 220, 196, 0.25)',
+        textShadow: '0 0 0px rgba(62, 220, 196, 0)',
+        duration: safeDuration(0.3),
+        ease: safeEase('power2.out'),
+      },
+      cursor
+    );
+
+    cursor += 0.35;
+
+    // ── Neon Sign Electrical Ignition Sequence ──
+    // Spark 1
+    const s1 = cursor;
+    tl.to(
+      neonTextRef.current,
+      {
+        opacity: 0.9,
+        color: '#e0fffa',
+        webkitTextStroke: '1.5px #3edcc4',
+        textShadow: '0 0 8px #ffffff, 0 0 20px #3edcc4, 0 0 45px rgba(62, 220, 196, 0.65)',
+        duration: safeDuration(0.04),
+        ease: 'none',
+      },
+      s1
+    );
+    if (neonAuraRef.current) {
+      tl.to(neonAuraRef.current, { opacity: 0.45, duration: safeDuration(0.04), ease: 'none' }, s1);
+    }
+
+    // Cut 1: Transformer dropout
+    const c1 = s1 + 0.04;
+    tl.to(
+      neonTextRef.current,
+      {
+        opacity: 0.15,
+        color: 'rgba(62, 220, 196, 0.15)',
+        webkitTextStroke: '1.5px rgba(62, 220, 196, 0.2)',
+        textShadow: '0 0 0px rgba(62, 220, 196, 0)',
+        duration: safeDuration(0.04),
+        ease: 'none',
+      },
+      c1
+    );
+    if (neonAuraRef.current) {
+      tl.to(neonAuraRef.current, { opacity: 0, duration: safeDuration(0.04), ease: 'none' }, c1);
+    }
+
+    // Spark 2: Second weak stutter spark
+    const s2 = c1 + 0.06;
+    tl.to(
+      neonTextRef.current,
+      {
+        opacity: 0.65,
+        color: '#c4f8ef',
+        webkitTextStroke: '1.5px #3edcc4',
+        textShadow: '0 0 6px #ffffff, 0 0 16px #3edcc4, 0 0 30px rgba(62, 220, 196, 0.4)',
+        duration: safeDuration(0.04),
+        ease: 'none',
+      },
+      s2
+    );
+    if (neonAuraRef.current) {
+      tl.to(neonAuraRef.current, { opacity: 0.3, duration: safeDuration(0.04), ease: 'none' }, s2);
+    }
+
+    // Cut 2
+    const c2 = s2 + 0.04;
+    tl.to(
+      neonTextRef.current,
+      {
+        opacity: 0.1,
+        color: 'rgba(62, 220, 196, 0.12)',
+        webkitTextStroke: '1.5px rgba(62, 220, 196, 0.18)',
+        textShadow: '0 0 0px rgba(62, 220, 196, 0)',
+        duration: safeDuration(0.04),
+        ease: 'none',
+      },
+      c2
+    );
+    if (neonAuraRef.current) {
+      tl.to(neonAuraRef.current, { opacity: 0, duration: safeDuration(0.04), ease: 'none' }, c2);
+    }
+
+    // Spark 3: Rapid double-stutter before full ionization
+    const s3 = c2 + 0.05;
+    tl.to(
+      neonTextRef.current,
+      {
+        opacity: 0.95,
+        color: '#f0fffd',
+        webkitTextStroke: '1.8px #3edcc4',
+        textShadow: '0 0 10px #ffffff, 0 0 25px #3edcc4, 0 0 50px rgba(62, 220, 196, 0.75)',
+        duration: safeDuration(0.05),
+        ease: 'none',
+      },
+      s3
+    );
+    if (neonAuraRef.current) {
+      tl.to(neonAuraRef.current, { opacity: 0.6, duration: safeDuration(0.05), ease: 'none' }, s3);
+    }
+
+    // Micro dip
+    const s3dip = s3 + 0.05;
+    tl.to(
+      neonTextRef.current,
+      {
+        opacity: 0.4,
+        color: '#7de2d3',
+        webkitTextStroke: '1.5px #3edcc4',
+        textShadow: '0 0 6px rgba(62, 220, 196, 0.35)',
+        duration: safeDuration(0.03),
+        ease: 'none',
+      },
+      s3dip
+    );
+
+    // Strike: Full Voltage Surge Strike!
+    const strike = s3dip + 0.03;
+    tl.to(
+      neonTextRef.current,
+      {
+        opacity: 1,
+        color: '#ffffff',
+        webkitTextStroke: '2px #3edcc4',
+        textShadow:
+          '0 0 6px #ffffff, 0 0 15px #3edcc4, 0 0 30px #3edcc4, 0 0 60px #3edcc4, 0 0 100px rgba(62, 220, 196, 0.9), 0 0 150px rgba(62, 220, 196, 0.6)',
+        scale: 1.03,
+        duration: safeDuration(0.12),
+        ease: safeEase('power2.out'),
+      },
+      strike
+    );
+    if (neonAuraRef.current) {
+      tl.to(
+        neonAuraRef.current,
+        {
+          opacity: 1,
+          scale: 1.1,
+          duration: safeDuration(0.12),
+          ease: safeEase('power2.out'),
+        },
+        strike
+      );
+    }
+
+    // Settle into steady high-power neon state
+    const settle = strike + 0.12;
+    tl.to(
+      neonTextRef.current,
+      {
+        opacity: 1,
+        color: '#ffffff',
+        webkitTextStroke: '1.5px #3edcc4',
+        textShadow:
+          '0 0 4px #ffffff, 0 0 10px #3edcc4, 0 0 20px #3edcc4, 0 0 40px #3edcc4, 0 0 80px rgba(62, 220, 196, 0.75), 0 0 120px rgba(62, 220, 196, 0.35)',
+        scale: 1.0,
+        duration: safeDuration(0.25),
+        ease: safeEase('power2.inOut'),
+      },
+      settle
+    );
+    if (neonAuraRef.current) {
+      tl.to(
+        neonAuraRef.current,
+        {
+          opacity: 0.65,
+          scale: 1.0,
+          duration: safeDuration(0.25),
+          ease: safeEase('power2.inOut'),
+        },
+        settle
+      );
+    }
+
+    // Breathing hum & hold
+    const hum = settle + 0.25;
+    if (neonAuraRef.current) {
+      tl.to(
+        neonAuraRef.current,
+        {
+          opacity: 0.45,
+          duration: safeDuration(0.35),
+          ease: safeEase('sine.inOut'),
+          yoyo: true,
+          repeat: 2,
+        },
+        hum
+      );
+    }
+
+    cursor = hum + 1.0;
+
+    // ═══════════════════════════════════════════════════
+    // ACT 2: SCROLL TRANSITION & LETTER-BY-LETTER REVEAL
+    // ═══════════════════════════════════════════════════
+    const scrollDuration = 0.95;
+
+    // Question scrolls up and fades out
+    tl.to(
+      questionSectionRef.current,
+      {
+        y: -140,
+        opacity: 0,
+        duration: safeDuration(scrollDuration),
+        ease: safeEase('power3.inOut'),
+      },
+      cursor
+    );
+
+    // DHANVI unlit glass tubes scroll up from below into center
+    tl.to(
+      nameContainerRef.current,
+      {
+        opacity: 1,
+        y: 0,
+        duration: safeDuration(scrollDuration),
+        ease: safeEase('power3.inOut'),
+      },
+      cursor + 0.12
+    );
+
+    cursor += scrollDuration + 0.25;
+
+    // ── Sequential Letter-by-Letter Neon Sign Illumination (D → H → A → N → V → I) ──
+    const traceStart = cursor;
+    const traceStagger = 0.28;
+
+    NAME_LETTERS.forEach((_, idx) => {
+      const cyanRef = letterCyanRefs.current[idx];
+      const baseRef = letterBaseRefs.current[idx];
+      if (!cyanRef) return;
+
+      const letterStart = traceStart + idx * traceStagger;
+
+      // Step 1: Starter spark (0.04s)
+      tl.to(
+        cyanRef,
+        {
+          opacity: 0.85,
+          color: '#e0fffa',
+          webkitTextStroke: '1.2px #3edcc4',
+          textShadow: '0 0 5px #ffffff, 0 0 12px #3edcc4, 0 0 25px rgba(62, 220, 196, 0.5)',
+          duration: safeDuration(0.04),
+          ease: 'none',
+        },
+        letterStart
+      );
+
+      // Step 2: Transformer dropout cut (0.03s)
+      tl.to(
+        cyanRef,
+        {
+          opacity: 0.1,
+          color: 'rgba(62, 220, 196, 0.15)',
+          webkitTextStroke: '1.2px rgba(62, 220, 196, 0.2)',
+          textShadow: '0 0 0px rgba(62, 220, 196, 0)',
+          duration: safeDuration(0.03),
+          ease: 'none',
+        },
+        letterStart + 0.04
+      );
+
+      // Step 3: Secondary stutter spark (0.04s)
+      tl.to(
+        cyanRef,
+        {
+          opacity: 0.65,
+          color: '#c4f8ef',
+          webkitTextStroke: '1.2px #3edcc4',
+          textShadow: '0 0 4px #ffffff, 0 0 10px #3edcc4, 0 0 18px rgba(62, 220, 196, 0.35)',
+          duration: safeDuration(0.04),
+          ease: 'none',
+        },
+        letterStart + 0.07
+      );
+
+      // Step 4: Quick cutoff (0.03s)
+      tl.to(
+        cyanRef,
+        {
+          opacity: 0.08,
+          color: 'rgba(62, 220, 196, 0.12)',
+          webkitTextStroke: '1.2px rgba(62, 220, 196, 0.18)',
+          textShadow: '0 0 0px rgba(62, 220, 196, 0)',
+          duration: safeDuration(0.03),
+          ease: 'none',
+        },
+        letterStart + 0.11
+      );
+
+      // Step 5: Full Voltage Surge Strike (0.08s)
+      tl.to(
+        cyanRef,
+        {
+          opacity: 1,
+          color: '#ffffff',
+          webkitTextStroke: '1.5px #3edcc4',
+          textShadow:
+            '0 0 5px #ffffff, 0 0 12px #3edcc4, 0 0 24px #3edcc4, 0 0 45px rgba(62, 220, 196, 0.7)',
+          duration: safeDuration(0.08),
+          ease: safeEase('power2.out'),
+        },
+        letterStart + 0.14
+      );
+
+      if (baseRef) {
+        tl.to(
+          baseRef,
+          {
+            webkitTextStrokeColor: 'rgba(62, 220, 196, 0.35)',
+            duration: safeDuration(0.08),
+            ease: safeEase('power2.out'),
+          },
+          letterStart + 0.14
+        );
       }
 
-      // Initial States
-      gsap.set(containerRef.current, { opacity: 1 });
-      gsap.set(anamorphicStreakRef.current, { opacity: 0, scaleX: 0.1 });
-      gsap.set(flashOverlayRef.current, { opacity: 0 });
+      // Step 6: Settle into steady neon glow (0.14s)
+      tl.to(
+        cyanRef,
+        {
+          opacity: 1,
+          color: '#e8fbf7',
+          webkitTextStroke: '1.2px #3edcc4',
+          textShadow:
+            '0 0 2.5px #ffffff, 0 0 6px #3edcc4, 0 0 14px rgba(62, 220, 196, 0.55), 0 0 26px rgba(62, 220, 196, 0.28), 0 0 45px rgba(62, 220, 196, 0.12)',
+          duration: safeDuration(0.14),
+          ease: safeEase('power2.inOut'),
+        },
+        letterStart + 0.22
+      );
+    });
 
-      const state = effectState.current;
+    cursor = traceStart + (NAME_LETTERS.length - 1) * traceStagger + 0.38;
 
-      // ═══════════════════════════════════════════════════════════════
-      // STAGE 1: CLEAN NEON TEXT (Reference Image 4) (0.0s - 1.8s)
-      // Crisp, pristine cyan-white glowing typography
-      // ═══════════════════════════════════════════════════════════════
-      tl.to(state, {
+    // ── Collective High-Voltage Neon Power Surge ──
+    const collectiveSurgeStart = cursor;
+    const activeCyanRefs = letterCyanRefs.current.filter(
+      (ref): ref is HTMLSpanElement => ref !== null
+    );
+
+    if (activeCyanRefs.length > 0) {
+      tl.to(
+        activeCyanRefs,
+        {
+          opacity: 1,
+          color: '#ffffff',
+          webkitTextStroke: '1.8px #3edcc4',
+          textShadow:
+            '0 0 5px #ffffff, 0 0 14px #3edcc4, 0 0 28px #3edcc4, 0 0 55px rgba(62, 220, 196, 0.8), 0 0 85px rgba(62, 220, 196, 0.35)',
+          duration: safeDuration(0.18),
+          ease: safeEase('power2.out'),
+        },
+        collectiveSurgeStart
+      );
+    }
+
+    if (nameGlowRef.current) {
+      tl.to(
+        nameGlowRef.current,
+        {
+          opacity: 0.8,
+          scale: 1.06,
+          duration: safeDuration(0.18),
+          ease: safeEase('power2.out'),
+        },
+        collectiveSurgeStart
+      );
+    }
+
+    // Settle collectively
+    if (activeCyanRefs.length > 0) {
+      tl.to(
+        activeCyanRefs,
+        {
+          opacity: 1,
+          color: '#e8fbf7',
+          webkitTextStroke: '1.2px #3edcc4',
+          textShadow:
+            '0 0 2.5px #ffffff, 0 0 6px #3edcc4, 0 0 14px rgba(62, 220, 196, 0.55), 0 0 26px rgba(62, 220, 196, 0.28)',
+          duration: safeDuration(0.3),
+          ease: safeEase('power2.inOut'),
+        },
+        collectiveSurgeStart + 0.2
+      );
+    }
+
+    if (nameGlowRef.current) {
+      tl.to(
+        nameGlowRef.current,
+        {
+          opacity: 0.35,
+          scale: 1.0,
+          duration: safeDuration(0.3),
+          ease: safeEase('power2.inOut'),
+        },
+        collectiveSurgeStart + 0.2
+      );
+    }
+
+    cursor = collectiveSurgeStart + 0.55;
+
+    // ═══════════════════════════════════════════════════
+    // ACT 3: ASCII MAGIC DIGITALIZATION ENGINE
+    // ═══════════════════════════════════════════════════
+
+    // Seamless hand-off from DOM text to ASCII Canvas Matrix:
+    // Canvas global opacity rises while DOM text fades out over 0.25s
+    tl.to(
+      state,
+      {
         globalOpacity: 1,
         stage1Neon: 1,
         stage1Glow: 1,
-        duration: 0.5,
+        duration: safeDuration(0.25),
         ease: 'power2.out',
-      }, 0.1);
+      },
+      cursor
+    );
 
-      // Anamorphic horizontal flare beam flashes across "DHANVI"
-      tl.fromTo(
-        anamorphicStreakRef.current,
-        { opacity: 0, scaleX: 0.05, scaleY: 0.5 },
-        { opacity: 1, scaleX: 1.0, scaleY: 1.2, duration: 0.45, ease: 'power2.out' },
-        0.2
-      ).to(
-        anamorphicStreakRef.current,
-        { opacity: 0.35, scaleY: 0.8, duration: 0.8, ease: 'power1.out' },
-        0.65
+    tl.to(
+      nameContainerRef.current,
+      {
+        opacity: 0,
+        duration: safeDuration(0.22),
+        ease: 'power2.out',
+      },
+      cursor + 0.05
+    );
+
+    if (nameGlowRef.current) {
+      tl.to(
+        nameGlowRef.current,
+        {
+          opacity: 0,
+          duration: safeDuration(0.22),
+          ease: 'power2.out',
+        },
+        cursor + 0.05
       );
+    }
 
-      // ═══════════════════════════════════════════════════════════════
-      // STAGE 2: PIXELATED FRAGMENTATION (Reference Image 1) (1.8s - 3.8s)
-      // Disintegrates into discrete floating square pixel blocks with light streaks
-      // ═══════════════════════════════════════════════════════════════
-      tl.to(state, {
+    // Anamorphic horizontal flare beam flashes across "DHANVI"
+    tl.fromTo(
+      anamorphicStreakRef.current,
+      { opacity: 0, scaleX: 0.05, scaleY: 0.5 },
+      { opacity: 1, scaleX: 1.0, scaleY: 1.2, duration: safeDuration(0.4), ease: 'power2.out' },
+      cursor + 0.05
+    ).to(
+      anamorphicStreakRef.current,
+      { opacity: 0.35, scaleY: 0.8, duration: safeDuration(0.6), ease: 'power1.out' },
+      cursor + 0.45
+    );
+
+    cursor += 0.45;
+
+    // ── STAGE 2: ASCII FRAGMENTATION & CIPHER SHUFFLE ──
+    tl.to(
+      state,
+      {
         stage2Fragmentation: 1,
         stage2Drift: 0.55,
         stage2Glitch: 1,
         stage1Glow: 1.4,
-        duration: 1.8,
+        duration: safeDuration(1.6),
         ease: 'power2.inOut',
-      }, 1.8);
+      },
+      cursor
+    );
 
-      tl.to(anamorphicStreakRef.current, {
+    tl.to(
+      anamorphicStreakRef.current,
+      {
         opacity: 0.75,
         scaleY: 1.6,
-        duration: 0.5,
+        duration: safeDuration(0.5),
         ease: 'power2.out',
-      }, 2.2);
+      },
+      cursor + 0.4
+    );
 
-      // ═══════════════════════════════════════════════════════════════
-      // STAGE 3: BLUE VOXELIZED / 3D EXTRUDED TEXT (Reference Image 3) (3.8s - 6.0s)
-      // 3D block columns extending deeply along perspective rays
-      // ═══════════════════════════════════════════════════════════════
-      tl.to(state, {
+    cursor += 1.6;
+
+    // ── STAGE 3: 3D HOLOGRAPHIC ASCII PERSPECTIVE EXTRUSION ──
+    tl.to(
+      state,
+      {
         stage3Extrusion: 1.0,
-        stage2Drift: 0.22, // consolidate back into solid 3D voxel structure
+        stage2Drift: 0.22, // consolidate back into aligned 3D perspective columns
         stage2Glitch: 0.2,
         stage1Glow: 1.8,
-        duration: 2.0,
+        duration: safeDuration(1.4),
         ease: 'power3.out',
-      }, 3.8);
+      },
+      cursor
+    );
 
-      // ═══════════════════════════════════════════════════════════════
-      // STAGE 4: EXTREME FORWARD ZOOM INTO PARTICLE TUNNEL (Reference Image 2)
-      // Hyper-speed radial warp dive into glowing data tunnel (6.0s - 8.2s)
-      // ═══════════════════════════════════════════════════════════════
-      tl.to(state, {
+    cursor += 1.4;
+
+    // ── STAGE 4: EXTREME FORWARD ZOOM INTO ASCII CYBER TUNNEL ──
+    tl.to(
+      state,
+      {
         stage4Tunnel: 1.0,
         stage4Speed: 1.0,
-        stage4Zoom: 22.0, // Extreme forward camera plunge
+        stage4Zoom: 22.0, // Extreme forward radial warp dive
         stage3Extrusion: 4.0,
-        duration: 2.2,
+        duration: safeDuration(1.6),
         ease: 'power4.in',
-      }, 6.0);
+      },
+      cursor
+    );
 
-      // Anamorphic horizontal flare expands to full screen width
-      tl.to(anamorphicStreakRef.current, {
+    // Flare expands to full screen width
+    tl.to(
+      anamorphicStreakRef.current,
+      {
         opacity: 1,
         scaleY: 8.0,
-        duration: 0.9,
+        duration: safeDuration(0.85),
         ease: 'power3.in',
-      }, 6.8);
+      },
+      cursor + 0.65
+    );
 
-      // ═══════════════════════════════════════════════════════════════
-      // CLIMAX FLASH & SEAMLESS TRANSITION INTO MAIN HOMEPAGE (8.0s - 8.6s)
-      // ═══════════════════════════════════════════════════════════════
-      tl.to(flashOverlayRef.current, {
+    cursor += 1.4;
+
+    // ── CLIMAX FLASH & TRANSITION TO HOME ──
+    tl.to(
+      flashOverlayRef.current,
+      {
         opacity: 1,
-        duration: 0.35,
+        duration: safeDuration(0.35),
         ease: 'power2.out',
-      }, 7.9);
+      },
+      cursor
+    );
 
-      tl.to(containerRef.current, {
+    tl.to(
+      containerRef.current,
+      {
         opacity: 0,
-        duration: 0.45,
+        duration: safeDuration(0.4),
         ease: 'power3.inOut',
-      }, 8.15);
-    }, containerRef);
+      },
+      cursor + 0.2
+    );
+
+    cursor += 0.55;
+
+    tl.to({}, { duration: 0.1 }, cursor);
+
+    return tl;
+  }, [onComplete]);
+
+  // Run Master Timeline when active
+  useEffect(() => {
+    if (!isActive) {
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+        timelineRef.current = null;
+      }
+      return;
+    }
+
+    const initTimeout = setTimeout(() => {
+      const tl = buildTimeline();
+      if (tl) {
+        timelineRef.current = tl;
+        tl.play();
+      }
+    }, 60);
 
     return () => {
-      ctx.revert();
+      clearTimeout(initTimeout);
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+        timelineRef.current = null;
+      }
     };
-  }, [isActive, onComplete]);
+  }, [isActive, buildTimeline]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+        timelineRef.current = null;
+      }
+    };
+  }, []);
 
   if (!isActive) return null;
 
@@ -551,7 +1185,7 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
       className={styles.revealRoot}
       id="creator-reveal-sequence"
       role="region"
-      aria-label="DHANVI Creator Reveal - 4-Stage Digitalization Sequence"
+      aria-label="DHANVI Creator Reveal - ASCII Magic Digitalization Sequence"
     >
       {/* ── CRT / Cyber Scanline Texture ── */}
       <div className={styles.scanlines} />
@@ -562,10 +1196,53 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
       {/* ── Anamorphic Horizontal Flare Beam ── */}
       <div ref={anamorphicStreakRef} className={styles.anamorphicStreak} />
 
-      {/* ── 4-STAGE DIGITALIZATION CANVAS LAYER ── */}
+      {/* ── ACT 1: "Wanna meet the CREATOR?" ── */}
+      <div ref={questionSectionRef} className={styles.questionSection}>
+        <div ref={questionLineRef} className={styles.questionLine}>
+          Wanna meet the
+        </div>
+        <div ref={questionAccentRef} className={styles.questionAccent}>
+          <div ref={neonAuraRef} className={styles.neonAura} />
+          <span ref={neonTextRef} className={styles.neonText}>
+            CREATOR?
+          </span>
+        </div>
+      </div>
+
+      {/* ── ACT 2: DHANVI Sequential Name Reveal (large, centred) ── */}
+      <div ref={nameContainerRef} className={styles.nameContainer}>
+        {NAME_LETTERS.map((letter, idx) => (
+          <div key={idx} className={styles.letterGroup}>
+            {/* Unlit wireframe base outline */}
+            <span
+              ref={(el) => {
+                letterBaseRefs.current[idx] = el;
+              }}
+              className={styles.letterBase}
+            >
+              {letter}
+            </span>
+
+            {/* Cyan overlay: sequential neon ignition */}
+            <span
+              ref={(el) => {
+                letterCyanRefs.current[idx] = el;
+              }}
+              className={styles.letterCyan}
+            >
+              {letter}
+            </span>
+          </div>
+        ))}
+
+        {/* Radial backdrop glow bloom */}
+        <div ref={nameGlowRef} className={styles.nameGlow} />
+      </div>
+
+      {/* ── ACT 3: ASCII MAGIC DIGITALIZATION CANVAS LAYER ── */}
       <canvas ref={canvasRef} className={styles.canvas} />
 
-      {/* ── Hyperdrive Climax Flash Overlay ── */}
+      {/* ── Climax Hyperdrive Flash Overlay ── */}
       <div ref={flashOverlayRef} className={styles.flashOverlay} />
     </div>
   );
