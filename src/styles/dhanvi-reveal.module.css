@@ -125,8 +125,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 45% 38%;
   border-radius: 50%;
-  filter: grayscale(0.05) contrast(1.08) brightness(1.05);
+  filter: contrast(1.08) brightness(1.05);
   display: block;
 }
 
@@ -484,7 +485,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(var(--space-2), 1.2vw, var(--space-4));
+  gap: clamp(1rem, 2vw, 1.75rem);
   font-family: var(--font-display);
   font-size: clamp(0.95rem, 1.4vw, 1.2rem);
   font-weight: var(--weight-regular);
@@ -492,9 +493,120 @@
   text-transform: uppercase;
   color: #ffffff;
   pointer-events: none;
-  z-index: 5;
+  z-index: 10;
   white-space: nowrap;
   transition: opacity 0.5s ease;
+}
+
+.tagline:has(.taglineSocialIcon:hover) {
+  opacity: 1 !important;
+}
+
+.taglineContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(var(--space-2), 1.2vw, var(--space-4));
+}
+
+.taglineSocialIcon {
+  pointer-events: auto;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(14, 18, 22, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
+  transition:
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+  position: relative;
+  text-decoration: none;
+  z-index: 10;
+}
+
+.taglineSocialIcon svg {
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.taglineSocialIcon:hover {
+  transform: translateY(-2px) scale(1.12);
+}
+
+.taglineSocialIcon:hover svg {
+  transform: scale(1.08);
+}
+
+.taglineSocialIcon:active {
+  transform: translateY(0px) scale(0.96);
+}
+
+/* LinkedIn Specific Accent */
+.taglineSocialIcon.linkedinIcon:hover {
+  background: rgba(10, 102, 194, 0.25);
+  border-color: #0a66c2;
+  color: #38a5ff;
+  box-shadow:
+    0 0 16px rgba(10, 102, 194, 0.65),
+    0 0 32px rgba(56, 165, 255, 0.3);
+}
+
+/* Gmail Specific Accent */
+.taglineSocialIcon.gmailIcon:hover {
+  background: rgba(234, 67, 53, 0.22);
+  border-color: #ea4335;
+  color: #ff5a4d;
+  box-shadow:
+    0 0 16px rgba(234, 67, 53, 0.65),
+    0 0 32px rgba(255, 90, 77, 0.3);
+}
+
+/* Floating Micro-Tooltip */
+.taglineSocialTooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(10, 14, 18, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+}
+
+.taglineSocialTooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px;
+  border-style: solid;
+  border-color: rgba(10, 14, 18, 0.95) transparent transparent transparent;
+}
+
+.taglineSocialIcon:hover .taglineSocialTooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* Individual tagline words */
@@ -626,5 +738,16 @@
   .tagline {
     bottom: 2rem;
     font-size: 0.7rem;
+    gap: 0.75rem;
+  }
+
+  .taglineSocialIcon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .taglineSocialIcon svg {
+    width: 15px;
+    height: 15px;
   }
 }
