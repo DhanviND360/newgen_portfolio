@@ -75,6 +75,21 @@ export interface GalleryItem {
   metrics?: string;
 }
 
+export interface ExperienceNode {
+  id: string;
+  role: string;
+  company: string;
+  period: string;
+  type: 'internship' | 'hackathon' | 'future';
+  badge: string;
+  summary: string;
+  highlights: string[];
+  skills: string[];
+  metrics?: string;
+  status: string;
+  accentColor: string;
+}
+
 export interface HobbyItem {
   id: string;
   title: string;
@@ -148,7 +163,7 @@ export const projects: Project[] = [
       '/projects/sihbro-3.png',
     ],
     tileLabels: ['01 // COPILOT UI', '02 // SESSION KEY', '03 // ARCHITECTURE'],
-    link: 'https://sih-bro.vercel.app',
+    link: 'https://sih-26-copilot.vercel.app/',
   },
   {
     id: 'razorpace-ai',
@@ -170,6 +185,7 @@ export const projects: Project[] = [
     ],
     imagePositions: ['left center', 'left top', 'left top'],
     tileLabels: ['01 // COMMERCE ENGINE', '02 // MERCHANT DASHBOARD', '03 // AGENT TRACE & RAILS'],
+    link: 'https://razorpace-ai.vercel.app/',
   },
   {
     id: 'hemoconnect',
@@ -191,6 +207,7 @@ export const projects: Project[] = [
     ],
     imagePositions: ['center center', 'left top', 'left center'],
     tileLabels: ['01 // ECOSYSTEM HERO', '02 // AI REPORT INSIGHTS', '03 // GEO DONOR MATCH'],
+    link: 'https://thal-care-daadde09.base44.app/',
   },
   {
     id: 'ynotme',
@@ -222,6 +239,8 @@ export const projects: Project[] = [
     ],
     imagePositions: ['center top', 'center top', 'center center'],
     tileLabels: ['01 // APP INTERFACE', '02 // LIVE COACHING', '03 // MEMORY GRAPH'],
+    link: 'https://github.com/DhanviND360/YnotMe_TechMonsters_HackHazards',
+    github: 'https://github.com/DhanviND360/YnotMe_TechMonsters_HackHazards',
   },
 ];
 
@@ -344,10 +363,10 @@ export const navigationNodes: NavigationNode[] = [
     href: '#gallery',
   },
   {
-    id: 'node-hobby',
-    label: 'Hobby',
-    description: 'Beyond the code',
-    href: '#hobby',
+    id: 'node-experience',
+    label: 'Experience',
+    description: 'Career DNA & Milestones',
+    href: '#experience',
   },
 ];
 
@@ -546,6 +565,111 @@ export const galleryItems: GalleryItem[] = [
     tags: ['3rd Place', 'Base44', 'Agentic Web', 'National Hackathon'],
     image: '/achievements/codewithflow-1.jpeg',
     rotation: 1.6,
+  },
+];
+
+// ── Career Experience DNA (Internships, Hackathons & Future Horizon) ──
+
+export const experienceNodes: ExperienceNode[] = [
+  {
+    id: 'exp-lakshya',
+    role: 'Developer Intern',
+    company: 'Lakshya Smartguard Systems Pvt. Ltd.',
+    period: '2026',
+    type: 'internship',
+    badge: 'INTERNSHIP // 01',
+    summary:
+      'Engineered production-oriented full-stack workflows across real-time telemetry, AI/ML models, and drone operations.',
+    highlights: [
+      'Built production-oriented workflows across responsive interfaces, dashboards, AI/ML, OCR, testing and deployment.',
+      'Developed a real-time drone fleet telemetry dashboard achieving <2 sec latency.',
+      'Optimized telemetry data storage footprint by 2×; debugged and tested mission-critical production workflows.',
+      'Collaborated on autonomous edge telemetry ingestion and real-time fleet map tracking.',
+    ],
+    skills: ['Next.js', 'FastAPI', 'AI/ML', 'OCR', 'Telemetry', 'Drone Fleet UI', 'Real-Time WebSockets'],
+    metrics: '<2s Drone Telemetry • 2x Data Compression',
+    status: 'PRODUCTION ACTIVE',
+    accentColor: '#3edcc4',
+  },
+  {
+    id: 'exp-scaler',
+    role: 'AI Annotation Intern',
+    company: 'Scaler Data AI Labs',
+    period: 'Nov 2025',
+    type: 'internship',
+    badge: 'INTERNSHIP // 02',
+    summary:
+      'Supported frontier AI model-training pipelines and structured reasoning workflows with high KPI quality benchmarks.',
+    highlights: [
+      'Supported AI model-training and data-annotation workflows with KPI-driven accuracy, consistency and strict quality standards.',
+      'Performed high-volume structured evaluation requiring nuanced reasoning, prompt analysis, and guideline adherence.',
+      'Curated specialized training datasets powering generative AI models and multi-modal benchmarks.',
+      'Audited multi-turn conversational accuracy and hallucination reduction workflows.',
+    ],
+    skills: ['AI Model Training', 'Data Annotation', 'Structured Reasoning', 'LLM Benchmark Evaluation', 'Quality Auditing'],
+    metrics: '99.4% KPI Adherence • High-Volume Evaluation',
+    status: 'COMPLETED WITH DISTINCTION',
+    accentColor: '#38bdf8',
+  },
+  {
+    id: 'exp-swecha',
+    role: 'Tech Lead Intern',
+    company: 'Swecha Telangana',
+    period: '2024 – 2025',
+    type: 'internship',
+    badge: 'INTERNSHIP // 03',
+    summary:
+      'Led technical execution, architecture, and deployment of open community applications in a fast-paced team environment.',
+    highlights: [
+      'Led technical execution, application development, problem-solving, and milestone delivery across team sprints.',
+      'Architected full-stack modules and established continuous integration and clean code reviews for contributors.',
+      'Coordinated technical workflows across distributed student teams building civic and educational software.',
+      'Spearheaded open-source technology deployment and local community infrastructure.',
+    ],
+    skills: ['Technical Leadership', 'Application Architecture', 'Full-Stack Delivery', 'Open Source', 'Sprint Planning'],
+    metrics: 'Multi-Project Delivery • Distributed Team Lead',
+    status: 'LEADERSHIP EXCELLENCE',
+    accentColor: '#818cf8',
+  },
+  {
+    id: 'exp-hackathons',
+    role: 'Serial Builder & Competitor',
+    company: 'The Hackathon Bug',
+    period: '2023 – Present',
+    type: 'hackathon',
+    badge: 'SPECIAL PURSUIT // 04',
+    summary:
+      'An insatiable drive for 24–48hr high-stakes hackathons, prototyping game-changing AI products from 0 to 1 under extreme pressure.',
+    highlights: [
+      '3× Hackathon Winner & 16× Hackathon Finalist across national and regional builder competitions.',
+      'Selected in Top 100 teams out of 31,000+ builders worldwide for YnotMe (Sarvam AI / Neo4j real-time conversation intelligence).',
+      'Built and shipped complete production MVPs in 24–36hr sprints: SIH Bro, RentRa, and Ballyhoo.ai.',
+      'Demonstrated master-level rapid prototyping: ideation, architecture, API integration, and investor-grade live pitch demos.',
+    ],
+    skills: ['Rapid Prototyping', '3x Winner', '16x Finalist', 'Top 100 / 31k', '0-to-1 Shipping', 'Live Product Demos'],
+    metrics: '3x Winner • 16x Finalist • Top 100 / 31,000+',
+    status: 'ALWAYS COMPETING',
+    accentColor: '#f59e0b',
+  },
+  {
+    id: 'exp-future',
+    role: 'The Next Frontier',
+    company: 'More Exciting News Coming Soon',
+    period: '2026+',
+    type: 'future',
+    badge: 'FUTURE HORIZON // 05',
+    summary:
+      'Currently deep in stealth research, architecting autonomous multi-agent networks, deep knowledge graphs, and spatial web systems.',
+    highlights: [
+      'Architecting next-gen agentic workflows where autonomous LLM agents coordinate with hard deterministic constraints.',
+      'Exploring graph neural networks and local voice-intelligence pipelines running directly on edge hardware.',
+      'Multiple stealth projects and research papers in active development.',
+      '“The best way to predict the future is to build it.” Stay tuned for the upcoming announcement.',
+    ],
+    skills: ['Autonomous AI Agents', 'Knowledge Graphs', 'Spatial Computing', 'Stealth Protocols', 'Next Chapter'],
+    metrics: 'Active R&D • Stealth Launch Imminent',
+    status: 'TRANSMISSION INCOMING...',
+    accentColor: '#3edcc4',
   },
 ];
 

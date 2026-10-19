@@ -32,9 +32,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(8, 8, 8, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 8, 8, 0.95);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   z-index: 60;
 }
@@ -149,7 +147,7 @@
 }
 
 .projectCard {
-  background: rgba(14, 14, 14, 0.75);
+  background: rgba(14, 14, 14, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 24px;
@@ -157,8 +155,6 @@
   flex-direction: column;
   justify-content: space-between;
   gap: 20px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
@@ -408,10 +404,13 @@
   border: 1px solid rgba(196, 62, 62, 0.25);
   background: rgba(14, 10, 10, 0.9);
   cursor: pointer;
+  contain: paint;
+  transform: translateZ(0);
+  will-change: flex;
   transition:
-    flex 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
+    flex 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
   outline: none;
 }
 
@@ -419,9 +418,7 @@
 .achieveTile:focus-visible {
   flex: 2;
   border-color: rgba(230, 60, 60, 0.85);
-  box-shadow:
-    0 0 20px rgba(230, 60, 60, 0.25),
-    inset 0 0 12px rgba(230, 60, 60, 0.12);
+  box-shadow: 0 0 18px rgba(230, 60, 60, 0.28);
   z-index: 2;
 }
 
@@ -430,22 +427,22 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  transform: translateZ(0);
 }
 
 .achieveTileImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.88) contrast(1.05) saturate(0.9);
-  transition:
-    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.3s ease;
+  transform: translateZ(0);
+  will-change: transform;
+  filter: brightness(0.92) contrast(1.02);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .achieveTile:hover .achieveTileImg,
 .achieveTile:focus-visible .achieveTileImg {
-  transform: scale(1.05);
-  filter: brightness(1.02) contrast(1.02) saturate(1.05);
+  transform: scale(1.05) translateZ(0);
 }
 
 .achieveTileGlow {
@@ -488,9 +485,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 3px 6px;
-  background: rgba(12, 6, 6, 0.9);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(12, 6, 6, 0.95);
   border: 1px solid rgba(196, 62, 62, 0.35);
   border-radius: 2px;
   pointer-events: none;
@@ -545,9 +540,7 @@
 .achieveLightboxOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(4, 2, 2, 0.92);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(4, 2, 2, 0.95);
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -1025,6 +1018,9 @@
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  contain: paint;
+  transform: translateZ(0);
+  will-change: transform;
   transition:
     transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
     border-color 0.3s ease,
@@ -1035,7 +1031,7 @@
 
 .galleryCard:hover,
 .galleryCard:focus-visible {
-  transform: translateY(-5px);
+  transform: translateY(-5px) translateZ(0);
   border-color: rgba(62, 220, 196, 0.55);
   box-shadow:
     0 16px 36px rgba(0, 0, 0, 0.7),
@@ -1049,6 +1045,7 @@
   height: 250px;
   background: #050709;
   overflow: hidden;
+  transform: translateZ(0);
 }
 
 .galleryImage {
@@ -1056,11 +1053,13 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s ease;
+  transform: translateZ(0);
+  will-change: transform;
+  transition: transform 0.35s ease;
 }
 
 .galleryCard:hover .galleryImage {
-  transform: scale(1.05);
+  transform: scale(1.05) translateZ(0);
 }
 
 .galleryCardInfo {
@@ -1100,9 +1099,7 @@
   inset: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(3, 5, 7, 0.94);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(3, 5, 7, 0.97);
   z-index: 999999;
   display: flex;
   align-items: center;
@@ -1199,7 +1196,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: rgba(14, 18, 22, 0.88);
+  background: rgba(14, 18, 22, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.22);
   color: #ffffff;
   font-size: 2rem;
@@ -1209,7 +1206,6 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  backdrop-filter: blur(8px);
   z-index: 20;
 }
 

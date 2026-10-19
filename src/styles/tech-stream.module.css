@@ -17,6 +17,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  contain: layout paint;
   mask-image: linear-gradient(
     to bottom,
     transparent 0%,
@@ -38,6 +39,10 @@
   user-select: none;
 }
 
+:global(body.node-page-active) .streamContainer {
+  display: none !important;
+}
+
 .streamLeft {
   left: clamp(14px, 3.2vw, 55px);
 }
@@ -54,6 +59,8 @@
   gap: clamp(16px, 2.2vh, 24px);
   padding: 20px 0;
   will-change: transform;
+  transform: translateZ(0);
+  contain: layout style;
 }
 
 .scrollUp {
@@ -99,10 +106,8 @@
   width: 44px;
   height: 44px;
   border-radius: 11px;
-  background: rgba(18, 18, 18, 0.75);
+  background: rgba(18, 18, 18, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -140,10 +145,8 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(14, 14, 14, 0.95);
+  background: rgba(14, 14, 14, 0.97);
   border: 1px solid rgba(62, 220, 196, 0.35);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   color: #f0f0f0;
   font-family: var(--font-mono);
   font-size: 0.68rem;
