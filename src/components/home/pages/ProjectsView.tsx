@@ -14,9 +14,11 @@
 import React, {
   useState, useEffect, useRef, useCallback, useMemo,
 } from 'react';
+import { createPortal } from 'react-dom';
 import gsap from 'gsap';
 import { projects as rawProjects, type Project } from '@/data/portfolio';
 import styles from '@/styles/projects-folder.module.css';
+import { playThock } from '@/systems/soundEffects';
 
 /* ─── DATA ENRICHMENT ─────────────────────────────────────────── */
 interface RichProject extends Project {
@@ -41,7 +43,7 @@ function enrich(p: Project, i: number): RichProject {
       tagline:    'Deterministic Problem Statement Ranking Engine',
       problem:    'Teams competing in SIH waste hours filtering hundreds of mismatched problem statements, often picking challenges outside their domain and failing early.',
       solution:   'A deterministic ranking engine that ingests team skill-matrices and challenge complexity scores, scoring every problem statement from best-fit to worst — with session persistence so the whole team stays aligned.',
-      liveUrl:    p.link ?? 'https://sih-bro.vercel.app',
+      liveUrl:    p.link ?? 'https://sih-26-copilot.vercel.app/',
       githubUrl:  p.github,
     };
     case 'razorpace-ai': return {
@@ -52,7 +54,7 @@ function enrich(p: Project, i: number): RichProject {
       tagline:    'Autonomous Financial Rails & Merchant Growth',
       problem:    'Autonomous AI buyers in e-commerce have zero financial guardrails — risking runaway negotiations, policy violations, and un-audited payments at scale.',
       solution:   'Multi-agent LangGraph pipeline with deterministic financial rails: agents discover, negotiate, and purchase inside hard constraint envelopes, with every Razorpay transaction fully auditable.',
-      liveUrl:    p.link,
+      liveUrl:    p.link ?? 'https://razorpace-ai.vercel.app/',
       githubUrl:  p.github,
     };
     case 'hemoconnect': return {
@@ -63,7 +65,7 @@ function enrich(p: Project, i: number): RichProject {
       tagline:    'AI Thalassemia Diagnostic Care & Blood Custody',
       problem:    'Thalassemia patients juggle transfusion schedules, manual CBC report interpretation, and emergency donor sourcing across fragmented paper-based systems.',
       solution:   'Tesseract OCR + ML extracts diagnostic insights from blood reports, geolocation-driven AI matchmaker connects patients with compatible donors, Polygon blockchain tracks blood-order custody end-to-end.',
-      liveUrl:    p.link,
+      liveUrl:    p.link ?? 'https://thal-care-daadde09.base44.app/',
       githubUrl:  p.github,
     };
     case 'ynotme': return {
@@ -74,8 +76,8 @@ function enrich(p: Project, i: number): RichProject {
       tagline:    'Real-Time Conversational AI & Knowledge Graph',
       problem:    'Communication coaching tools only offer retrospective feedback after sessions end, missing the critical window for live, in-the-moment guidance.',
       solution:   'An 8-second rolling audio pipeline feeds Sarvam AI for live transcription and reasoning while a Neo4j knowledge graph accumulates context across sessions — surfacing prompts without interrupting the speaker.',
-      liveUrl:    p.link,
-      githubUrl:  p.github,
+      liveUrl:    p.link ?? 'https://github.com/DhanviND360/YnotMe_TechMonsters_HackHazards',
+      githubUrl:  p.github ?? 'https://github.com/DhanviND360/YnotMe_TechMonsters_HackHazards',
     };
     default: return {
       ...p,
@@ -134,9 +136,9 @@ function Folder({ project, mountDelay, onClick }: FolderProps) {
   /* Entrance animation */
   useEffect(() => {
     if (!rootRef.current) return;
-    gsap.set(c2Ref.current, { ...REST.c2, filter: 'brightness(1)' });
-    gsap.set(c1Ref.current, { ...REST.c1, filter: 'brightness(0.8)' });
-    gsap.set(c3Ref.current, { ...REST.c3, filter: 'brightness(0.8)' });
+    gsap.set(c2Ref.current, { ...REST.c2 });
+    gsap.set(c1Ref.current, { ...REST.c1 });
+    gsap.set(c3Ref.current, { ...REST.c3 });
 
     gsap.fromTo(
       rootRef.current,
@@ -155,6 +157,7 @@ function Folder({ project, mountDelay, onClick }: FolderProps) {
   }, [mountDelay]);
 
   const onEnter = useCallback(() => {
+    playThock('deep');
     hoverTl.current?.kill();
     const tl = gsap.timeline({ defaults: { ease: 'power3.out', duration: 0.44 } });
     hoverTl.current = tl;
@@ -162,17 +165,14 @@ function Folder({ project, mountDelay, onClick }: FolderProps) {
     tl.to(assemblyRef.current, { y: -12 }, 0);
     tl.to(c2Ref.current, {
       ...HOV.c2,
-      filter: 'brightness(1.08)',
       boxShadow: '0 24px 44px rgba(0,0,0,0.85), 0 0 20px rgba(62,220,196,0.22)',
     }, 0);
     tl.to(c1Ref.current, {
       ...HOV.c1,
-      filter: 'brightness(0.94)',
       boxShadow: '0 18px 36px rgba(0,0,0,0.8)',
     }, 0.03);
     tl.to(c3Ref.current, {
       ...HOV.c3,
-      filter: 'brightness(0.94)',
       boxShadow: '0 18px 36px rgba(0,0,0,0.8)',
     }, 0.03);
 
@@ -195,17 +195,14 @@ function Folder({ project, mountDelay, onClick }: FolderProps) {
     tl.to(assemblyRef.current, { y: 0 }, 0);
     tl.to(c2Ref.current, {
       ...REST.c2,
-      filter: 'brightness(1)',
       boxShadow: '0 12px 28px rgba(0,0,0,0.72), inset 0 1px 0 rgba(255,255,255,0.2)',
     }, 0);
     tl.to(c1Ref.current, {
       ...REST.c1,
-      filter: 'brightness(0.8)',
       boxShadow: '0 10px 24px rgba(0,0,0,0.7)',
     }, 0.03);
     tl.to(c3Ref.current, {
       ...REST.c3,
-      filter: 'brightness(0.8)',
       boxShadow: '0 10px 24px rgba(0,0,0,0.7)',
     }, 0.03);
 
@@ -268,7 +265,7 @@ function Folder({ project, mountDelay, onClick }: FolderProps) {
               <span className={styles.cardLabel}>{tileLabels[1] ?? '02 // WORKFLOW'}</span>
             </div>
             <div className={styles.cardImgWrap}>
-              {imgs[1] && <img src={imgs[1]} alt="" loading="lazy" />}
+              {imgs[1] && <img src={imgs[1]} alt="" loading="lazy" decoding="async" />}
               <div className={styles.cardGlass} />
             </div>
           </div>
@@ -282,7 +279,7 @@ function Folder({ project, mountDelay, onClick }: FolderProps) {
               <span className={styles.cardLabel}>{tileLabels[2] ?? '03 // ARCHITECTURE'}</span>
             </div>
             <div className={styles.cardImgWrap}>
-              {imgs[2] && <img src={imgs[2]} alt="" loading="lazy" />}
+              {imgs[2] && <img src={imgs[2]} alt="" loading="lazy" decoding="async" />}
               <div className={styles.cardGlass} />
             </div>
           </div>
@@ -296,7 +293,7 @@ function Folder({ project, mountDelay, onClick }: FolderProps) {
               <span className={styles.cardLabel}>{tileLabels[0] ?? '01 // UI VIEWPORT'}</span>
             </div>
             <div className={styles.cardImgWrap}>
-              {imgs[0] && <img src={imgs[0]} alt="" loading="lazy" />}
+              {imgs[0] && <img src={imgs[0]} alt="" loading="lazy" decoding="async" />}
               <div className={styles.cardGlass} />
             </div>
           </div>
@@ -348,6 +345,13 @@ function Folder({ project, mountDelay, onClick }: FolderProps) {
    - Bottom left: Title, Subtitle, Key Impact points, Live/Source CTAs
    - Bottom right: Tech Stack tags
    ───────────────────────────────────────────────────────────── */
+/* ─── DETAIL MODAL ───────────────────────────────────────────────
+   Centered Viewport Dossier:
+   - Rendered via React Portal directly onto document.body (true viewport center)
+   - Lock body scroll while open
+   - Enlarged interactive hero image showcase with counter & thumbnails
+   - Symmetrical, equidistant columns: Overview & Impact (50%) + System Specs & Tech Stack (50%)
+   ───────────────────────────────────────────────────────────── */
 interface ModalProps {
   project: RichProject;
   onClose: () => void;
@@ -360,14 +364,23 @@ function Modal({ project, onClose }: ModalProps) {
   const closing    = useRef(false);
   const images     = project.images ?? [];
 
-  /* Open */
+  /* Lock body scroll */
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
+  /* Smooth GSAP entrance centering in viewport */
   useEffect(() => {
     const tl = gsap.timeline();
-    tl.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out' });
+    tl.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.22, ease: 'power2.out' });
     tl.fromTo(panelRef.current,
-      { opacity: 0, scale: 0.94, y: 24 },
-      { opacity: 1, scale: 1,    y: 0,  duration: 0.42, ease: 'power3.out' },
-      '-=0.1');
+      { opacity: 0, scale: 0.95 },
+      { opacity: 1, scale: 1, duration: 0.36, ease: 'power3.out' },
+      '-=0.08');
     return () => { tl.kill(); };
   }, []);
 
@@ -375,18 +388,29 @@ function Modal({ project, onClose }: ModalProps) {
     if (closing.current) return;
     closing.current = true;
     const tl = gsap.timeline({ onComplete: onClose });
-    tl.to(panelRef.current,  { opacity: 0, scale: 0.95, y: 16, duration: 0.25, ease: 'power2.in' });
-    tl.to(overlayRef.current, { opacity: 0, duration: 0.2,  ease: 'power2.in' }, '-=0.12');
+    tl.to(panelRef.current,   { opacity: 0, scale: 0.96, duration: 0.2, ease: 'power2.in' });
+    tl.to(overlayRef.current, { opacity: 0, duration: 0.18, ease: 'power2.in' }, '-=0.1');
   }, [onClose]);
 
+  /* Keyboard shortcuts: ESC to close, Left/Right for images */
   useEffect(() => {
-    const h = (e: KeyboardEvent) => { if (e.key === 'Escape') close(); };
+    const h = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        close();
+      } else if (e.key === 'ArrowLeft') {
+        setImgIdx(i => Math.max(0, i - 1));
+      } else if (e.key === 'ArrowRight') {
+        setImgIdx(i => Math.min(images.length - 1, i + 1));
+      }
+    };
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
-  }, [close]);
+  }, [close, images.length]);
 
   const prev = () => setImgIdx(i => Math.max(0, i - 1));
   const next = () => setImgIdx(i => Math.min(images.length - 1, i + 1));
+
+  const isLiveGithub = project.liveUrl?.includes('github.com');
 
   return (
     <div ref={overlayRef} className={styles.overlay} style={{ opacity: 0 }}>
@@ -409,14 +433,14 @@ function Modal({ project, onClose }: ModalProps) {
             <span className={styles.mTopYear}>[{project.year}]</span>
           </div>
           <button className={styles.mCloseBtn} onClick={close} aria-label="Close dossier (ESC)">
-            × <span>CLOSE</span> <kbd className={styles.mEsc}>ESC</kbd>
+            ✕ <span>CLOSE</span> <kbd className={styles.mEsc}>ESC</kbd>
           </button>
         </div>
 
-        {/* ── Image browser ── */}
+        {/* ── Hero Image Section ── */}
         {images.length > 0 && (
           <div className={styles.mImageSection}>
-            {/* Main image */}
+            {/* Main Interactive Viewport */}
             <div className={styles.mImageMain}>
               <button
                 className={`${styles.mImgArrow} ${styles.mImgArrowLeft}`}
@@ -431,9 +455,14 @@ function Modal({ project, onClose }: ModalProps) {
                   alt={`${project.title} preview ${imgIdx + 1}`}
                   className={styles.mImgEl}
                 />
-                {project.tileLabels?.[imgIdx] && (
-                  <span className={styles.mImgLabel}>{project.tileLabels[imgIdx]}</span>
-                )}
+                <div className={styles.mImgMetaOverlay}>
+                  {project.tileLabels?.[imgIdx] && (
+                    <span className={styles.mImgLabel}>{project.tileLabels[imgIdx]}</span>
+                  )}
+                  <span className={styles.mImgCounter}>
+                    {imgIdx + 1} / {images.length}
+                  </span>
+                </div>
               </div>
 
               <button
@@ -444,7 +473,7 @@ function Modal({ project, onClose }: ModalProps) {
               >›</button>
             </div>
 
-            {/* Thumbnails */}
+            {/* Thumbnail Navigation Strip */}
             {images.length > 1 && (
               <div className={styles.mThumbs}>
                 {images.map((src, i) => (
@@ -452,6 +481,7 @@ function Modal({ project, onClose }: ModalProps) {
                     key={i}
                     className={`${styles.mThumb} ${i === imgIdx ? styles.mThumbActive : ''}`}
                     onClick={() => setImgIdx(i)}
+                    onMouseEnter={() => playThock('soft')}
                     aria-label={project.tileLabels?.[i] ?? `Screenshot ${i + 1}`}
                   >
                     <img src={src} alt="" />
@@ -465,47 +495,95 @@ function Modal({ project, onClose }: ModalProps) {
           </div>
         )}
 
-        {/* ── Bottom: info + tech stack ── */}
+        {/* ── Bottom: Equidistant Description & Tech Stack Panels ── */}
         <div className={styles.mBottom}>
-          {/* Left — project info */}
+          {/* Left Column (50%): Project Overview & Impact Highlights */}
           <div className={styles.mInfo}>
+            <div className={styles.mColHeader}>
+              <span className={styles.mColBadge}>PROJECT DOSSIER // 01</span>
+              <span className={styles.mColTitle}>OVERVIEW & IMPACT</span>
+            </div>
+
             <div className={styles.mHeaderGroup}>
               <span className={styles.mCategory}>{project.category}</span>
               <h2 className={styles.mTitle}>{project.title}</h2>
               <p className={styles.mSubtitle}>{project.subtitle}</p>
             </div>
 
-            <ul className={styles.mImpactList}>
-              {project.impact.map((item, i) => (
-                <li key={i} className={styles.mImpactItem}>
-                  <span className={styles.mImpactDot} aria-hidden />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+            <p className={styles.mDescriptionText}>{project.description}</p>
 
+            <div className={styles.mImpactSection}>
+              <span className={styles.mSubLabel}>CORE IMPACT & METRICS</span>
+              <ul className={styles.mImpactList}>
+                {project.impact.map((item, i) => (
+                  <li key={i} className={styles.mImpactItem}>
+                    <span className={styles.mImpactDot} aria-hidden />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Live CTAs */}
             <div className={styles.mLinks}>
               {project.liveUrl && (
-                <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className={styles.mLinkPrimary}>
-                  LIVE SYSTEM ↗
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.mLinkPrimary}
+                  title={`Open link in new tab: ${project.liveUrl}`}
+                >
+                  <span>{isLiveGithub ? 'GITHUB REPOSITORY' : 'LAUNCH LIVE APP'}</span>
+                  <span className={styles.mLinkArrow}>↗</span>
                 </a>
               )}
-              {project.githubUrl && (
-                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className={styles.mLinkSecondary}>
-                  SOURCE CODE ↗
+              {project.githubUrl && project.githubUrl !== project.liveUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.mLinkSecondary}
+                  title={`View source repository: ${project.githubUrl}`}
+                >
+                  <span>SOURCE CODE</span>
+                  <span className={styles.mLinkArrow}>↗</span>
                 </a>
               )}
             </div>
           </div>
 
-          {/* Right — tech stack */}
+          {/* Right Column (50%): Architecture Specs & Tech Stack */}
           <div className={styles.mTechPanel}>
-            <p className={styles.mTechLabel}>BUILT WITH</p>
-            <div className={styles.mTechDivider} />
-            <div className={styles.mTechGrid}>
-              {project.tags.map(tag => (
-                <span key={tag} className={styles.mTechTag}>{tag}</span>
-              ))}
+            <div className={styles.mColHeader}>
+              <span className={styles.mColBadge}>SYSTEM SPECS // 02</span>
+              <span className={styles.mColTitle}>ENGINEERING & STACK</span>
+            </div>
+
+            {project.solution && (
+              <div className={styles.mSpecBlock}>
+                <span className={styles.mSubLabel}>SYSTEM ARCHITECTURE</span>
+                <p className={styles.mSpecText}>{project.solution}</p>
+              </div>
+            )}
+
+            {project.problem && (
+              <div className={styles.mSpecBlock}>
+                <span className={styles.mSubLabel}>THE CORE CHALLENGE</span>
+                <p className={styles.mSpecText}>{project.problem}</p>
+              </div>
+            )}
+
+            <div className={styles.mTechBlock}>
+              <span className={styles.mSubLabel}>TECHNOLOGY STACK</span>
+              <div className={styles.mTechGrid}>
+                {project.tags.map(tag => (
+                  <span key={tag} className={styles.mTechTag}>
+                    <span className={styles.mTechDot} aria-hidden />
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -517,6 +595,12 @@ function Modal({ project, onClose }: ModalProps) {
 /* ─── ROOT COMPONENT ────────────────────────────────────────── */
 export default function ProjectsView() {
   const [active, setActive] = useState<RichProject | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const open  = useCallback((p: RichProject) => setActive(p), []);
   const close = useCallback(() => setActive(null), []);
 
@@ -529,8 +613,8 @@ export default function ProjectsView() {
         ))}
       </div>
 
-      {/* ── Detail Modal ── */}
-      {active && <Modal project={active} onClose={close} />}
+      {/* ── Detail Modal Portal rendered directly to document.body ── */}
+      {mounted && active && createPortal(<Modal project={active} onClose={close} />, document.body)}
     </section>
   );
 }

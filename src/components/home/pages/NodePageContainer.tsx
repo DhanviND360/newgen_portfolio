@@ -30,6 +30,14 @@ export default function NodePageContainer({
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
+  // Mark document.body as node-page-active so background streams can sleep
+  useEffect(() => {
+    document.body.classList.add('node-page-active');
+    return () => {
+      document.body.classList.remove('node-page-active');
+    };
+  }, []);
+
   // Keyboard shortcut: ESC to return to orbit
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

@@ -31,21 +31,22 @@ export default function FilmGrain() {
         inset: 0,
         zIndex: 500,
         pointerEvents: 'none',
-        opacity: 0.035,
+        opacity: 0.03,
         mixBlendMode: 'overlay',
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
         backgroundRepeat: 'repeat',
-        backgroundSize: '128px 128px',
-        animation: 'grainShift 0.5s steps(4) infinite',
+        backgroundSize: '150px 150px',
+        animation: 'grainShift 1.2s steps(3) infinite',
+        willChange: 'transform',
+        contain: 'strict',
       }}
     >
       <style>{`
         @keyframes grainShift {
-          0% { transform: translate(0, 0); }
-          25% { transform: translate(-2px, 2px); }
-          50% { transform: translate(2px, -1px); }
-          75% { transform: translate(-1px, -2px); }
-          100% { transform: translate(0, 0); }
+          0% { transform: translate3d(0, 0, 0); }
+          33% { transform: translate3d(-2px, 2px, 0); }
+          66% { transform: translate3d(2px, -1px, 0); }
+          100% { transform: translate3d(0, 0, 0); }
         }
       `}</style>
     </div>
