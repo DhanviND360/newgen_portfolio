@@ -8,6 +8,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '@/styles/node-pages.module.css';
 import { achievements } from '@/data/portfolio';
+import { playThock } from '@/systems/soundEffects';
 
 export default function AchievementsView() {
   const [activeImage, setActiveImage] = useState<{ src: string; caption?: string } | null>(null);
@@ -52,6 +53,7 @@ export default function AchievementsView() {
                   <div
                     key={idx}
                     className={styles.achieveTile}
+                    onMouseEnter={() => playThock('crisp')}
                     onClick={() =>
                       setActiveImage({
                         src: imgSrc,
@@ -75,6 +77,8 @@ export default function AchievementsView() {
                         src={imgSrc}
                         alt={`${achieve.title} proof asset 0${idx + 1}`}
                         className={styles.achieveTileImg}
+                        loading="lazy"
+                        decoding="async"
                         style={{
                           objectPosition: achieve.imagePositions?.[idx] || 'center center',
                         }}

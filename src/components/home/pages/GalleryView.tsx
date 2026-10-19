@@ -11,6 +11,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '@/styles/node-pages.module.css';
 import { galleryItems, GalleryItem } from '@/data/portfolio';
+import { playThock } from '@/systems/soundEffects';
 
 const CATEGORIES = [
   'ALL',
@@ -113,6 +114,7 @@ export default function GalleryView() {
               role="tab"
               aria-selected={isActive}
               onClick={() => setActiveCategory(cat)}
+              onMouseEnter={() => playThock('soft')}
               className={`${styles.galleryFilterBtn} ${
                 isActive ? styles.galleryFilterBtnActive : ''
               }`}
@@ -130,6 +132,7 @@ export default function GalleryView() {
           <article
             key={item.id}
             className={styles.galleryCard}
+            onMouseEnter={() => playThock('crisp')}
             onClick={() => setSelectedItem(item)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -147,6 +150,7 @@ export default function GalleryView() {
                 alt={item.title}
                 className={styles.galleryImage}
                 loading="lazy"
+                decoding="async"
               />
             </div>
 

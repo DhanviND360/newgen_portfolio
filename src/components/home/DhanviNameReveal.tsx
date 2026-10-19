@@ -16,10 +16,11 @@
    6. Return: "← BACK TO ORBIT" or ESC triggers reverse-zoom back to orbit.
    ═══════════════════════════════════════════════════════════════ */
 
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import gsap from 'gsap';
 import styles from '@/styles/dhanvi-reveal.module.css';
 import { navigationNodes, NavigationNode } from '@/data/portfolio';
+import { playSpaceSynth } from '@/systems/soundEffects';
 
 // Warp Transition & Individual Page Components
 import PlanetaryWarpOverlay from './PlanetaryWarpOverlay';
@@ -29,7 +30,7 @@ import AchievementsView from './pages/AchievementsView';
 import AboutView from './pages/AboutView';
 import ContactView from './pages/ContactView';
 import GalleryView from './pages/GalleryView';
-import HobbyView from './pages/HobbyView';
+import ExperienceView from './pages/ExperienceView';
 
 const NAME_LETTERS = ['D', 'H', 'A', 'N', 'V', 'I'];
 const NUM_LETTERS = 6;
@@ -54,10 +55,15 @@ export default function DhanviNameReveal() {
   const portraitFrameRef = useRef<HTMLDivElement>(null);
   const taglineRef = useRef<HTMLDivElement>(null);
   const hoverZoneRef = useRef<HTMLDivElement>(null);
+  const nodeCardRefs = useRef<(HTMLElement | null)[]>([]);
 
-  // Interaction State
-  const [isHovered, setIsHovered] = useState(false);
-  const [activeNodeIndex, setActiveNodeIndex] = useState<number | null>(null);
+  // Interaction State (refs eliminate React re-renders during 120fps mouse movement)
+  const isHoveredRef = useRef(false);
+  const activeNodeIndexRef = useRef<number | null>(null);
+  const activePageNodeRef = useRef<NavigationNode | null>(null);
+  const isWarpActiveRef = useRef(false);
+  const lastProgressRef = useRef(-1);
+  const hasPositionedLettersRef = useRef(false);
 
   // Planetary Zoom & Page Navigation State
   const [activePageNode, setActivePageNode] = useState<NavigationNode | null>(null);
@@ -65,6 +71,15 @@ export default function DhanviNameReveal() {
   const [isWarpActive, setIsWarpActive] = useState(false);
   const [isZoomingIn, setIsZoomingIn] = useState(true);
   const [warpOrigin, setWarpOrigin] = useState({ x: 0, y: 0 });
+
+  // Sync state to refs for lock-free ticker access
+  useEffect(() => {
+    activePageNodeRef.current = activePageNode;
+  }, [activePageNode]);
+
+  useEffect(() => {
+    isWarpActiveRef.current = isWarpActive;
+  }, [isWarpActive]);
 
   // Refs for real-time 60fps frame coordination
   const isPausedForZoomRef = useRef(false);
@@ -89,9 +104,9 @@ export default function DhanviNameReveal() {
   const updateDimensions = useCallback(() => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const cx = rect.width / 2;
-    const cy = rect.height / 2;
-    const minDim = Math.min(rect.width, rect.height);
+    const cx = rect.width > 0 ? rect.width / 2 : window.innerWidth / 2;
+    const cy = rect.height > 0 ? rect.height / 2 : window.innerHeight / 2;
+    const minDim = Math.min(rect.width || window.innerWidth, rect.height || window.innerHeight);
 
     // Responsive scaling with generous spacing
     const scaleFactor = Math.max(0.55, Math.min(1.0, minDim / 900));
@@ -111,6 +126,18 @@ export default function DhanviNameReveal() {
     animState.current.letterRadius = letterRadius;
     animState.current.nodeRadius = nodeRadius;
     animState.current.letterSpacing = letterSpacing;
+
+    hasPositionedLettersRef.current = false;
+
+    // Position letters statically at resting horizontal positions initially
+    const totalWordWidth = (NUM_LETTERS - 1) * letterSpacing;
+    const startX = cx - totalWordWidth / 2;
+    for (let i = 0; i < NUM_LETTERS; i++) {
+      const letterEl = letterRefs.current[i];
+      if (letterEl) {
+        letterEl.style.transform = `translate3d(${startX + i * letterSpacing}px, ${cy}px, 0) translate(-50%, -50%)`;
+      }
+    }
 
     // Update static SVG orbit tracks
     if (orbitRingRef.current) {
@@ -132,10 +159,31 @@ export default function DhanviNameReveal() {
     }
   }, []);
 
-  /* ── Hover Trigger Handlers ── */
+  /* ── Hover Node Selector (Direct DOM, 0 React re-renders) ── */
+  const setHoveredNode = useCallback((index: number | null) => {
+    if (activeNodeIndexRef.current === index) return;
+    const prev = activeNodeIndexRef.current;
+    activeNodeIndexRef.current = index;
+
+    if (prev !== null) {
+      lineRefs.current[prev]?.classList.remove(styles.connectionLineActive);
+      nodeRefs.current[prev]?.removeAttribute('data-active');
+    }
+    if (index !== null) {
+      lineRefs.current[index]?.classList.add(styles.connectionLineActive);
+      nodeRefs.current[index]?.setAttribute('data-active', 'true');
+      playSpaceSynth(index);
+    }
+  }, []);
+
+  /* ── Hover Trigger Handlers (Ref-only, zero React re-renders) ── */
   const handleMouseEnter = useCallback(() => {
-    if (activePageNode || isWarpActive || isPausedForZoomRef.current) return;
-    setIsHovered(true);
+    if (activePageNodeRef.current || isWarpActiveRef.current || isPausedForZoomRef.current) return;
+    if (!isHoveredRef.current) {
+      isHoveredRef.current = true;
+      orbitRingRef.current?.classList.add(styles.orbitTrackVisible);
+      outerRingRef.current?.classList.add(styles.orbitTrackVisible);
+    }
 
     if (progressTween.current) progressTween.current.kill();
     progressTween.current = gsap.to(animState.current, {
@@ -143,12 +191,16 @@ export default function DhanviNameReveal() {
       duration: 1.15,
       ease: 'power3.out',
     });
-  }, [activePageNode, isWarpActive]);
+  }, []);
 
   const handleMouseLeave = useCallback(() => {
-    if (activePageNode || isWarpActive || isPausedForZoomRef.current) return;
-    setIsHovered(false);
-    setActiveNodeIndex(null);
+    if (activePageNodeRef.current || isWarpActiveRef.current || isPausedForZoomRef.current) return;
+    if (isHoveredRef.current) {
+      isHoveredRef.current = false;
+      orbitRingRef.current?.classList.remove(styles.orbitTrackVisible);
+      outerRingRef.current?.classList.remove(styles.orbitTrackVisible);
+      setHoveredNode(null);
+    }
 
     if (progressTween.current) progressTween.current.kill();
     progressTween.current = gsap.to(animState.current, {
@@ -156,31 +208,30 @@ export default function DhanviNameReveal() {
       duration: 0.95,
       ease: 'power3.inOut',
     });
-  }, [activePageNode, isWarpActive]);
+  }, [setHoveredNode]);
 
-  /* ── Distance-Based Interaction Controller ── */
+  /* ── Distance-Based Interaction Controller (Ref-only, throttled, 0 DOM reads) ── */
+  const pointerMoveThrottleRef = useRef(0);
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
-      if (activePageNode || isWarpActive || isPausedForZoomRef.current) return;
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const cx = rect.width / 2;
-      const cy = rect.height / 2;
+      // Throttle to ~40fps to avoid excessive math
+      const now = performance.now();
+      if (now - pointerMoveThrottleRef.current < 25) return;
+      pointerMoveThrottleRef.current = now;
 
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-      const dist = Math.hypot(mouseX - cx, mouseY - cy);
+      if (activePageNodeRef.current || isWarpActiveRef.current || isPausedForZoomRef.current) return;
 
-      const { nodeRadius, progress } = animState.current;
+      const { cx, cy, nodeRadius, progress } = animState.current;
+      const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
       const hitRadius = gsap.utils.interpolate(nodeRadius * 0.85, nodeRadius + 55, progress);
 
       if (dist <= hitRadius) {
-        if (!isHovered) handleMouseEnter();
+        if (!isHoveredRef.current) handleMouseEnter();
       } else {
-        if (isHovered) handleMouseLeave();
+        if (isHoveredRef.current) handleMouseLeave();
       }
     },
-    [isHovered, handleMouseEnter, handleMouseLeave, activePageNode, isWarpActive]
+    [handleMouseEnter, handleMouseLeave]
   );
 
   /* ── Node Click: Trigger Planetary Zoom ── */
@@ -189,11 +240,12 @@ export default function DhanviNameReveal() {
       e.preventDefault();
       e.stopPropagation();
 
-      if (activePageNode || isWarpActive) return;
+      if (activePageNodeRef.current || isWarpActiveRef.current) return;
 
       // 1. Immediately pause the orbital revolution
       isPausedForZoomRef.current = true;
-      setActiveNodeIndex(index);
+      activeNodeIndexRef.current = index;
+      nodeRefs.current[index]?.classList.add(styles.nodeTargetGlow);
 
       // 2. Read exact coordinates of the clicked node
       const rect = nodeRefs.current[index]?.getBoundingClientRect();
@@ -219,14 +271,14 @@ export default function DhanviNameReveal() {
         });
       }
     },
-    [activePageNode, isWarpActive]
+    []
   );
 
   /* ── Minimalist Flash Peak Callback (State Swap) ── */
   const handleFlashPeak = useCallback(() => {
     if (isZoomingIn) {
       // Swapping in the target node page at the peak of the flash
-      const targetIndex = activeNodeIndex !== null ? activeNodeIndex : 0;
+      const targetIndex = activeNodeIndexRef.current !== null ? activeNodeIndexRef.current : 0;
       const targetNode = navigationNodes[targetIndex];
       setActivePageNode(targetNode);
       setActivePageIndex(targetIndex);
@@ -251,7 +303,7 @@ export default function DhanviNameReveal() {
         history.pushState(null, '', window.location.pathname + window.location.search);
       }
     }
-  }, [isZoomingIn, activeNodeIndex]);
+  }, [isZoomingIn]);
 
   /* ── Warp Transition Finished ── */
   const handleWarpComplete = useCallback(() => {
@@ -260,9 +312,10 @@ export default function DhanviNameReveal() {
     if (!isZoomingIn) {
       // Returned to orbit: unpause orbital revolution
       isPausedForZoomRef.current = false;
-      setActiveNodeIndex(null);
+      nodeRefs.current.forEach((el) => el?.classList.remove(styles.nodeTargetGlow));
+      setHoveredNode(null);
     }
-  }, [isZoomingIn]);
+  }, [isZoomingIn, setHoveredNode]);
 
   /* ── Return to Orbit (Reverse Zoom) ── */
   const handleBackToOrbit = useCallback(() => {
@@ -273,6 +326,8 @@ export default function DhanviNameReveal() {
 
     setIsZoomingIn(false);
     setIsWarpActive(true);
+    nodeRefs.current.forEach((el) => el?.classList.remove(styles.nodeTargetGlow));
+    setHoveredNode(null);
 
     if (zoomLayerRef.current) {
       gsap.fromTo(
@@ -291,7 +346,7 @@ export default function DhanviNameReveal() {
         }
       );
     }
-  }, [activePageNode, isWarpActive, warpOrigin]);
+  }, [activePageNode, isWarpActive, warpOrigin, setHoveredNode]);
 
   /* ── Deep Linking / Initial Hash Listener ── */
   useEffect(() => {
@@ -314,6 +369,16 @@ export default function DhanviNameReveal() {
     return () => window.removeEventListener('popstate', checkHash);
   }, [activePageNode]);
 
+  /* ── Cache node card sub-elements to avoid per-frame querySelector ── */
+  useEffect(() => {
+    navigationNodes.forEach((_, i) => {
+      const nodeEl = nodeRefs.current[i];
+      if (nodeEl) {
+        nodeCardRefs.current[i] = nodeEl.querySelector(`.${styles.nodeCard}`) as HTMLElement | null;
+      }
+    });
+  }, []);
+
   /* ── Master GSAP Animation Ticker Loop ── */
   useEffect(() => {
     updateDimensions();
@@ -323,9 +388,10 @@ export default function DhanviNameReveal() {
     const tl = gsap.timeline({ delay: 0.3 });
     NAME_LETTERS.forEach((_, i) => {
       const el = letterRefs.current[i];
-      if (el) {
+      const textEl = el?.querySelector<HTMLElement>(`.${styles.letterText}`);
+      if (textEl) {
         tl.fromTo(
-          el,
+          textEl,
           { opacity: 0, scale: 0.5, y: -20, filter: 'brightness(0.25) blur(6px)' },
           {
             opacity: 1,
@@ -350,9 +416,14 @@ export default function DhanviNameReveal() {
 
     // Ticker function running at display refresh rate (60/120fps)
     const ticker = () => {
+      // When inside an active node page, sleep completely (0 CPU/GPU)
+      if (activePageNodeRef.current) return;
+
       const state = animState.current;
       const dt = gsap.ticker.deltaRatio() / 60; // Normalize to 60fps delta
       const p = state.progress;
+      const isProgressChanging = Math.abs(p - lastProgressRef.current) > 0.0005;
+      lastProgressRef.current = p;
 
       // Revolve smoothly only when not paused for planetary zoom transition
       if (!isPausedForZoomRef.current) {
@@ -403,16 +474,18 @@ export default function DhanviNameReveal() {
         currentPositionsRef.current[i] = { x: curNodeX, y: curNodeY };
 
         // 4. Update Letter Element
-        if (letterEl) {
+        if (letterEl && (p > 0 || isProgressChanging || !hasPositionedLettersRef.current)) {
           letterEl.style.transform = `translate3d(${curLetterX}px, ${curLetterY}px, 0) translate(-50%, -50%)`;
         }
 
         // 5. Update Node Element
         if (nodeEl) {
           nodeEl.style.transform = `translate3d(${curNodeX}px, ${curNodeY}px, 0) translate(-50%, -50%)`;
-          const cardEl = nodeEl.querySelector(`.${styles.nodeCard}`) as HTMLElement | null;
-          if (cardEl) {
-            cardEl.style.opacity = String(gsap.utils.interpolate(0.45, 1, p));
+          if (isProgressChanging) {
+            const cardEl = nodeCardRefs.current[i];
+            if (cardEl) {
+              cardEl.style.opacity = String(gsap.utils.interpolate(0.45, 1, p));
+            }
           }
         }
 
@@ -422,26 +495,42 @@ export default function DhanviNameReveal() {
           lineEl.setAttribute('y1', String(curLetterY));
           lineEl.setAttribute('x2', String(curNodeX));
           lineEl.setAttribute('y2', String(curNodeY));
-          lineEl.style.opacity = String(gsap.utils.interpolate(0.18, 0.65, p));
+          if (isProgressChanging) {
+            lineEl.style.opacity = String(gsap.utils.interpolate(0.18, 0.65, p));
+          }
         }
       }
 
-      // ── Update Central Profile Reveal ──
-      if (portraitWrapperRef.current) {
-        portraitWrapperRef.current.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%) scale(${gsap.utils.interpolate(0.5, 1.0, p)})`;
-        portraitWrapperRef.current.style.opacity = String(p);
+      hasPositionedLettersRef.current = true;
 
-        const blurAmount = gsap.utils.interpolate(16, 0, p);
-        portraitWrapperRef.current.style.filter = `blur(${blurAmount}px)`;
-      }
+      // ── Update Central Profile Reveal (only when p > 0 or p is morphing) ──
+      if (isProgressChanging || p > 0) {
+        if (portraitWrapperRef.current) {
+          if (p <= 0.005) {
+            portraitWrapperRef.current.style.opacity = '0';
+            portraitWrapperRef.current.style.display = 'none';
+            portraitWrapperRef.current.style.filter = 'none';
+          } else {
+            portraitWrapperRef.current.style.display = 'flex';
+            portraitWrapperRef.current.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%) scale(${gsap.utils.interpolate(0.5, 1.0, p)})`;
+            portraitWrapperRef.current.style.opacity = String(p);
 
-      if (portraitGlowRef.current) {
-        portraitGlowRef.current.style.opacity = String(p);
-      }
+            if (p >= 0.98) {
+              portraitWrapperRef.current.style.filter = 'none';
+            } else {
+              const blurAmount = gsap.utils.interpolate(16, 0, p);
+              portraitWrapperRef.current.style.filter = `blur(${blurAmount}px)`;
+            }
+          }
+        }
 
-      // Tagline dims subtly on expansion
-      if (taglineRef.current) {
-        taglineRef.current.style.opacity = String(gsap.utils.interpolate(1.0, 0.3, p));
+        if (portraitGlowRef.current) {
+          portraitGlowRef.current.style.opacity = String(p);
+        }
+
+        if (taglineRef.current) {
+          taglineRef.current.style.opacity = String(gsap.utils.interpolate(1.0, 0.3, p));
+        }
       }
     };
 
@@ -468,8 +557,9 @@ export default function DhanviNameReveal() {
         return <ContactView />;
       case 'node-gallery':
         return <GalleryView />;
+      case 'node-experience':
       case 'node-hobby':
-        return <HobbyView />;
+        return <ExperienceView />;
       default:
         return null;
     }
@@ -488,14 +578,8 @@ export default function DhanviNameReveal() {
         {/* ── SVG Connection & Orbit Canvas ── */}
         <svg ref={svgRef} className={styles.svgCanvas} aria-hidden="true">
           {/* Orbital Guide Tracks */}
-          <circle
-            ref={orbitRingRef}
-            className={`${styles.orbitTrack} ${isHovered ? styles.orbitTrackVisible : ''}`}
-          />
-          <circle
-            ref={outerRingRef}
-            className={`${styles.orbitTrack} ${isHovered ? styles.orbitTrackVisible : ''}`}
-          />
+          <circle ref={orbitRingRef} className={styles.orbitTrack} />
+          <circle ref={outerRingRef} className={styles.orbitTrack} />
 
           {/* Physical Tether Lines (Letter to Node) */}
           {NAME_LETTERS.map((_, i) => (
@@ -504,9 +588,7 @@ export default function DhanviNameReveal() {
               ref={(el) => {
                 lineRefs.current[i] = el;
               }}
-              className={`${styles.connectionLine} ${
-                activeNodeIndex === i ? styles.connectionLineActive : ''
-              }`}
+              className={styles.connectionLine}
             />
           ))}
         </svg>
@@ -540,9 +622,9 @@ export default function DhanviNameReveal() {
             className={styles.letterItem}
             onMouseEnter={() => {
               handleMouseEnter();
-              setActiveNodeIndex(i);
+              setHoveredNode(i);
             }}
-            onMouseLeave={() => setActiveNodeIndex(null)}
+            onMouseLeave={() => setHoveredNode(null)}
           >
             <span className={styles.letterText}>{letter}</span>
           </div>
@@ -557,19 +639,16 @@ export default function DhanviNameReveal() {
             ref={(el) => {
               nodeRefs.current[i] = el;
             }}
-            className={`${styles.nodeAnchor} ${
-              activeNodeIndex === i && isPausedForZoomRef.current ? styles.nodeTargetGlow : ''
-            }`}
+            className={styles.nodeAnchor}
             data-index={i}
-            data-active={activeNodeIndex === i ? 'true' : 'false'}
             aria-label={`Navigate to ${node.label} section`}
             onClick={(e) => handleNodeClick(e, node, i)}
             onMouseEnter={() => {
               handleMouseEnter();
-              setActiveNodeIndex(i);
+              setHoveredNode(i);
             }}
             onMouseLeave={() => {
-              if (!isPausedForZoomRef.current) setActiveNodeIndex(null);
+              if (!isPausedForZoomRef.current) setHoveredNode(null);
             }}
           >
             <div className={styles.nodeDotWrapper}>

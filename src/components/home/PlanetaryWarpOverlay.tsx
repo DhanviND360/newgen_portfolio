@@ -51,7 +51,7 @@ export default function PlanetaryWarpOverlay({
     const height = (canvas.height = window.innerHeight);
 
     // Generate radial warp rays
-    const NUM_RAYS = 120;
+    const NUM_RAYS = 64;
     const rays: WarpRay[] = [];
     const colors = [
       'rgba(255, 255, 255, 0.95)',
