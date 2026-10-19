@@ -1,0 +1,597 @@
+/* ═══════════════════════════════════════════════════════════════
+   DHANVI — Career Experience DNA (3D Alive Being Scrollytelling)
+   
+   Professional Motion Design Scrollytelling Experience:
+   - Sticky 3D Living DNA Double Helix Canvas with depth projection
+   - Clean, junk-free layout (all encircled badges & filter pills removed)
+   - 5 Milestone Chapters revealed sequentially as user scrolls
+   - Interactive 3D mouse tilt & tactile audio feedback
+   ═══════════════════════════════════════════════════════════════ */
+
+.stageRoot {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  color: #ffffff;
+  user-select: none;
+}
+
+/* ── Minimalist Scrollytelling Journey Intro ──────────────────── */
+.scrollyIntro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+  padding: clamp(24px, 4vh, 48px) clamp(16px, 3vw, 32px) clamp(20px, 3vh, 36px);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.scrollyTag {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent-cyan, #3edcc4);
+  background: rgba(62, 220, 196, 0.08);
+  border: 1px solid rgba(62, 220, 196, 0.28);
+  padding: 4px 14px;
+  border-radius: 4px;
+  box-shadow: 0 0 16px rgba(62, 220, 196, 0.15);
+}
+
+.scrollyHeading {
+  font-family: var(--font-display, sans-serif);
+  font-size: clamp(1.8rem, 3.6vw, 2.7rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.scrollyHeading span {
+  color: var(--color-accent-cyan, #3edcc4);
+  text-shadow: 0 0 24px rgba(62, 220, 196, 0.45);
+}
+
+.scrollyPromptRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: #7e8ba6;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.scrollDownArrow {
+  font-size: 0.85rem;
+  color: var(--color-accent-cyan, #3edcc4);
+  animation: bounceDown 1.8s ease-in-out infinite;
+}
+
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
+/* ── Split Scrollytelling Stage Grid ──────────────────────────── */
+.scrollyGrid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44% 56%;
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 3vw, 40px);
+  gap: clamp(20px, 3vw, 48px);
+}
+
+/* ── Left Column: Sticky 3D DNA Alive Being Stage ────────────── */
+.dnaStickyPane {
+  position: sticky;
+  top: 80px;
+  height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.dnaCanvasWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-height: 720px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, rgba(12, 17, 30, 0.7) 0%, rgba(5, 7, 12, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.85),
+    inset 0 0 40px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(62, 220, 196, 0.05);
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.dnaCanvasWrapper:active {
+  cursor: grabbing;
+}
+
+.dnaCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ── HUD Overlay on Top of 3D DNA Being ───────────────────────── */
+.dnaHudOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 22px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.hudTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.hudStageBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--hud-accent, #3edcc4);
+  background: rgba(6, 8, 14, 0.9);
+  border: 1px solid var(--hud-accent, #3edcc4);
+  padding: 4px 10px;
+  border-radius: 4px;
+  box-shadow: 0 0 12px var(--hud-accent, rgba(62, 220, 196, 0.4));
+  transition: all 0.3s ease;
+}
+
+.hudStageDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--hud-accent, #3edcc4);
+  box-shadow: 0 0 8px var(--hud-accent, #3edcc4);
+  animation: pulseBeacon 1.8s ease-in-out infinite;
+}
+
+.hudStatusTag {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: #76839d;
+  background: rgba(6, 8, 14, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* HUD Middle: Focused Node Name readout */
+.hudCenterFocus {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: rgba(6, 8, 14, 0.7);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  width: fit-content;
+  max-width: 85%;
+}
+
+.hudFocusLabel {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  color: #616e87;
+  text-transform: uppercase;
+}
+
+.hudFocusCompany {
+  font-family: var(--font-display, sans-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* HUD Bottom: 5-Stage Scrubber Navigator */
+.hudBottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  pointer-events: auto;
+}
+
+.stageScrubber {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(6, 8, 14, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 5px 10px;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+.scrubberBtn {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #7b88a2;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  padding: 0;
+}
+
+.scrubberBtn:hover {
+  background: rgba(62, 220, 196, 0.18);
+  border-color: var(--color-accent-cyan, #3edcc4);
+  color: #ffffff;
+  transform: scale(1.15);
+}
+
+.scrubberBtnActive {
+  background: var(--node-accent, #3edcc4);
+  border-color: var(--node-accent, #3edcc4);
+  color: #000000;
+  font-weight: 700;
+  transform: scale(1.2);
+  box-shadow: 0 0 14px var(--node-accent, #3edcc4);
+}
+
+.hud3dHint {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: #636f87;
+  text-transform: uppercase;
+}
+
+/* ── Right Column: The 5 Scrollytelling Story Chapters ────────── */
+.scrollyContent {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+}
+
+/* Each story section represents one milestone in the scroll journey */
+.storySection {
+  min-height: clamp(600px, 85vh, 880px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Active vs Inactive section visual motion states */
+.storySectionActive {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.storySectionInactive {
+  opacity: 0.45;
+  transform: scale(0.97);
+  filter: grayscale(0.2);
+}
+
+/* ── High-End Milestone Dossier Card ──────────────────────────── */
+.milestoneCard {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  background: rgba(9, 12, 20, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 3px solid var(--node-accent, #3edcc4);
+  border-radius: 14px;
+  padding: clamp(24px, 3vw, 36px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.85),
+    0 0 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.milestoneCard:hover,
+.milestoneCardFocused {
+  border-color: rgba(255, 255, 255, 0.24);
+  border-left-color: var(--node-accent, #3edcc4);
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.95),
+    0 0 35px var(--node-glow, rgba(62, 220, 196, 0.18));
+}
+
+.cardTopAccentGlow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle at top right, var(--node-accent, #3edcc4), transparent 70%);
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+/* Card Header: Node Index Badge + Period */
+.cardMetaHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
+.cardGenomicBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  color: var(--node-accent, #3edcc4);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  padding: 3px 9px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.cardPeriodPill {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: #727e99;
+}
+
+.cardStatusTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--node-accent, #3edcc4);
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.cardStatusDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--node-accent, #3edcc4);
+  box-shadow: 0 0 7px var(--node-accent, #3edcc4);
+}
+
+/* Card Title: Role Title & Organization */
+.cardTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cardRole {
+  font-family: var(--font-display, sans-serif);
+  font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.cardCompany {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--node-accent, #3edcc4);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+/* Card Summary */
+.cardSummary {
+  font-family: var(--font-body, sans-serif);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #a7b5cc;
+  margin: 0;
+}
+
+/* Card Highlights List */
+.highlightsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.highlightItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  font-family: var(--font-body, sans-serif);
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: #ccd5e5;
+}
+
+.highlightDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--node-accent, #3edcc4);
+  box-shadow: 0 0 7px var(--node-accent, #3edcc4);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+/* Tech Badges Grid */
+.skillsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding-top: 8px;
+}
+
+.skillPill {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  color: #9ab0cf;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.milestoneCard:hover .skillPill {
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #d1deef;
+}
+
+/* Metrics Bottom Banner */
+.metricsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.09);
+}
+
+.metricsTag {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: #616f8a;
+  text-transform: uppercase;
+}
+
+.metricsValue {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--node-accent, #3edcc4);
+}
+
+/* Special High-Voltage Style for Hackathon Bug Card */
+.hackathonBugCard {
+  border-left-color: #f59e0b;
+  background: radial-gradient(circle at 100% 0%, rgba(245, 158, 11, 0.08) 0%, rgba(9, 12, 20, 0.94) 75%);
+}
+
+.hackathonBugCard:hover {
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.95),
+    0 0 35px rgba(245, 158, 11, 0.25);
+}
+
+/* Special Stealth Iridescent Style for Future Node Card */
+.futureBeaconCard {
+  border-left-color: #3edcc4;
+  border-right: 1px solid rgba(62, 220, 196, 0.35);
+  background: radial-gradient(circle at 50% 0%, rgba(62, 220, 196, 0.08) 0%, rgba(9, 12, 20, 0.95) 80%);
+}
+
+/* ── Responsive Adaptations ───────────────────────────────────── */
+@media (max-width: 960px) {
+  .scrollyGrid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 0 16px;
+  }
+
+  .dnaStickyPane {
+    position: sticky;
+    top: 70px;
+    height: 250px;
+    margin-bottom: 20px;
+  }
+
+  .dnaCanvasWrapper {
+    max-height: 250px;
+  }
+
+  .hudCenterFocus {
+    display: none;
+  }
+
+  .storySection {
+    min-height: auto;
+    padding: 24px 0;
+  }
+
+  .milestoneCard {
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .cardRole {
+    font-size: 1.25rem;
+  }
+}
