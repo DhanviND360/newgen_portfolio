@@ -82,8 +82,8 @@
 /* ── Result / Metric — the dominant visual element ── */
 .achievementResult {
   font-family: var(--font-display);
-  font-size: clamp(var(--text-4xl), 6vw, var(--text-7xl));
-  line-height: var(--leading-none);
+  font-size: clamp(var(--text-3xl), 4.8vw, var(--text-6xl));
+  line-height: 1.05;
   letter-spacing: var(--tracking-tight);
   text-transform: uppercase;
   color: var(--color-accent-red);
