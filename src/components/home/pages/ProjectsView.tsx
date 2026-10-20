@@ -79,6 +79,72 @@ function enrich(p: Project, i: number): RichProject {
       liveUrl:    p.link ?? 'https://github.com/DhanviND360/YnotMe_TechMonsters_HackHazards',
       githubUrl:  p.github ?? 'https://github.com/DhanviND360/YnotMe_TechMonsters_HackHazards',
     };
+    case 'ballyhoo': return {
+      ...p,
+      index:      indexStr,
+      folderName: 'BALLYHOO',
+      category:   'CREATOR SAAS & AI',
+      tagline:    'Trend Discovery & Reach Intelligence for Content Creators',
+      problem:    'Content creators burn dozens of hours chasing elusive social media algorithms and guessing video topics without knowing what will actually trigger high reach and engagement.',
+      solution:   'A creator-focused SaaS platform that analyzes trending topics across video ecosystems, scoring momentum and delivering actionable hooks to maximize viewer watch time and engagement.',
+      liveUrl:    p.link ?? 'https://v0-build-ballyhoo-ai.vercel.app/',
+      githubUrl:  p.github,
+    };
+    case 'prp-manager': return {
+      ...p,
+      index:      indexStr,
+      folderName: 'PRP MANAGER',
+      category:   'AGENTIC PIPELINE & FINTECH',
+      tagline:    'Autonomous Cost Assessment Agent · CUBE Buildathon 2026',
+      problem:    'Complex multi-agent data pipelines frequently generate unpredictable compute, API, and token costs without real-time financial containment or observability.',
+      solution:   'Engineered as PREP Manager for the CUBE Buildathon 2026 pipeline. Features an autonomous background agent hosted on Render that continuously assesses operational costs, tracks telemetry, and exposes pipeline state.',
+      liveUrl:    p.link ?? 'https://cube26-prp-0211-dhanvind360.vercel.app/',
+      githubUrl:  p.github ?? 'https://github.com/DhanviND360/cube26-prp-0211-dhanvind360',
+    };
+    case 'hirequest': return {
+      ...p,
+      index:      indexStr,
+      folderName: 'HIREQUEST',
+      category:   'TALENT PLATFORM & HRTECH',
+      tagline:    'Unified Hiring & Candidate Portal · Gradskills 2026',
+      problem:    'Job seekers struggle with opaque application statuses and fragmented submission channels, while recruiters face overwhelming stacks of uncurated resumes.',
+      solution:   'Official Gradskills 2026 entry delivering dual-sided portals: job seekers build verified skill portfolios and track application velocity, while HR teams leverage streamlined candidate vetting and hiring workflows.',
+      liveUrl:    p.link ?? 'https://hirequest-gradskills-d.vercel.app/',
+      githubUrl:  p.github ?? 'https://github.com/DhanviND360/hirequest_gradskillsD',
+    };
+    case 'maileage': return {
+      ...p,
+      index:      indexStr,
+      folderName: 'M.AI.LEAGE',
+      category:   'LOCAL AI HARNESS',
+      tagline:    'Local LLM Harness Layer for Token & Prompt Efficiency',
+      problem:    'Modern LLM workflows leak token budgets through redundant prompt context, conversational bloat, and unoptimized schema overhead.',
+      solution:   'A locally-hosted LLM execution harness that intercepts prompt pipelines to eliminate context waste, optimize token mileage, and evaluate prompt efficiency with zero external cloud telemetry exposure.',
+      liveUrl:    p.link ?? 'https://github.com/DhanviND360/m.AI.leage',
+      githubUrl:  p.github ?? 'https://github.com/DhanviND360/m.AI.leage',
+    };
+    case 'prism': return {
+      ...p,
+      index:      indexStr,
+      folderName: 'PRISM',
+      category:   'PREDICTIVE INTELLIGENCE',
+      tagline:    'Predictive Risk Intelligence & Smart Monitoring · SIH 2026',
+      problem:    'Mission-critical projects suffer from unforeseen budget overruns and delivery bottlenecks due to lack of forward-looking early risk detection.',
+      solution:   'Smart India Hackathon 2026 submission for Problem Statement SIH26103. Combines multi-parameter predictive models to score schedule, cost, and roadblock risks with transparent explainability.',
+      liveUrl:    p.link ?? 'https://prism-sih-2026-rouge.vercel.app/',
+      githubUrl:  p.github ?? 'https://github.com/DhanviND360/PRISM_SIH2026',
+    };
+    case 'rentra': return {
+      ...p,
+      index:      indexStr,
+      folderName: 'RENTRA',
+      category:   'PROPTECH & FINTECH',
+      tagline:    'Rental Tracking & Property Management Ecosystem',
+      problem:    'Property owners and tenants struggle with disjointed rent reminders, untracked cash receipts, maintenance delays, and undocumented lease agreements.',
+      solution:   'A centralized property management and rental tracking platform providing automated payment records, lease status tracking, maintenance ticket pipelines, and owner-tenant dashboards.',
+      liveUrl:    p.link,
+      githubUrl:  p.github,
+    };
     default: return {
       ...p,
       index:      indexStr,

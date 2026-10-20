@@ -245,6 +245,141 @@ export const projects: Project[] = [
     link: 'https://github.com/DhanviND360/YnotMe_TechMonsters_HackHazards',
     github: 'https://github.com/DhanviND360/YnotMe_TechMonsters_HackHazards',
   },
+  {
+    id: 'ballyhoo',
+    title: 'Ballyhoo',
+    subtitle: 'AI Trend Discovery & Reach Engine for Content Creators',
+    description:
+      'My SaaS product that aims at helping content creators find the right trends to make videos on. Helps them get more reach and engagement.',
+    impact: [
+      'Automated momentum tracking engine tailored for modern video platforms',
+      'AI-assisted hook generation algorithms designed to maximize audience watch retention',
+      'Deployed SaaS web application with responsive analytics and creator dashboard',
+    ],
+    tags: ['Next.js', 'TypeScript', 'AI Trend Engine', 'Creator SaaS', 'Vercel'],
+    year: 2026,
+    images: [
+      '/projects/ballyhoo-1.png',
+      '/projects/ballyhoo-2.png',
+      '/projects/ballyhoo-3.png',
+    ],
+    imagePositions: ['center center', 'left top', 'center center'],
+    tileLabels: ['01 // TREND DASHBOARD', '02 // ANALYTICS SUITE', '03 // CREATOR STUDIO'],
+    link: 'https://v0-build-ballyhoo-ai.vercel.app/',
+  },
+  {
+    id: 'prp-manager',
+    title: 'PRP MANAGER',
+    subtitle: 'CUBE Buildathon 2026 · Autonomous Cost Assessment Agent',
+    description:
+      'My project for the CUBE buildathon 2026 where I created PREP manager as part of the pipeline. An agent hosted on render assess the cost and all.',
+    impact: [
+      'Official competition project for the CUBE Buildathon 2026',
+      'Autonomous assessment agent hosted on Render evaluating real-time pipeline costs',
+      'Interactive pipeline dashboard providing live status updates and dataset analytics',
+    ],
+    tags: ['Next.js', 'Python', 'FastAPI', 'Render', 'Agentic AI', 'Vercel'],
+    year: 2026,
+    images: [
+      '/projects/prpmanager-1.png',
+      '/projects/prpmanager-2.png',
+      '/projects/prpmanager-3.png',
+    ],
+    imagePositions: ['center top', 'center center', 'left center'],
+    tileLabels: ['01 // PIPELINE DASHBOARD', '02 // AGENT RUNTIME', '03 // PROCESS TELEMETRY'],
+    link: 'https://cube26-prp-0211-dhanvind360.vercel.app/',
+    github: 'https://github.com/DhanviND360/cube26-prp-0211-dhanvind360',
+  },
+  {
+    id: 'hirequest',
+    title: 'Hirequest',
+    subtitle: 'Unified Talent Acquisition & Job Seeker Platform · Gradskills 2026',
+    description:
+      'Entry for Gradskills 2026. A comprehensive platform bridging job seekers and HRs through skill verification, candidate portfolios, and hiring workflow management.',
+    impact: [
+      'Official competition submission for Gradskills 2026',
+      'Integrated dual-role portals for both job applicants and corporate HR recruiters',
+      'Automated resume parsing, application status tracking, and recruiter candidate management',
+    ],
+    tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Supabase', 'Vercel', 'HRTech'],
+    year: 2026,
+    images: [
+      '/projects/hirequest-1.jpeg',
+      '/projects/hirequest-2.jpeg',
+      '/projects/hirequest-3.jpeg',
+    ],
+    imagePositions: ['center top', 'center center', 'center center'],
+    tileLabels: ['01 // TALENT PLATFORM', '02 // RECRUITER PORTAL', '03 // CANDIDATE METRICS'],
+    link: 'https://hirequest-gradskills-d.vercel.app/',
+    github: 'https://github.com/DhanviND360/hirequest_gradskillsD',
+  },
+  {
+    id: 'maileage',
+    title: 'm.AI.leage',
+    subtitle: 'Local LLM Harness Layer for Token & Prompt Optimization',
+    description:
+      'Locally hosted harness layer to optimise tokens and efficient prompts. Intercepts calls to measure mileage, eliminate context waste, and optimize prompt architecture.',
+    impact: [
+      'Locally-hosted execution harness with zero external credential leakage',
+      'Token mileage telemetry and dynamic prompt compression pipeline',
+      'Terminal CLI & remote mobile control interface for developer experimentation',
+    ],
+    tags: ['Python', 'LLM Harness', 'Token Optimization', 'Prompt Engineering', 'CLI'],
+    year: 2026,
+    images: [
+      '/projects/maileage-1.jpeg',
+      '/projects/maileage-2.jpeg',
+      '/projects/maileage-3.jpeg',
+    ],
+    imagePositions: ['center top', 'left top', 'center center'],
+    tileLabels: ['01 // HARNESS OVERVIEW', '02 // TERMINAL CLI', '03 // MOBILE CONTROL'],
+    link: 'https://github.com/DhanviND360/m.AI.leage',
+    github: 'https://github.com/DhanviND360/m.AI.leage',
+  },
+  {
+    id: 'prism',
+    title: 'PRISM',
+    subtitle: 'Predictive Risk Intelligence for Smart Monitoring · SIH 2026',
+    description:
+      'Entry for SIH 2026. PS number SIH26103. Predictive risk intelligence platform that forecasts cost overruns, timeline drift, and delivery roadblocks with explainable AI scores.',
+    impact: [
+      'Official competition entry for Smart India Hackathon 2026 (Problem Statement SIH26103)',
+      'Multi-parameter risk telemetry scoring financial, schedule, and execution risks',
+      'Interactive risk dashboard with transparent factor explanations and early warnings',
+    ],
+    tags: ['Next.js', 'TypeScript', 'Predictive AI', 'SIH 2026', 'Tailwind CSS', 'Vercel'],
+    year: 2026,
+    images: [
+      '/projects/prism-1.png',
+      '/projects/prism-2.png',
+      '/projects/prism-3.png',
+    ],
+    imagePositions: ['center center', 'center top', 'left center'],
+    tileLabels: ['01 // RISK DASHBOARD', '02 // ANALYTICS OVERVIEW', '03 // PREDICTIVE METRICS'],
+    link: 'https://prism-sih-2026-rouge.vercel.app/',
+    github: 'https://github.com/DhanviND360/PRISM_SIH2026',
+  },
+  {
+    id: 'rentra',
+    title: 'rentra',
+    subtitle: 'Intelligent Rental Tracking & Property Management Ecosystem',
+    description:
+      'Rent track and management for owners and tenants. Simplifies rental collection, lease status tracking, maintenance requests, and financial ledgers.',
+    impact: [
+      'Dual-sided dashboard tailored for independent property owners and tenant occupants',
+      'Automated rent due reminders, transaction payment records, and invoice generation',
+      'Integrated maintenance issue reporting and centralized digital lease tracking',
+    ],
+    tags: ['React', 'Next.js', 'TypeScript', 'PropTech', 'Fintech', 'UI/UX'],
+    year: 2026,
+    images: [
+      '/projects/rentra-1.jpeg',
+      '/projects/rentra-2.jpeg',
+      '/projects/rentra-3.jpeg',
+    ],
+    imagePositions: ['center top', 'center center', 'center center'],
+    tileLabels: ['01 // OWNER PORTAL', '02 // LEASE MANAGEMENT', '03 // PAYMENT LEDGER'],
+  },
 ];
 
 // ── Achievements ──
