@@ -118,9 +118,9 @@ export interface SkillCategory {
 export const creator: CreatorInfo = {
   name: 'DHANVI',
   firstName: 'Dhanvi',
-  tagline: 'Builder. Creator. Engineer.',
-  title: 'Full-Stack Developer & Creative Technologist',
-  location: 'India',
+  tagline: 'Developer · Builder · Product-minded Engineer',
+  title: 'Developer · Builder · Product-minded Engineer',
+  location: 'Hyderabad, India',
   email: 'narra.dhanvi@gmail.com',
   socials: [
     {
@@ -741,50 +741,50 @@ export const hobbyItems: HobbyItem[] = [
 
 export const aboutTimeline: AboutTimeline[] = [
   {
-    year: '2025 — PRESENT',
-    role: 'Lead Creative Technologist & Full-Stack Architect',
-    company: 'Independent Practice / Autonomous Systems',
-    description: 'Architecting high-throughput distributed architectures, real-time collaboration engines, and cutting-edge WebGPU spatial web applications.',
+    year: '2024 — PRESENT',
+    role: 'Computer Science & Engineering (B.Tech)',
+    company: 'KG Reddy College of Engineering & Technology, Hyderabad',
+    description:
+      'Focusing on full-stack web architectures, applied AI, OCR pipelines, and human-centred systems. Building and shipping products under real constraints.',
   },
   {
-    year: '2024 — 2025',
-    role: 'Systems Engineer & Research Fellow',
-    company: 'Distributed Systems & Applied Crypto Lab',
-    description: 'Conducted empirical research on zero-knowledge messaging networks, low-latency state resolution, and co-authored 3 conference papers.',
+    year: '2024',
+    role: 'HackHazards Finalist — Top 100 of 31,000+ Builders',
+    company: 'YnotMe (LiveNudge) — Conversational Intelligence',
+    description:
+      'Engineered privacy-first conversational coaching direction with on-device speech analysis, low-latency feedback, and edge-first design.',
+  },
+  {
+    year: '2024',
+    role: 'Creator & Full-Stack Lead',
+    company: 'SIH bro — Smart India Hackathon Copilot',
+    description:
+      'Architected and shipped a practical web app helping student teams decompose SIH problem statements and form teams. Deployed to 100+ active users.',
   },
   {
     year: '2023 — 2024',
-    role: 'Full-Stack Developer & UI Engineer',
-    company: 'Interactive Media & Creative Studios',
-    description: 'Engineered high-performance web products, bespoke design systems, and animated interactive platforms for tech clients globally.',
-  },
-  {
-    year: '2022 — 2023',
-    role: 'Open-Source Contributor & Hackathon Competitor',
-    company: 'Global Developer Community',
-    description: 'Secured national hackathon championship victories and built open-source utilities reaching over 10K+ GitHub stars worldwide.',
+    role: 'Systems & ML Pipeline Prototyping',
+    company: 'PRISM, PREP Manager & FireView Projects',
+    description:
+      'Built predictive risk intelligence dashboard concepts, batch image OCR pipelines with memory optimizations, and massive geospatial fire pattern analytics.',
   },
 ];
 
 export const skillCategories: SkillCategory[] = [
   {
     title: 'Core Languages',
-    skills: ['TypeScript', 'JavaScript (ESNext)', 'Python', 'Rust', 'C / C++', 'SQL', 'Go'],
+    skills: ['TypeScript', 'JavaScript', 'Python', 'C / C++', 'SQL', 'HTML5 / CSS3'],
   },
   {
     title: 'Frameworks & Runtimes',
-    skills: ['Next.js 16', 'React 19', 'Node.js', 'Express', 'Flask', 'FastAPI', 'Tailwind / Vanilla CSS'],
+    skills: ['React 19', 'Next.js 16', 'FastAPI', 'Node.js', 'Express', 'Tailwind / Vanilla CSS'],
   },
   {
-    title: 'Graphics & Creative Tech',
-    skills: ['WebGPU / WGSL', 'WebGL 2.0', 'GSAP Core', 'Three.js', 'Framer Motion', 'Canvas 2D', 'Shaders'],
+    title: 'AI Engineering & Data',
+    skills: ['AI Model APIs (OpenAI, Gemini)', 'On-Device AI / Ollama', 'RAG & Vector Workflows', 'Tesseract OCR', 'NumPy', 'Pandas'],
   },
   {
-    title: 'Systems, Cloud & Infra',
-    skills: ['Docker', 'PostgreSQL', 'Redis', 'WebSockets', 'WebRTC', 'Vercel Edge', 'Cloudflare Workers', 'Supabase'],
-  },
-  {
-    title: 'AI & Machine Learning',
-    skills: ['OpenAI / ChatGPT API', 'Google Gemini', 'Anthropic Claude', 'Ollama (Local LLMs)', 'NumPy', 'Pandas', 'OpenCV'],
+    title: 'Backend, Cloud & Databases',
+    skills: ['Supabase', 'PostgreSQL', 'RESTful APIs', 'Vercel', 'Git & GitHub', 'Session Storage'],
   },
 ];
