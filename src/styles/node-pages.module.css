@@ -657,6 +657,102 @@
   color: var(--color-text-secondary);
 }
 
+/* ── About View: Verified Digital Channels ── */
+.aboutConnectBlock {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.aboutSocialsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.aboutSocialCard {
+  background: rgba(18, 18, 20, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 12px 14px;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.aboutSocialHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.aboutSocialIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.aboutSocialPlatform {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #e0e0e0;
+  font-weight: 600;
+}
+
+.aboutSocialArrow {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.aboutSocialHandle {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-accent-cyan);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aboutSocialCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.aboutSocialCard:hover .aboutSocialArrow {
+  transform: translate(2px, -2px);
+  color: #ffffff;
+}
+
+.aboutSocialGithub:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+}
+
+.aboutSocialLinkedin:hover {
+  border-color: #0a66c2;
+  box-shadow: 0 0 20px rgba(10, 102, 194, 0.35);
+}
+
+.aboutSocialTwitter:hover {
+  border-color: #1d9bf0;
+  box-shadow: 0 0 20px rgba(29, 155, 240, 0.35);
+}
+
+.aboutSocialEmail:hover {
+  border-color: #ea4335;
+  box-shadow: 0 0 20px rgba(234, 67, 53, 0.35);
+}
+
 .timelineSection {
   margin-top: 32px;
 }
@@ -800,7 +896,7 @@
   background: rgba(14, 14, 14, 0.9);
   border: 1px solid rgba(62, 220, 196, 0.3);
   border-radius: 8px;
-  padding: 16px 20px;
+  padding: 14px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -808,11 +904,32 @@
   margin-top: 8px;
 }
 
+.emailInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.emailIcon {
+  color: #ea4335;
+  flex-shrink: 0;
+}
+
 .emailText {
   font-family: var(--font-mono);
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: #ffffff;
   letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.emailText:hover {
+  color: var(--color-accent-cyan);
 }
 
 .copyBtn {
@@ -826,6 +943,7 @@
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
 .copyBtn:hover {
@@ -835,7 +953,7 @@
 
 .socialsRow {
   display: flex;
-  gap: 14px;
+  gap: 12px;
   flex-wrap: wrap;
   margin-top: 8px;
 }
@@ -846,19 +964,56 @@
   gap: 8px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 8px 16px;
+  padding: 8px 14px;
   border-radius: 6px;
   font-family: var(--font-mono);
   font-size: 0.8rem;
   color: #f0f0f0;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.22s ease;
 }
 
 .socialBadge:hover {
   border-color: var(--color-accent-cyan);
-  color: var(--color-accent-cyan);
+  color: #ffffff;
   transform: translateY(-2px);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.2);
+}
+
+.socialBadgeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent-cyan);
+  transition: transform 0.2s ease;
+}
+
+.socialBadgePlatform {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.socialBadgeHandle {
+  font-size: 0.74rem;
+  color: var(--color-text-secondary);
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  padding-left: 8px;
+}
+
+.socialBadgeArrow {
+  opacity: 0.6;
+  font-size: 0.75rem;
+  margin-left: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.socialBadge:hover .socialBadgeArrow {
+  transform: translate(2px, -2px);
+  opacity: 1;
+}
+
+.socialBadge:hover .socialBadgeIcon {
+  transform: scale(1.1);
 }
 
 /* Transmission Form Console */
@@ -1421,5 +1576,9 @@
 
   .achieveMetricSide {
     align-items: flex-start;
+  }
+
+  .aboutSocialsGrid {
+    grid-template-columns: 1fr;
   }
 }

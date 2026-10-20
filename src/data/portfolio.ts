@@ -125,18 +125,21 @@ export const creator: CreatorInfo = {
   socials: [
     {
       platform: 'GitHub',
-      url: 'https://github.com/dhanvi',
-      label: 'github/dhanvi',
+      url: 'https://github.com/DhanviND360',
+      label: 'DhanviND360',
+      icon: 'github',
     },
     {
       platform: 'LinkedIn',
       url: 'https://www.linkedin.com/in/narra-dhanvi-65a63b2b9',
-      label: 'in/narra-dhanvi',
+      label: 'narra-dhanvi-65a63b2b9',
+      icon: 'linkedin',
     },
     {
-      platform: 'Twitter',
-      url: 'https://x.com/dhanvi',
-      label: '@dhanvi',
+      platform: 'X (Twitter)',
+      url: 'https://x.com/codelox_13',
+      label: '@codelox_13',
+      icon: 'twitter',
     },
   ],
 };
