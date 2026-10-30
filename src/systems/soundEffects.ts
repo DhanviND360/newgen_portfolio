@@ -66,7 +66,7 @@ function getAudioContext(): AudioContext | null {
     userGestureBound = true;
     const unlock = () => {
       if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume().catch(() => {});
+        audioCtx.resume().catch(() => { });
       }
       window.removeEventListener('pointerdown', unlock);
       window.removeEventListener('keydown', unlock);
@@ -101,7 +101,7 @@ export function playThock(options?: ThockVariant | ThockOptions): void {
   if (!ctx) return;
 
   if (ctx.state === 'suspended') {
-    ctx.resume().catch(() => {});
+    ctx.resume().catch(() => { });
   }
 
   // Parse options
@@ -130,7 +130,7 @@ export function playThock(options?: ThockVariant | ThockOptions): void {
       endFreq = 48;
       decayTime = 0.075;
       filterCutoff = 650;
-      volume = customVolume ?? 0.26;
+      volume = customVolume ?? 0.50; // +20% volume boost (from 0.26) for rich tactile project card hover
       break;
 
     case 'crisp':
@@ -271,7 +271,7 @@ export function playSpaceSynth(param?: number | SpaceSynthOptions): void {
   if (!ctx) return;
 
   if (ctx.state === 'suspended') {
-    ctx.resume().catch(() => {});
+    ctx.resume().catch(() => { });
   }
 
   let nodeIndex = 0;
@@ -353,8 +353,8 @@ export function playSpaceSynth(param?: number | SpaceSynthOptions): void {
         osc2Gain.disconnect();
         filter.disconnect();
         masterGain.disconnect();
-      } catch {}
+      } catch { }
     }, (duration + 0.05) * 1000);
-  } catch {}
+  } catch { }
 }
 

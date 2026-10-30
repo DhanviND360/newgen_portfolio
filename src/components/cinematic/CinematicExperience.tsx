@@ -22,6 +22,9 @@ import { projects, achievements } from '@/data/portfolio';
 import { startBGM, stopBGM } from '@/systems/audioManager';
 import styles from '@/styles/cinematic.module.css';
 
+// Cinematic sequence: retain only the first four selected works
+const cinematicProjects = projects.slice(0, 4);
+
 // Phase components
 import InitializingSequence from './InitializingSequence';
 import BootSequence from './BootSequence';
@@ -132,7 +135,7 @@ export default function CinematicExperience() {
           />
           <ProjectSequence
             isActive={phase === CinematicPhase.PROJECTS}
-            projects={projects}
+            projects={cinematicProjects}
             onComplete={handlePhaseComplete}
           />
           <AchievementSequence

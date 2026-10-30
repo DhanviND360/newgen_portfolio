@@ -209,9 +209,11 @@ export default function AboutView() {
               </a>
 
               <a
-                href={`mailto:${creator.email}`}
+                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(creator.email)}`}
                 className={`${styles.aboutSocialCard} ${styles.aboutSocialEmail}`}
-                title={`Email: ${creator.email}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={`Open Gmail: ${creator.email}`}
               >
                 <div className={styles.aboutSocialHeader}>
                   <span className={styles.aboutSocialIcon}>

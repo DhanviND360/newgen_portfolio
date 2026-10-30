@@ -730,10 +730,12 @@ export default function DhanviNameReveal() {
 
           <div className={styles.taglineSocialGroup}>
             <a
-              href="mailto:narra.dhanvi@gmail.com"
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=narra.dhanvi@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className={`${styles.taglineSocialIcon} ${styles.gmailIcon}`}
               aria-label="Gmail / Email contact: narra.dhanvi@gmail.com"
-              title="Gmail: narra.dhanvi@gmail.com"
+              title="Open Gmail: narra.dhanvi@gmail.com"
             >
               <svg
                 viewBox="0 0 24 24"

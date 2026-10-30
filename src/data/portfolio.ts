@@ -451,19 +451,19 @@ export const achievements: Achievement[] = [
   },
   {
     id: 'achievement-hackathonbug',
-    title: 'Hackathon Bug',
+    title: '4x Hackathon Wins, 18x Hackathon Finalist',
     event: 'Competitive Hackathon Circuit',
-    result: '4 WINS · 19 FINALS',
+    result: '4X WINS · 18X FINALIST',
     year: 2026,
     statement:
-      '4-time winner and 19-time finalist across national and collegiate hackathons. Relentless builder with active participation in many more competitive sprints.',
+      '4-time hackathon winner and 18-time finalist across national and collegiate competitions. Relentless builder with active participation in many more competitive sprints.',
     images: [
       '/achievements/hackathonbug-1.jpeg',
       '/achievements/hackathonbug-2.jpeg',
       '/achievements/hackathonbug-3.jpeg',
     ],
     imagePositions: ['center 25%', 'center 20%', 'center 30%'],
-    tileLabels: ['01 // NIGHT SPRINT', '02 // 19X FINALIST', '03 // SPEED PROTOTYPING'],
+    tileLabels: ['01 // NIGHT SPRINT', '02 // 4X WINS · 18X FINALIST', '03 // SPEED PROTOTYPING'],
   },
 ];
 
@@ -672,9 +672,9 @@ export const galleryItems: GalleryItem[] = [
     year: 2026,
     date: '2025 — 2026',
     location: 'Hackathon Circuit',
-    description: 'Dark auditorium, glowing monitor screens, energy drinks, and keyboard clatter. 19x finalists and 4x victories born in nights like this.',
+    description: 'Dark auditorium, glowing monitor screens, energy drinks, and keyboard clatter. 4x hackathon wins and 18x finalists born in nights like this.',
     note: 'The raw, irreplaceable magic of hackathon sprint nights at 3:00 AM.',
-    tags: ['19x Finalist', '4x Winner', 'Night Sprint', 'Pure Code'],
+    tags: ['4x Winner', '18x Finalist', 'Night Sprint', 'Pure Code'],
     image: '/achievements/hackathonbug-1.jpeg',
     rotation: 2.2,
   },
@@ -710,12 +710,31 @@ export const galleryItems: GalleryItem[] = [
 
 export const experienceNodes: ExperienceNode[] = [
   {
+    id: 'exp-trinance',
+    role: 'Full Stack Developer Intern',
+    company: 'Trinance',
+    period: 'October 2026',
+    type: 'internship',
+    badge: 'INTERNSHIP // 01',
+    summary:
+      'Developed Full Stack website and gained hands-on engineering experience in enabling autonomous AI Agents into web applications.',
+    highlights: [
+      'Developed Full Stack website features focusing on clean architecture, responsive components, and backend endpoints.',
+      'Gained hands-on experience in enabling autonomous AI Agents into the website application workflow.',
+      'Collaborated on responsive design, modern state management, and real-time interactive user experiences.',
+    ],
+    skills: ['Full Stack', 'AI Agents', 'Next.js', 'React', 'TypeScript', 'Web Architecture', 'API Integration'],
+    metrics: 'AI Agent Integration • Full-Stack Web',
+    status: 'ACTIVE / RECENT',
+    accentColor: '#3edcc4',
+  },
+  {
     id: 'exp-lakshya',
     role: 'Developer Intern',
     company: 'Lakshya Smartguard Systems Pvt. Ltd.',
     period: '2026',
     type: 'internship',
-    badge: 'INTERNSHIP // 01',
+    badge: 'INTERNSHIP // 02',
     summary:
       'Engineered production-oriented full-stack workflows across real-time telemetry, AI/ML models, and drone operations.',
     highlights: [
@@ -727,7 +746,7 @@ export const experienceNodes: ExperienceNode[] = [
     skills: ['Next.js', 'FastAPI', 'AI/ML', 'OCR', 'Telemetry', 'Drone Fleet UI', 'Real-Time WebSockets'],
     metrics: '<2s Drone Telemetry • 2x Data Compression',
     status: 'PRODUCTION ACTIVE',
-    accentColor: '#3edcc4',
+    accentColor: '#38bdf8',
   },
   {
     id: 'exp-scaler',
@@ -735,7 +754,7 @@ export const experienceNodes: ExperienceNode[] = [
     company: 'Scaler Data AI Labs',
     period: 'Nov 2025',
     type: 'internship',
-    badge: 'INTERNSHIP // 02',
+    badge: 'INTERNSHIP // 03',
     summary:
       'Supported frontier AI model-training pipelines and structured reasoning workflows with high KPI quality benchmarks.',
     highlights: [
@@ -747,7 +766,7 @@ export const experienceNodes: ExperienceNode[] = [
     skills: ['AI Model Training', 'Data Annotation', 'Structured Reasoning', 'LLM Benchmark Evaluation', 'Quality Auditing'],
     metrics: '99.4% KPI Adherence • High-Volume Evaluation',
     status: 'COMPLETED WITH DISTINCTION',
-    accentColor: '#38bdf8',
+    accentColor: '#818cf8',
   },
   {
     id: 'exp-swecha',
@@ -755,7 +774,7 @@ export const experienceNodes: ExperienceNode[] = [
     company: 'Swecha Telangana',
     period: '2024 – 2025',
     type: 'internship',
-    badge: 'INTERNSHIP // 03',
+    badge: 'INTERNSHIP // 04',
     summary:
       'Led technical execution, architecture, and deployment of open community applications in a fast-paced team environment.',
     highlights: [
@@ -767,7 +786,7 @@ export const experienceNodes: ExperienceNode[] = [
     skills: ['Technical Leadership', 'Application Architecture', 'Full-Stack Delivery', 'Open Source', 'Sprint Planning'],
     metrics: 'Multi-Project Delivery • Distributed Team Lead',
     status: 'LEADERSHIP EXCELLENCE',
-    accentColor: '#818cf8',
+    accentColor: '#a78bfa',
   },
   {
     id: 'exp-hackathons',
@@ -779,13 +798,13 @@ export const experienceNodes: ExperienceNode[] = [
     summary:
       'An insatiable drive for 24–48hr high-stakes hackathons, prototyping game-changing AI products from 0 to 1 under extreme pressure.',
     highlights: [
-      '4× Hackathon Winner & 19× Hackathon Finalist across national and regional builder competitions.',
+      '4× Hackathon Winner & 18× Hackathon Finalist across national and regional builder competitions.',
       'Selected in Top 100 teams out of 31,000+ builders worldwide for YnotMe (Sarvam AI / Neo4j real-time conversation intelligence).',
       'Built and shipped complete production MVPs in 24–36hr sprints: SIH Bro, RentRa, and Ballyhoo.ai.',
       'Demonstrated master-level rapid prototyping: ideation, architecture, API integration, and investor-grade live pitch demos.',
     ],
-    skills: ['Rapid Prototyping', '4x Winner', '19x Finalist', 'Top 100 / 31k', '0-to-1 Shipping', 'Live Product Demos'],
-    metrics: '4x Winner • 19x Finalist • Top 100 / 31,000+',
+    skills: ['Rapid Prototyping', '4x Winner', '18x Finalist', 'Top 100 / 31k', '0-to-1 Shipping', 'Live Product Demos'],
+    metrics: '4x Hackathon Wins • 18x Finalist • Top 100 / 31,000+',
     status: 'ALWAYS COMPETING',
     accentColor: '#f59e0b',
   },

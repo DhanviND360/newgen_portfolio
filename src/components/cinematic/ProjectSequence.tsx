@@ -111,6 +111,11 @@ export default function ProjectSequence({
     projects.map(() => createRef<ProjectSceneRefs>())
   );
 
+  // Keep refs synchronized with projects array length
+  if (sceneRefs.current.length !== projects.length) {
+    sceneRefs.current = projects.map(() => createRef<ProjectSceneRefs>());
+  }
+
   const buildTimeline = useCallback(() => {
     if (!containerRef.current || !cameraRigRef.current) return null;
 
