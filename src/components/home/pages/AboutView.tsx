@@ -8,7 +8,7 @@
 
 import React from 'react';
 import styles from '@/styles/node-pages.module.css';
-import { creator, aboutTimeline, skillCategories } from '@/data/portfolio';
+import { creator, skillCategories } from '@/data/portfolio';
 
 // Core Operating Principles
 const OPERATING_PRINCIPLES = [
@@ -91,6 +91,21 @@ const SELECTED_WORK = [
     badge: 'DATA INTELLIGENCE',
     badgeColor: '#fb7185',
   },
+];
+
+// Duplicate sets for smooth, infinite marquee looping
+const REPEATED_PRINCIPLES = [
+  ...OPERATING_PRINCIPLES,
+  ...OPERATING_PRINCIPLES,
+  ...OPERATING_PRINCIPLES,
+  ...OPERATING_PRINCIPLES,
+];
+
+const REPEATED_SELECTED_WORK = [
+  ...SELECTED_WORK,
+  ...SELECTED_WORK,
+  ...SELECTED_WORK,
+  ...SELECTED_WORK,
 ];
 
 export default function AboutView() {
@@ -213,60 +228,74 @@ export default function AboutView() {
           </div>
         </div>
 
-        {/* Right: At A Glance HUD & Technical Arsenal */}
-        <div className={styles.aboutSidebar}>
-          {/* Telemetry Card */}
-          <div className={styles.specConsoleCard}>
-            <div className={styles.specConsoleHeader}>
-              <span className={styles.specConsoleDot} />
-              <span>AT A GLANCE // SYSTEM TELEMETRY</span>
-            </div>
+        {/* Right: At A Glance HUD */}
+        <div className={styles.specConsoleCard}>
+          <div className={styles.specConsoleHeader}>
+            <span className={styles.specConsoleDot} />
+            <span>AT A GLANCE // SYSTEM TELEMETRY</span>
+          </div>
 
-            <div className={styles.specGrid}>
-              <div className={styles.specItem}>
-                <span className={styles.specLabel}>LOCATION</span>
-                <span className={styles.specValue}>Hyderabad, India</span>
-              </div>
-              <div className={styles.specItem}>
-                <span className={styles.specLabel}>ACADEMICS</span>
-                <span className={styles.specValue}>B.Tech, Computer Science &amp; Eng</span>
-              </div>
-              <div className={styles.specItem}>
-                <span className={styles.specLabel}>INSTITUTION</span>
-                <span className={styles.specValue}>KG Reddy College of Eng &amp; Tech</span>
-              </div>
-              <div className={styles.specItem}>
-                <span className={styles.specLabel}>PRIMARY FOCUS</span>
-                <span className={styles.specValue}>Full-Stack · Applied AI · Product Thinking</span>
-              </div>
-              <div className={styles.specItem}>
-                <span className={styles.specLabel}>CORE STACK</span>
-                <span className={styles.specValue}>React · Next.js · TypeScript · Python · FastAPI · Supabase</span>
-              </div>
-              <div className={styles.specItem}>
-                <span className={styles.specLabel}>CORE CREED</span>
-                <span className={styles.specValueHighlight}>Curious by default · Practical about execution</span>
-              </div>
+          {/* Highlight Tagline Block */}
+          <div className={styles.specHighlightBox}>
+            <div className={styles.specHighlightTagline}>
+              4 times hackathon wins, 18 times hackathon finalists
+            </div>
+            <div className={styles.specHighlightSubline}>
+              ready for any freelance projects or ready to work - just contact me
             </div>
           </div>
 
-          {/* Skills Matrix */}
-          <div className={styles.skillsMatrixCard}>
-            <h3 className={styles.sectionHeaderSmall}>TECHNICAL ARSENAL</h3>
-            <div className={styles.skillsGroupList}>
-              {skillCategories.map((cat, idx) => (
-                <div key={idx} className={styles.skillBox}>
-                  <h4 className={styles.skillBoxTitle}>{cat.title}</h4>
-                  <div className={styles.skillPills}>
-                    {cat.skills.map((skill) => (
-                      <span key={skill} className={styles.skillPill}>
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
+          <div className={styles.specGrid}>
+            <div className={styles.specItem}>
+              <span className={styles.specLabel}>LOCATION</span>
+              <span className={styles.specValue}>Hyderabad, India</span>
             </div>
+            <div className={styles.specItem}>
+              <span className={styles.specLabel}>ACADEMICS</span>
+              <span className={styles.specValue}>B.Tech, Computer Science &amp; Eng</span>
+            </div>
+            <div className={styles.specItem}>
+              <span className={styles.specLabel}>INSTITUTION</span>
+              <span className={styles.specValue}>KG Reddy College of Eng &amp; Tech</span>
+            </div>
+            <div className={styles.specItem}>
+              <span className={styles.specLabel}>PRIMARY FOCUS</span>
+              <span className={styles.specValue}>Full-Stack · Applied AI · Product Thinking</span>
+            </div>
+            <div className={styles.specItem}>
+              <span className={styles.specLabel}>CORE STACK</span>
+              <span className={styles.specValue}>React · Next.js · TypeScript · Python · FastAPI · Supabase</span>
+            </div>
+            <div className={styles.specItem}>
+              <span className={styles.specLabel}>CORE CREED</span>
+              <span className={styles.specValueHighlight}>Curious by default · Practical about execution</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Landscape Technical Arsenal across bottom */}
+        <div className={styles.skillsMatrixCardLandscape}>
+          <div className={styles.skillsMatrixHeader}>
+            <div className={styles.skillsMatrixTitleRow}>
+              <span className={styles.specConsoleDot} />
+              <h3 className={styles.skillsMatrixTitle}>TECHNICAL ARSENAL</h3>
+            </div>
+            <span className={styles.skillsMatrixSubtitle}>CORE STACK &amp; CAPABILITIES</span>
+          </div>
+
+          <div className={styles.skillsGroupListLandscape}>
+            {skillCategories.map((cat, idx) => (
+              <div key={idx} className={styles.skillBoxLandscape}>
+                <h4 className={styles.skillBoxTitle}>{cat.title}</h4>
+                <div className={styles.skillPills}>
+                  {cat.skills.map((skill) => (
+                    <span key={skill} className={styles.skillPill}>
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -317,58 +346,69 @@ export default function AboutView() {
         </div>
       </section>
 
-      {/* ── 3. How I Like to Work (Operating Principles) ── */}
+      {/* ── 3. How I Like to Work (Operating Principles) Auto-Carousel (Left to Right) ── */}
       <section className={styles.aboutSectionBlock}>
         <div className={styles.sectionTitleGroup}>
           <span className={styles.sectionEyebrow}>METHODOLOGY</span>
           <h3 className={styles.sectionHeaderMain}>HOW I LIKE TO WORK</h3>
         </div>
 
-        <div className={styles.principlesGrid}>
-          {OPERATING_PRINCIPLES.map((principle) => (
-            <div key={principle.num} className={styles.principleCard}>
-              <span className={styles.principleNum}>{principle.num}</span>
-              <h4 className={styles.principleTitle}>{principle.title}</h4>
-              <p className={styles.principleDesc}>{principle.desc}</p>
-            </div>
-          ))}
+        <div className={styles.autoCarouselContainer}>
+          <div className={styles.autoCarouselTrackLtoR}>
+            {REPEATED_PRINCIPLES.map((principle, idx) => (
+              <div key={`${principle.num}-${idx}`} className={styles.principleCarouselCard}>
+                <div>
+                  <div className={styles.principleCardTop}>
+                    <span className={styles.principleNum}>{principle.num}</span>
+                    <span className={styles.principleStepBadge}>PHASE // {principle.num}</span>
+                  </div>
+                  <h4 className={styles.principleTitle}>{principle.title}</h4>
+                </div>
+                <p className={styles.principleDesc}>{principle.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── 4. Selected Work & Real-World Impact (SIH bro) ── */}
+      {/* ── 4. Selected Work & Real-World Impact Auto-Carousel (Right to Left) ── */}
       <section className={styles.aboutSectionBlock}>
         <div className={styles.sectionTitleGroup}>
           <span className={styles.sectionEyebrow}>PORTFOLIO HIGHLIGHTS</span>
           <h3 className={styles.sectionHeaderMain}>SELECTED WORK &amp; IMPACT</h3>
         </div>
 
-        <div className={styles.selectedWorkGrid}>
-          {SELECTED_WORK.map((work) => (
-            <div key={work.id} className={styles.selectedWorkCard}>
-              <div className={styles.selectedWorkTop}>
-                <span
-                  className={styles.workBadge}
-                  style={{ color: work.badgeColor, borderColor: `${work.badgeColor}40` }}
-                >
-                  {work.badge}
-                </span>
-                <span className={styles.workHighlight}>{work.highlight}</span>
+        <div className={styles.autoCarouselContainer}>
+          <div className={styles.autoCarouselTrackRtoL}>
+            {REPEATED_SELECTED_WORK.map((work, idx) => (
+              <div key={`${work.id}-${idx}`} className={styles.selectedWorkCard}>
+                <div>
+                  <div className={styles.selectedWorkTop}>
+                    <span
+                      className={styles.workBadge}
+                      style={{ color: work.badgeColor, borderColor: `${work.badgeColor}40` }}
+                    >
+                      {work.badge}
+                    </span>
+                    <span className={styles.workHighlight}>{work.highlight}</span>
+                  </div>
+
+                  <h4 className={styles.workTitle}>{work.title}</h4>
+                  <h5 className={styles.workTagline}>{work.tagline}</h5>
+
+                  <p className={styles.workDesc}>{work.desc}</p>
+                </div>
+
+                <div className={styles.workPillRow}>
+                  {work.pillars.map((pillar) => (
+                    <span key={pillar} className={styles.workPill}>
+                      {pillar}
+                    </span>
+                  ))}
+                </div>
               </div>
-
-              <h4 className={styles.workTitle}>{work.title}</h4>
-              <h5 className={styles.workTagline}>{work.tagline}</h5>
-
-              <p className={styles.workDesc}>{work.desc}</p>
-
-              <div className={styles.workPillRow}>
-                {work.pillars.map((pillar) => (
-                  <span key={pillar} className={styles.workPill}>
-                    {pillar}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
@@ -413,43 +453,6 @@ export default function AboutView() {
         </div>
       </section>
 
-      {/* ── 6. Engineering Trajectory Timeline ── */}
-      <section className={styles.aboutSectionBlock}>
-        <div className={styles.sectionTitleGroup}>
-          <span className={styles.sectionEyebrow}>CHRONOLOGY</span>
-          <h3 className={styles.sectionHeaderMain}>ENGINEERING TRAJECTORY</h3>
-        </div>
-
-        <div className={styles.timelineList}>
-          {aboutTimeline.map((item, idx) => (
-            <div key={idx} className={styles.timelineItem}>
-              <span className={styles.timelineYear}>{item.year}</span>
-              <h4 className={styles.timelineRole}>{item.role}</h4>
-              <p className={styles.timelineCompany}>{item.company}</p>
-              <p className={styles.timelineDesc}>{item.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── 7. The Next Chapter & Final Creed Banner ── */}
-      <section className={styles.nextChapterBanner}>
-        <div className={styles.creedBox}>
-          <span className={styles.creedTag}>THE NORTH STAR</span>
-          <h3 className={styles.creedHeading}>
-            BUILD WITH CURIOSITY. SHIP WITH INTENTION. KEEP LEARNING.
-          </h3>
-          <p className={styles.creedBody}>
-            I&apos;m seeking difficult, worthwhile problems, collaborative peers who care deeply about what they
-            ship, and opportunities to keep growing as an engineer and product builder.
-          </p>
-          <div className={styles.creedActionRow}>
-            <a href="#contact" className={styles.creedPrimaryBtn}>
-              GET IN TOUCH // TRANSMIT FREQUENCY ↗
-            </a>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

@@ -41,7 +41,6 @@ function getSocialIcon(platform: string) {
 
 export default function ContactView() {
   const [copied, setCopied] = useState(false);
-  const [formSent, setFormSent] = useState(false);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(creator.email);
@@ -49,11 +48,7 @@ export default function ContactView() {
     setTimeout(() => setCopied(false), 2500);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormSent(true);
-    setTimeout(() => setFormSent(false), 4000);
-  };
+  const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(creator.email)}`;
 
   return (
     <div className={styles.contactGrid}>
@@ -62,6 +57,33 @@ export default function ContactView() {
         <h2 className={styles.contactBigCallout}>
           LET&apos;S BUILD SOMETHING <span>EXTRAORDINARY</span>.
         </h2>
+
+        {/* Highlight: Open for Freelancing Projects, Internships & Jobs */}
+        <div className={styles.contactAvailabilityCard}>
+          <div className={styles.availabilityHeader}>
+            <span className={styles.availabilityBeacon} />
+            <span className={styles.availabilityStatus}>CURRENT STATUS // OPEN TO WORK</span>
+          </div>
+
+          <div className={styles.availabilityTagsRow}>
+            <div className={styles.availabilityTag}>
+              <span className={styles.availTagIcon}>⚡</span>
+              <span className={styles.availTagText}>FREELANCE PROJECTS</span>
+            </div>
+            <div className={styles.availabilityTag}>
+              <span className={styles.availTagIcon}>🎯</span>
+              <span className={styles.availTagText}>INTERNSHIPS</span>
+            </div>
+            <div className={styles.availabilityTag}>
+              <span className={styles.availTagIcon}>💼</span>
+              <span className={styles.availTagText}>JOBS</span>
+            </div>
+          </div>
+
+          <p className={styles.availabilityDesc}>
+            Actively open for <strong>freelancing projects</strong>, <strong>internships</strong>, and <strong>engineering jobs</strong>. Whether building an MVP from scratch, integrating AI workflows, or joining a high-velocity product team—let&apos;s build it.
+          </p>
+        </div>
 
         <p className={styles.contactBodyText}>
           Available for select high-impact technical architecture roles, creative technology
@@ -83,9 +105,11 @@ export default function ContactView() {
                 <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.272H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z" />
               </svg>
               <a
-                href={`mailto:${creator.email}`}
+                href={gmailComposeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.emailText}
-                title="Send email to narra.dhanvi@gmail.com"
+                title="Send email via Gmail"
               >
                 {creator.email}
               </a>
@@ -123,74 +147,132 @@ export default function ContactView() {
         </div>
       </div>
 
-      {/* Right Column: Transmission Form Console */}
-      <div className={styles.formConsole}>
-        <div className={styles.formHeader}>
-          <span>TRANSMISSION CONSOLE // ENCRYPTED</span>
-        </div>
-
-        {formSent ? (
-          <div style={{ padding: '40px 0', textAlign: 'center' }}>
-            <p
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '1.6rem',
-                color: 'var(--color-accent-cyan)',
-                textTransform: 'uppercase',
-              }}
+      {/* Right Column: Telephone Hotline (Opens Gmail) */}
+      <div className={styles.hotlineConsole}>
+        <a
+          href={gmailComposeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.telephoneCard}
+          title={`Click to open Gmail and send transmission to ${creator.email}`}
+        >
+          {/* Telephone SVG */}
+          <div className={styles.telephoneSvgWrap}>
+            <svg
+              viewBox="0 0 100 100"
+              width="130"
+              height="130"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className={styles.telephoneSvg}
             >
-              TRANSMISSION RECEIVED
-            </p>
-            <p style={{ marginTop: '8px', color: 'var(--color-text-secondary)' }}>
-              Thank you for reaching out. I will respond to your frequency shortly.
-            </p>
+              {/* Soundwaves / Ring Ripples (visible on hover) */}
+              <g className={styles.telephoneWaves}>
+                <path
+                  d="M 16 30 C 12 24 12 16 16 10"
+                  stroke="var(--color-accent-cyan)"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M 9 34 C 3 24 3 12 9 2"
+                  stroke="var(--color-accent-cyan)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  opacity="0.6"
+                />
+                <path
+                  d="M 84 30 C 88 24 88 16 84 10"
+                  stroke="var(--color-accent-cyan)"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M 91 34 C 97 24 97 12 91 2"
+                  stroke="var(--color-accent-cyan)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  opacity="0.6"
+                />
+              </g>
+
+              {/* Telephone Base */}
+              <g>
+                {/* Cradle notches */}
+                <path
+                  d="M 28 50 L 34 50 L 34 54"
+                  stroke="var(--color-accent-cyan)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M 72 50 L 66 50 L 66 54"
+                  stroke="var(--color-accent-cyan)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+
+                {/* Main phone body */}
+                <path
+                  d="M 32 52 C 32 49 35 48 40 48 L 60 48 C 65 48 68 49 68 52 L 78 80 C 80 84 76 88 72 88 L 28 88 C 24 88 20 84 22 80 Z"
+                  className={styles.telephoneBase}
+                />
+
+                {/* Keypad Plate */}
+                <rect
+                  x="36"
+                  y="56"
+                  width="28"
+                  height="26"
+                  rx="4"
+                  fill="rgba(0, 0, 0, 0.6)"
+                  stroke="rgba(0, 240, 255, 0.2)"
+                  strokeWidth="1"
+                />
+
+                {/* Keypad Buttons (3x3 grid) */}
+                <circle cx="42" cy="62" r="2" fill="var(--color-accent-cyan)" />
+                <circle cx="50" cy="62" r="2" fill="var(--color-accent-cyan)" />
+                <circle cx="58" cy="62" r="2" fill="var(--color-accent-cyan)" />
+
+                <circle cx="42" cy="69" r="2" fill="var(--color-accent-cyan)" />
+                <circle cx="50" cy="69" r="2" fill="var(--color-accent-cyan)" />
+                <circle cx="58" cy="69" r="2" fill="var(--color-accent-cyan)" />
+
+                <circle cx="42" cy="76" r="2" fill="var(--color-accent-cyan)" />
+                <circle cx="50" cy="76" r="2" fill="var(--color-accent-cyan)" />
+                <circle cx="58" cy="76" r="2" fill="var(--color-accent-cyan)" />
+
+                {/* Coiled Cord */}
+                <path
+                  d="M 23 82 C 17 84 14 90 18 94 C 22 98 28 94 32 99"
+                  stroke="rgba(0, 240, 255, 0.4)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+              </g>
+
+              {/* Handset (Lifts up and shakes on hover) */}
+              <g className={styles.telephoneHandset}>
+                <path
+                  d="M 22 44 C 20 38 24 32 30 32 C 34 32 37 34 38 38 C 42 28 58 28 62 38 C 63 34 66 32 70 32 C 76 32 80 38 78 44 C 76 49 71 50 67 48 C 65 47 64 44 64 41 C 60 34 40 34 36 41 C 36 44 35 47 33 48 C 29 50 24 49 22 44 Z"
+                  className={styles.telephoneHandsetPath}
+                />
+              </g>
+            </svg>
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div className={styles.inputGroup}>
-              <label className={styles.inputLabel} htmlFor="contact-name">
-                IDENTITY // NAME
-              </label>
-              <input
-                id="contact-name"
-                type="text"
-                required
-                placeholder="Enter your name"
-                className={styles.textInput}
-              />
-            </div>
 
-            <div className={styles.inputGroup}>
-              <label className={styles.inputLabel} htmlFor="contact-email">
-                CONTACT // EMAIL
-              </label>
-              <input
-                id="contact-email"
-                type="email"
-                required
-                placeholder="name@domain.com"
-                className={styles.textInput}
-              />
-            </div>
+          <div className={styles.telephonePrompt}>
+            <h3 className={styles.telephoneActionHeading}>CLICK TO OPEN GMAIL</h3>
+            <p className={styles.telephoneActionEmail}>{creator.email}</p>
+          </div>
 
-            <div className={styles.inputGroup}>
-              <label className={styles.inputLabel} htmlFor="contact-message">
-                TRANSMISSION // MESSAGE
-              </label>
-              <textarea
-                id="contact-message"
-                required
-                rows={4}
-                placeholder="Describe your project, timeline, and scope..."
-                className={styles.textAreaInput}
-              />
-            </div>
-
-            <button type="submit" className={styles.sendBtn}>
-              DISPATCH TRANSMISSION →
-            </button>
-          </form>
-        )}
+          <div className={styles.telephoneCtaBtn}>
+            <span>COMPOSE IN GMAIL</span>
+            <span className={styles.telephoneCtaArrow}>↗</span>
+          </div>
+        </a>
       </div>
     </div>
   );
