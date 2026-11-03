@@ -450,6 +450,22 @@ export const achievements: Achievement[] = [
     tileLabels: ['01 // LAB MENTORING', '02 // TECH WORKSHOP', '03 // ORGANIZING TEAM'],
   },
   {
+    id: 'achievement-nasscom-kgrcet',
+    title: 'NASSCOM KGRCET Hackathon',
+    event: 'GenAI Forge Hackathon · NASSCOM & KGRCET',
+    result: '2ND PLACE',
+    year: 2026,
+    statement:
+      'Won 2nd place award at GenAI Forge Hackathon organized by NASSCOM and KG Reddy College of Engineering & Technology. Built an intelligent healthcare application for efficient patient assistance, symptom triaging, and patient-doctor awareness.',
+    images: [
+      '/achievements/nasscom-kgrcet-1.jpeg',
+      '/achievements/nasscom-kgrcet-1.jpeg',
+      '/achievements/nasscom-kgrcet-1.jpeg',
+    ],
+    imagePositions: ['left 35%', 'center 40%', 'right 35%'],
+    tileLabels: ['01 // GENAI FORGE', '02 // 2ND PLACE PODIUM', '03 // NASSCOM CEREMONY'],
+  },
+  {
     id: 'achievement-hackathonbug',
     title: '4x Hackathon Wins, 18x Hackathon Finalist',
     event: 'Competitive Hackathon Circuit',

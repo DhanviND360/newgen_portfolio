@@ -25,6 +25,11 @@ import styles from '@/styles/cinematic.module.css';
 // Cinematic sequence: retain only the first four selected works
 const cinematicProjects = projects.slice(0, 4);
 
+// Cinematic sequence: retain only the original five cinematic achievements
+const cinematicAchievements = achievements.filter(
+  (a) => a.id !== 'achievement-nasscom-kgrcet'
+);
+
 // Phase components
 import InitializingSequence from './InitializingSequence';
 import BootSequence from './BootSequence';
@@ -140,7 +145,7 @@ export default function CinematicExperience() {
           />
           <AchievementSequence
             isActive={phase === CinematicPhase.ACHIEVEMENTS}
-            achievements={achievements}
+            achievements={cinematicAchievements}
             onComplete={handlePhaseComplete}
           />
           <CreatorReveal
