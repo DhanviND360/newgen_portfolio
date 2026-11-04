@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import styles from '@/styles/home.module.css';
 import DhanviNameReveal from './DhanviNameReveal';
 import TechStream from './TechStream';
+import ViewCounter from './ViewCounter';
 
 export default function HomePage() {
   useEffect(() => {
@@ -19,6 +20,9 @@ export default function HomePage() {
 
   return (
     <main className={styles.homeRoot} id="home">
+      {/* Top middle view counter */}
+      <ViewCounter />
+
       {/* Ambient vertical tech streams on left (upward) and right (downward) */}
       <TechStream side="left" />
       <TechStream side="right" />
