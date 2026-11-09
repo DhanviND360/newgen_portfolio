@@ -95,6 +95,7 @@ export default function DhanviNameReveal() {
     nodeRadius: 390,
     letterSpacing: 90,
     idleAngles: [0.2, 1.3, 2.4, 3.4, 4.5, 5.6],
+    isMobile: false,
   });
 
   // GSAP tween for the progress transition
@@ -107,25 +108,34 @@ export default function DhanviNameReveal() {
     const cx = rect.width > 0 ? rect.width / 2 : window.innerWidth / 2;
     const cy = rect.height > 0 ? rect.height / 2 : window.innerHeight / 2;
     const minDim = Math.min(rect.width || window.innerWidth, rect.height || window.innerHeight);
+    const vw = window.innerWidth;
+    const isMobile = vw < 768;
 
-    // Responsive scaling with generous spacing
+    // Desktop retains the exact generous scaling & radii
     const scaleFactor = Math.max(0.55, Math.min(1.0, minDim / 900));
 
-    // Spacious radii to prevent any letter overlap & allow enlarged nodes breathing room
-    const letterRadius = Math.max(160, 240 * scaleFactor);
-    const nodeRadius = letterRadius + Math.max(110, 150 * scaleFactor);
+    // Responsive radii: tailored for mobile viewports (320px - 430px) to prevent any clipping,
+    // while keeping desktop 100% identical to its original spatial composition.
+    const letterRadius = isMobile
+      ? Math.max(68, Math.min(96, vw * 0.22))
+      : Math.max(160, 240 * scaleFactor);
+
+    const nodeRadius = isMobile
+      ? letterRadius + Math.max(38, Math.min(54, vw * 0.125))
+      : letterRadius + Math.max(110, 150 * scaleFactor);
 
     // Horizontal spacing in collapsed DHANVI state
-    const vw = window.innerWidth;
     let letterSpacing = 90 * scaleFactor;
-    if (vw < 480) letterSpacing = Math.max(42, vw * 0.11);
-    else if (vw < 768) letterSpacing = Math.max(60, vw * 0.09);
+    if (vw < 380) letterSpacing = Math.max(35, vw * 0.108);
+    else if (vw < 480) letterSpacing = Math.max(40, vw * 0.11);
+    else if (vw < 768) letterSpacing = Math.max(56, vw * 0.09);
 
     animState.current.cx = cx;
     animState.current.cy = cy;
     animState.current.letterRadius = letterRadius;
     animState.current.nodeRadius = nodeRadius;
     animState.current.letterSpacing = letterSpacing;
+    animState.current.isMobile = isMobile;
 
     hasPositionedLettersRef.current = false;
 
@@ -153,7 +163,7 @@ export default function DhanviNameReveal() {
 
     // Update hover trigger zone size
     if (hoverZoneRef.current) {
-      const zoneRadius = nodeRadius + 45;
+      const zoneRadius = nodeRadius + (isMobile ? 24 : 45);
       hoverZoneRef.current.style.width = `${zoneRadius * 2}px`;
       hoverZoneRef.current.style.height = `${zoneRadius * 2}px`;
     }
@@ -209,6 +219,19 @@ export default function DhanviNameReveal() {
       ease: 'power3.inOut',
     });
   }, [setHoveredNode]);
+
+  /* ── Mobile Touch Interaction (Tap to expand/collapse orbit) ── */
+  const handleCenterTap = useCallback(
+    (e: React.MouseEvent | React.TouchEvent) => {
+      if (activePageNodeRef.current || isWarpActiveRef.current || isPausedForZoomRef.current) return;
+      if (animState.current.progress < 0.5) {
+        handleMouseEnter();
+      } else {
+        handleMouseLeave();
+      }
+    },
+    [handleMouseEnter, handleMouseLeave]
+  );
 
   /* ── Distance-Based Interaction Controller (Ref-only, throttled, 0 DOM reads) ── */
   const pointerMoveThrottleRef = useRef(0);
@@ -448,8 +471,12 @@ export default function DhanviNameReveal() {
 
         // In collapsed state, nodes orbit around the name in an elliptical planetary track
         const defaultNodeAngle = state.idleAngles[i] + orbitAngle * 0.35;
-        const defaultOrbitRx = Math.max(340, 440 * (letterRadius / 240));
-        const defaultOrbitRy = Math.max(190, 240 * (letterRadius / 240));
+        const defaultOrbitRx = state.isMobile
+          ? Math.min(cx - 36, Math.max(105, 135 * (letterRadius / 80)))
+          : Math.max(340, 440 * (letterRadius / 240));
+        const defaultOrbitRy = state.isMobile
+          ? Math.min(cy * 0.35, Math.max(115, 150 * (letterRadius / 80)))
+          : Math.max(190, 240 * (letterRadius / 240));
 
         const colNodeX = cx + defaultOrbitRx * Math.cos(defaultNodeAngle);
         const colNodeY = cy + defaultOrbitRy * Math.sin(defaultNodeAngle);
@@ -510,10 +537,12 @@ export default function DhanviNameReveal() {
             portraitWrapperRef.current.style.opacity = '0';
             portraitWrapperRef.current.style.display = 'none';
             portraitWrapperRef.current.style.filter = 'none';
+            portraitWrapperRef.current.style.pointerEvents = 'none';
           } else {
             portraitWrapperRef.current.style.display = 'flex';
             portraitWrapperRef.current.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%) scale(${gsap.utils.interpolate(0.5, 1.0, p)})`;
             portraitWrapperRef.current.style.opacity = String(p);
+            portraitWrapperRef.current.style.pointerEvents = p >= 0.7 ? 'auto' : 'none';
 
             if (p >= 0.98) {
               portraitWrapperRef.current.style.filter = 'none';
@@ -598,6 +627,7 @@ export default function DhanviNameReveal() {
           ref={portraitWrapperRef}
           className={styles.portraitWrapper}
           style={{ opacity: 0 }}
+          onClick={handleCenterTap}
         >
           <div ref={portraitGlowRef} className={styles.portraitGlow} />
           <div ref={portraitFrameRef} className={styles.portraitFrame}>
@@ -620,6 +650,7 @@ export default function DhanviNameReveal() {
               letterRefs.current[i] = el;
             }}
             className={styles.letterItem}
+            onClick={handleCenterTap}
             onMouseEnter={() => {
               handleMouseEnter();
               setHoveredNode(i);
@@ -669,6 +700,7 @@ export default function DhanviNameReveal() {
           ref={hoverZoneRef}
           className={styles.hoverZone}
           onMouseEnter={handleMouseEnter}
+          onClick={handleCenterTap}
           aria-hidden="true"
         />
 

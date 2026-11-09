@@ -1034,3 +1034,40 @@
     padding: 16px 18px;
   }
 }
+
+@media (max-width: 420px) {
+  .folder {
+    height: 250px;
+  }
+
+  .back {
+    height: 145px;
+  }
+
+  .cards {
+    height: 145px;
+    bottom: 50px;
+  }
+
+  .front {
+    height: 110px;
+  }
+
+  .frontTitle {
+    font-size: 0.95rem;
+  }
+
+  .mModal {
+    width: 95vw;
+    max-height: 90dvh;
+  }
+
+  .mInfo,
+  .mTechPanel {
+    padding: 12px 14px;
+  }
+
+  .mTop {
+    padding: 10px 14px;
+  }
+}

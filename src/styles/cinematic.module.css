@@ -250,10 +250,58 @@
   .skipControl {
     top: var(--space-4);
     right: var(--space-4);
-    padding: var(--space-1) var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .projectCard {
     padding: var(--space-4);
+  }
+}
+
+@media (max-width: 640px) {
+  .skipKey {
+    display: none;
+  }
+
+  .skipLabel {
+    font-size: 0.72rem;
+  }
+
+  .bootSentence {
+    padding: 0 var(--space-4);
+  }
+
+  .bootSentenceLine {
+    font-size: clamp(1.3rem, 5.5vw, 2.2rem);
+  }
+
+  .bootButWhy {
+    font-size: clamp(2.4rem, 12vw, 4.2rem);
+  }
+
+  .bootTripleWord {
+    font-size: clamp(2.0rem, 9.5vw, 3.4rem);
+  }
+}
+
+@media (max-width: 360px) {
+  .bootSentence {
+    padding: 0 var(--space-2);
+  }
+
+  .bootSentenceLine {
+    font-size: clamp(1.15rem, 5vw, 1.8rem);
+  }
+
+  .bootButWhy {
+    font-size: clamp(2.0rem, 11vw, 3.2rem);
+  }
+
+  .bootTripleWord {
+    font-size: clamp(1.8rem, 8.5vw, 2.6rem);
   }
 }

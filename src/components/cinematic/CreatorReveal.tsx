@@ -144,9 +144,9 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
     const chars: AsciiChar[] = [];
 
     // Monospace step size: fast, light, and perfectly spaced
-    const stepX = width < 768 ? 7 : 8;
-    const stepY = width < 768 ? 11 : 12;
-    const charFontSize = width < 768 ? 10 : 12;
+    const stepX = width < 480 ? 8 : width < 768 ? 7 : 8;
+    const stepY = width < 480 ? 12 : width < 768 ? 11 : 12;
+    const charFontSize = width < 480 ? 9 : width < 768 ? 10 : 12;
 
     for (let y = 0; y < height; y += stepY) {
       for (let x = 0; x < width; x += stepX) {
@@ -213,7 +213,8 @@ export default function CreatorReveal({ isActive, onComplete }: CreatorRevealPro
   // Initialize ASCII background data tunnel
   const initTunnelParticles = useCallback((width: number, height: number) => {
     const particles: AsciiTunnelParticle[] = [];
-    const count = 450; // Optimized count for buttery 60-120fps
+    // Adapt particle count for mobile GPUs while maintaining dense cinematic field on desktop
+    const count = width < 768 ? (width < 480 ? 160 : 220) : 450;
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;

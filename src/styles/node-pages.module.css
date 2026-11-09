@@ -2581,13 +2581,53 @@
 
 @media (max-width: 600px) {
   .topBar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    gap: 8px;
+  }
+
+  .headingGroup {
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .nodeIndexBadge {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+  }
+
+  .nodePageHeading {
+    font-size: clamp(1.2rem, 5vw, 1.6rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .returnBtn {
-    align-self: flex-start;
+    align-self: center;
+    padding: 6px 12px;
+    font-size: 0.72rem;
+    gap: 6px;
+    flex-shrink: 0;
+    min-height: 40px;
+    touch-action: manipulation;
+  }
+
+  .escKeyBadge {
+    display: none;
+  }
+
+  .contentContainer {
+    padding: 16px 14px 60px;
+  }
+
+  .pageSubtitleBanner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 20px;
   }
 
   .achieveCard {
@@ -2623,5 +2663,24 @@
 
   .principlesGrid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 380px) {
+  .topBar {
+    padding: 8px 10px;
+  }
+
+  .contentContainer {
+    padding: 12px 10px 48px;
+  }
+
+  .nodePageHeading {
+    font-size: 1.15rem;
+  }
+
+  .returnBtn {
+    padding: 5px 8px;
+    font-size: 0.68rem;
   }
 }

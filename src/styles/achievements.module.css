@@ -434,3 +434,56 @@
   }
 }
 
+@media (max-width: 640px) {
+  .lightboxClose {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+    top: 16px;
+    right: 16px;
+    touch-action: manipulation;
+  }
+}
+
+@media (max-width: 480px) {
+  .achievementScene {
+    padding: 16px 12px;
+  }
+
+  .achievementVisual {
+    height: clamp(160px, 24vh, 205px);
+  }
+
+  .achievementResult {
+    font-size: clamp(1.4rem, 7.5vw, 2.0rem);
+  }
+
+  .achievementTitle {
+    font-size: clamp(1.05rem, 4.5vw, 1.35rem);
+    margin-top: var(--space-2);
+  }
+
+  .achievementDivider {
+    margin: var(--space-2) 0;
+  }
+
+  .achievementEvent {
+    font-size: 0.78rem;
+  }
+
+  .achievementYear {
+    margin-top: var(--space-2);
+    font-size: 0.68rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .achievementVisual {
+    height: 150px;
+  }
+
+  .achievementResult {
+    font-size: clamp(1.2rem, 7vw, 1.6rem);
+  }
+}
+
