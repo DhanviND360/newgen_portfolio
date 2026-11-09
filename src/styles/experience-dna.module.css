@@ -453,7 +453,7 @@
     left: 14px;
   }
   .timelineNodeMarker {
-    width: 30px;
+    width: 28px;
   }
   .nodeMarkerDot {
     width: 14px;
@@ -462,5 +462,39 @@
   .cardFooter {
     flex-direction: column;
     align-items: flex-start;
+  }
+  .timelineCard {
+    padding: 16px 18px;
+  }
+  .cardRoleTitle {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .timelineItem {
+    gap: 12px;
+  }
+  .timelineCard {
+    padding: 14px 14px;
+    gap: 10px;
+  }
+  .cardRoleTitle {
+    font-size: 1.15rem;
+  }
+  .cardSummaryText {
+    font-size: 0.84rem;
+  }
+  .highlightItem {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .timelineItem {
+    gap: 8px;
+  }
+  .timelineCard {
+    padding: 12px 10px;
   }
 }

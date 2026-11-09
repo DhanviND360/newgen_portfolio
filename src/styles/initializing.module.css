@@ -823,3 +823,39 @@
     height: 3px;
   }
 }
+
+@media (max-width: 480px) {
+  .macroRig {
+    width: clamp(240px, 80vw, 300px);
+    height: clamp(240px, 80vw, 300px);
+  }
+
+  .reactorContainer {
+    width: clamp(180px, 60vw, 220px);
+    height: clamp(180px, 60vw, 220px);
+  }
+
+  .epilepsyNotice {
+    left: 14px;
+    bottom: 36px;
+    gap: 6px;
+  }
+
+  .soundNotice {
+    left: 14px;
+    right: auto;
+    bottom: 14px;
+    gap: 8px;
+  }
+
+  .epilepsyNoticeText,
+  .soundNoticeText {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+  }
+
+  .volumeTrack {
+    width: 48px;
+    height: 3px;
+  }
+}
